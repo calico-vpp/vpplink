@@ -18,87 +18,86 @@ package vpplink
 import (
 	"bytes"
 	"fmt"
+	"net"
 
-	"github.com/pkg/errors"
 	"github.com/calico-vpp/vpplink/binapi/19_08/interfaces"
 	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
 	"github.com/calico-vpp/vpplink/binapi/19_08/tapv2"
+	"github.com/calico-vpp/vpplink/types"
+	"github.com/pkg/errors"
 )
 
 const (
-	INVALID_INDEX = ^uint32(0)
+	INVALID_SW_IF_INDEX = ^uint32(0)
 )
 
-func (v *VppLink) CreateTap(
-	ContNS string,
-	ContIfName string,
-	Tag string,
-	EnableIp6 bool,
-	macAddress [6]byte,
-	hostMacAddress [6]byte,
-) (SwIfIndex uint32, vppIPAddress []byte, err error) {
+func (v *VppLink) CreateTapV2(tap *types.TapV2) (SwIfIndex uint32, err error) {
+	v.lock.Lock()
+	defer v.lock.Unlock()
 	response := &tapv2.TapCreateV2Reply{}
 	request := &tapv2.TapCreateV2{
 		// TODO check namespace len < 64?
 		// TODO set MTU?
 		ID:               ^uint32(0),
-		HostNamespace:    []byte(ContNS),
+		HostNamespace:    []byte(tap.ContNS),
 		HostNamespaceSet: 1,
-		HostIfName:       []byte(ContIfName),
+		HostIfName:       []byte(tap.ContIfName),
 		HostIfNameSet:    1,
-		Tag:              []byte(Tag),
-		MacAddress:       macAddress[:],
-		HostMacAddr:      hostMacAddress[:],
+		Tag:              []byte(tap.Tag),
+		MacAddress:       tap.GetVppMacAddress(),
+		HostMacAddr:      tap.GetVppHostMacAddress(),
 		HostMacAddrSet:   1,
 	}
 
-	v.lock.Lock()
-	v.log.Debugf("Tap creation request: %+v", request)
 	err = v.ch.SendRequest(request).ReceiveReply(response)
-	v.log.Infof("Tap creation: err %v retval %d sw_if_index = %d", err, response.Retval, response.SwIfIndex)
-	v.lock.Unlock()
 	if err != nil {
-		return INVALID_INDEX, vppIPAddress, errors.Wrap(err, "Tap creation request failed")
+		return INVALID_SW_IF_INDEX, errors.Wrap(err, "Tap creation request failed")
 	} else if response.Retval != 0 {
-		return INVALID_INDEX, vppIPAddress, fmt.Errorf("Tap creation failed (retval %d). Request: %+v", response.Retval, request)
+		return INVALID_SW_IF_INDEX, fmt.Errorf("Tap creation failed (retval %d). Request: %+v", response.Retval, request)
 	}
+	return response.SwIfIndex, err
 
 	// Add VPP side fake address
 	// TODO: Only if v4 is enabled
 	// There is currently a hard limit in VPP to 1024 taps - so this should be safe
-	vppIPAddress = []byte{169, 254, byte(response.SwIfIndex >> 8), byte(response.SwIfIndex)}
-	err = v.AddInterfaceAddress(response.SwIfIndex, vppIPAddress, 32)
-	if err != nil {
-		return INVALID_INDEX, vppIPAddress, errors.Wrap(err, "error adding address to new tap")
-	}
+	// vppIPAddress = []byte{169, 254, byte(response.SwIfIndex >> 8), byte(response.SwIfIndex)}
+	// err = v.AddInterfaceAddress(response.SwIfIndex, vppIPAddress, 32)
+	// if err != nil {
+	// 	return INVALID_SW_IF_INDEX, vppIPAddress, errors.Wrap(err, "error adding address to new tap")
+	// }
 
-	// Set interface up
-	err = v.InterfaceAdminUp(response.SwIfIndex)
-	if err != nil {
-		return INVALID_INDEX, vppIPAddress, errors.Wrap(err, "error setting new tap up")
-	}
+	// // Set interface up
+	// err = v.InterfaceAdminUp(response.SwIfIndex)
+	// if err != nil {
+	// 	return INVALID_SW_IF_INDEX, vppIPAddress, errors.Wrap(err, "error setting new tap up")
+	// }
 
-	// Add IPv6 neighbor entry if v6 is enabled
-	if EnableIp6 {
-		err = v.EnableInterfaceIP6(response.SwIfIndex)
-		if err != nil {
-			return INVALID_INDEX, vppIPAddress, errors.Wrap(err, "error enabling IPv6 on new tap")
-		}
-		// Compute a link local address from mac address, and set it
-	}
-	return response.SwIfIndex, vppIPAddress, err
+	// // Add IPv6 neighbor entry if v6 is enabled
+	// if EnableIp6 {
+	// 	err = v.EnableInterfaceIP6(response.SwIfIndex)
+	// 	if err != nil {
+	// 		return INVALID_SW_IF_INDEX, vppIPAddress, errors.Wrap(err, "error enabling IPv6 on new tap")
+	// 	}
+	// 	// Compute a link local address from mac address, and set it
+	// }
+	// return response.SwIfIndex, vppIPAddress, err
 }
 
-func (v *VppLink) addDelInterfaceAddress(swIfIndex uint32, addr []byte, addrLen uint8, isAdd uint8) error {
+func (v *VppLink) addDelInterfaceAddress(swIfIndex uint32, addr *net.IPNet, isAdd uint8) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
-
+	addrLen, _ := addr.Mask.Size()
 	request := &interfaces.SwInterfaceAddDelAddress{
 		SwIfIndex:     swIfIndex,
 		IsAdd:         isAdd,
-		AddressLength: addrLen,
-		Address:       addr,
+		AddressLength: uint8(addrLen),
 	}
+	if IsIP4(addr.IP) {
+		request.Address = addr.IP.To4()
+	} else {
+		request.Address = addr.IP.To16()
+	}
+
 	response := &interfaces.SwInterfaceAddDelAddressReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
@@ -107,12 +106,12 @@ func (v *VppLink) addDelInterfaceAddress(swIfIndex uint32, addr []byte, addrLen 
 	return nil
 }
 
-func (v *VppLink) DelInterfaceAddress(swIfIndex uint32, addr []byte, addrLen uint8) error {
-	return v.addDelInterfaceAddress(swIfIndex, addr, addrLen, 0)
+func (v *VppLink) DelInterfaceAddress(swIfIndex uint32, addr *net.IPNet) error {
+	return v.addDelInterfaceAddress(swIfIndex, addr, 0)
 }
 
-func (v *VppLink) AddInterfaceAddress(swIfIndex uint32, addr []byte, addrLen uint8) error {
-	return v.addDelInterfaceAddress(swIfIndex, addr, addrLen, 1)
+func (v *VppLink) AddInterfaceAddress(swIfIndex uint32, addr *net.IPNet) error {
+	return v.addDelInterfaceAddress(swIfIndex, addr, 1)
 }
 
 func (v *VppLink) enableDisableInterfaceIP6(swIfIndex uint32, enable uint8) error {
@@ -262,9 +261,9 @@ func (v *VppLink) interfaceSetUnnumbered(unnumberedSwIfIndex uint32, swIfIndex u
 
 	// Set interface down
 	request := &interfaces.SwInterfaceSetUnnumbered{
-		SwIfIndex:   swIfIndex,
-		UnnumberedSwIfIndex:   unnumberedSwIfIndex,
-		IsAdd: isAdd,
+		SwIfIndex:           swIfIndex,
+		UnnumberedSwIfIndex: unnumberedSwIfIndex,
+		IsAdd:               isAdd,
 	}
 	response := &interfaces.SwInterfaceSetUnnumberedReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
@@ -280,4 +279,23 @@ func (v *VppLink) InterfaceSetUnnumbered(unnumberedSwIfIndex uint32, swIfIndex u
 
 func (v *VppLink) InterfaceUnsetUnnumbered(unnumberedSwIfIndex uint32, swIfIndex uint32) error {
 	return v.interfaceSetUnnumbered(unnumberedSwIfIndex, swIfIndex, 0)
+}
+
+func (v *VppLink) PuntRedirect(sourceSwIfIndex, destSwIfIndex uint32, nh net.IP) error {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+	request := &vppip.IPPuntRedirect{
+		Punt: vppip.PuntRedirect{
+			RxSwIfIndex: sourceSwIfIndex,
+			TxSwIfIndex: destSwIfIndex,
+			Nh:          types.ToVppIpAddress(nh),
+		},
+		IsAdd: 1,
+	}
+	response := &vppip.IPPuntRedirectReply{}
+	err := v.ch.SendRequest(request).ReceiveReply(response)
+	if err != nil || response.Retval != 0 {
+		return fmt.Errorf("cannot set punt in VPP: %v %d", err, response.Retval)
+	}
+	return nil
 }

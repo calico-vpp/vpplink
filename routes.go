@@ -19,8 +19,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/pkg/errors"
 	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
+	"github.com/calico-vpp/vpplink/types"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -52,21 +53,26 @@ func (v *VppLink) GetRoutes(tableID uint32, isIPv6 uint8) (routes []vppip.IPRout
 	}
 }
 
-func (v *VppLink) AddNeighbor(neighbor vppip.IPNeighbor) error {
+func (v *VppLink) AddNeighbor(neighbor *types.Neighbor) error {
 	return v.addDelNeighbor(neighbor, 1)
 }
 
-func (v *VppLink) DelNeighbor(neighbor vppip.IPNeighbor) error {
+func (v *VppLink) DelNeighbor(neighbor *types.Neighbor) error {
 	return v.addDelNeighbor(neighbor, 0)
 }
 
-func (v *VppLink) addDelNeighbor(neighbor vppip.IPNeighbor, isAdd uint8) error {
+func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd uint8) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
 	request := &vppip.IPNeighborAddDel{
-		IsAdd:    isAdd,
-		Neighbor: neighbor,
+		IsAdd: isAdd,
+		Neighbor: vppip.IPNeighbor{
+			SwIfIndex:  uint32(neighbor.SwIfIndex),
+			Flags:      vppip.IP_API_NEIGHBOR_FLAG_NONE,
+			MacAddress: neighbor.GetVppMacAddress(),
+			IPAddress:  neighbor.GetVppIPAddress(),
+		},
 	}
 	response := &vppip.IPNeighborAddDelReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
@@ -79,21 +85,43 @@ func (v *VppLink) addDelNeighbor(neighbor vppip.IPNeighbor, isAdd uint8) error {
 	return nil
 }
 
-func (v *VppLink) AddIPRoute(route vppip.IPRoute) error {
+func (v *VppLink) AddIPRoute(route *types.Route) error {
 	return v.addDelIPRoute(route, 1)
 }
 
-func (v *VppLink) DelIPRoute(route vppip.IPRoute) error {
+func (v *VppLink) DelIPRoute(route *types.Route) error {
 	return v.addDelIPRoute(route, 0)
 }
 
-func (v *VppLink) addDelIPRoute(route vppip.IPRoute, isAdd uint8) error {
+func (v *VppLink) addDelIPRoute(route *types.Route, isAdd uint8) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
+	prefixLen, _ := route.Dst.Mask.Size()
 
 	request := &vppip.IPRouteAddDel{
 		IsAdd: isAdd,
-		Route: route,
+		Route: vppip.IPRoute{
+			TableID: 0,
+			Prefix: vppip.Prefix{
+				Len:     uint8(prefixLen),
+				Address: route.GetVppDstAddress(),
+			},
+			Paths: []vppip.FibPath{
+				{
+					SwIfIndex:  uint32(route.SwIfIndex),
+					TableID:    uint32(route.Table),
+					RpfID:      0,
+					Weight:     1,
+					Preference: 0,
+					Type:       vppip.FIB_API_PATH_TYPE_NORMAL,
+					Flags:      vppip.FIB_API_PATH_FLAG_NONE,
+					Proto:      vppip.FIB_API_PATH_NH_PROTO_IP4,
+					Nh: vppip.FibPathNh{
+						Address: route.GetVppGwAddress().Un,
+					},
+				},
+			},
+		},
 	}
 	response := &vppip.IPRouteAddDelReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)

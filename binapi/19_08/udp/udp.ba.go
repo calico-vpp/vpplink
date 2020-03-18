@@ -17,10 +17,11 @@ package udp
 import (
 	bytes "bytes"
 	context "context"
-	api "git.fd.io/govpp.git/api"
-	struc "github.com/lunixbochs/struc"
 	io "io"
 	strconv "strconv"
+
+	api "git.fd.io/govpp.git/api"
+	struc "github.com/lunixbochs/struc"
 )
 
 const (
