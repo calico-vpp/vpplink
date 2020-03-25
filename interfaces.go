@@ -90,6 +90,7 @@ func (v *VppLink) addDelInterfaceAddress(swIfIndex uint32, addr *net.IPNet, isAd
 	request := &interfaces.SwInterfaceAddDelAddress{
 		SwIfIndex:     swIfIndex,
 		IsAdd:         isAdd,
+		IsIPv6:        BoolToU8(IsIP6(addr.IP)),
 		AddressLength: uint8(addrLen),
 	}
 	if IsIP4(addr.IP) {
