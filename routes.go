@@ -17,7 +17,6 @@ package vpplink
 
 import (
 	"fmt"
-	"net"
 
 	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
 	"github.com/calico-vpp/vpplink/types"
@@ -25,10 +24,10 @@ import (
 )
 
 const (
-	INTERFACE_ANY = ^uint32(0)
+	AnyInterface = ^uint32(0)
 )
 
-func (v *VppLink) GetRoutes(tableID uint32, isIPv6 uint8) (routes []vppip.IPRoute, err error) {
+func (v *VppLink) GetRoutes(tableID uint32, isIPv6 uint8) (routes []types.Route, err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -49,7 +48,21 @@ func (v *VppLink) GetRoutes(tableID uint32, isIPv6 uint8) (routes []vppip.IPRout
 		if stop {
 			return routes, nil
 		}
-		routes = append(routes, response.Route)
+		vppRoute := response.Route
+		if vppRoute.NPaths != 1 {
+			// Multipath not supported yet
+			v.log.Info("Skipping route with %d paths : %+v", vppRoute.NPaths, vppRoute)
+			continue
+		}
+		vppPath := vppRoute.Paths[0]
+		route := types.Route{
+			Dst:       types.FromVppIpPrefix(vppRoute.Prefix),
+			Table:     int(vppRoute.TableID),
+			Gw:        types.FromVppIpAddressUnion(vppPath.Nh.Address, vppRoute.Prefix.Address.Af == vppip.ADDRESS_IP6),
+			DstTable:  int(vppPath.TableID),
+			SwIfIndex: vppPath.SwIfIndex,
+		}
+		routes = append(routes, route)
 	}
 }
 
@@ -85,11 +98,11 @@ func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd uint8) error {
 	return nil
 }
 
-func (v *VppLink) AddIPRoute(route *types.Route) error {
+func (v *VppLink) RouteAdd(route *types.Route) error {
 	return v.addDelIPRoute(route, 1)
 }
 
-func (v *VppLink) DelIPRoute(route *types.Route) error {
+func (v *VppLink) RouteDel(route *types.Route) error {
 	return v.addDelIPRoute(route, 0)
 }
 
@@ -98,30 +111,39 @@ func (v *VppLink) addDelIPRoute(route *types.Route, isAdd uint8) error {
 	defer v.lock.Unlock()
 	prefixLen, _ := route.Dst.Mask.Size()
 
+	proto := vppip.FIB_API_PATH_NH_PROTO_IP4
+	if IsIP6(route.Dst.IP) {
+		proto = vppip.FIB_API_PATH_NH_PROTO_IP6
+	}
+
+	paths := []vppip.FibPath{
+		{
+			SwIfIndex:  uint32(route.SwIfIndex),
+			TableID:    uint32(route.DstTable),
+			RpfID:      0,
+			Weight:     1,
+			Preference: 0,
+			Type:       vppip.FIB_API_PATH_TYPE_NORMAL,
+			Flags:      vppip.FIB_API_PATH_FLAG_NONE,
+			Proto:      proto,
+		},
+	}
+	if route.Gw != nil {
+		paths[0].Nh.Address = route.GetVppGwAddress().Un
+	}
+
+	vppRoute := vppip.IPRoute{
+		TableID: uint32(route.DstTable),
+		Prefix: vppip.Prefix{
+			Len:     uint8(prefixLen),
+			Address: route.GetVppDstAddress(),
+		},
+		Paths: paths,
+	}
+
 	request := &vppip.IPRouteAddDel{
 		IsAdd: isAdd,
-		Route: vppip.IPRoute{
-			TableID: 0,
-			Prefix: vppip.Prefix{
-				Len:     uint8(prefixLen),
-				Address: route.GetVppDstAddress(),
-			},
-			Paths: []vppip.FibPath{
-				{
-					SwIfIndex:  uint32(route.SwIfIndex),
-					TableID:    uint32(route.Table),
-					RpfID:      0,
-					Weight:     1,
-					Preference: 0,
-					Type:       vppip.FIB_API_PATH_TYPE_NORMAL,
-					Flags:      vppip.FIB_API_PATH_FLAG_NONE,
-					Proto:      vppip.FIB_API_PATH_NH_PROTO_IP4,
-					Nh: vppip.FibPathNh{
-						Address: route.GetVppGwAddress().Un,
-					},
-				},
-			},
-		},
+		Route: vppRoute,
 	}
 	response := &vppip.IPRouteAddDelReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
@@ -131,84 +153,5 @@ func (v *VppLink) addDelIPRoute(route *types.Route, isAdd uint8) error {
 		return fmt.Errorf("failed to add/delete (%d) route from VPP (retval %d)", isAdd, response.Retval)
 	}
 	v.log.Debugf("added/deleted (%d) route %+v", isAdd, route)
-	return nil
-}
-
-func (v *VppLink) ReplaceRoute(v4 bool, dst net.IPNet, gw net.IP, swIfIndex uint32) error {
-	return v.addDelRoute(v4, dst, gw, swIfIndex, 1)
-}
-
-func (v *VppLink) DelRoute(v4 bool, dst net.IPNet, gw net.IP, swIfIndex uint32) error {
-	return v.addDelRoute(v4, dst, gw, swIfIndex, 0)
-}
-
-func (v *VppLink) addDelRoute(v4 bool, dst net.IPNet, gw net.IP, swIfIndex uint32, isAdd uint8) error {
-	v.lock.Lock()
-	defer v.lock.Unlock()
-
-	prefixLen, _ := dst.Mask.Size()
-
-	route := vppip.IPRoute{
-		TableID: 0,
-		Paths: []vppip.FibPath{
-			{
-				SwIfIndex:  swIfIndex, // 0xffffffff for any interface
-				TableID:    0,
-				RpfID:      0,
-				Weight:     1,
-				Preference: 0,
-				Type:       vppip.FIB_API_PATH_TYPE_NORMAL,
-				Flags:      vppip.FIB_API_PATH_FLAG_NONE,
-			},
-		},
-	}
-	if v4 {
-		ip := [4]uint8{}
-		copy(ip[:], dst.IP.To4())
-		route.Prefix = vppip.Prefix{
-			Address: vppip.Address{
-				Af: vppip.ADDRESS_IP4,
-				Un: vppip.AddressUnionIP4(ip),
-			},
-			Len: uint8(prefixLen),
-		}
-		route.Paths[0].Proto = vppip.FIB_API_PATH_NH_PROTO_IP4
-		if gw != nil {
-			copy(ip[:], gw.To4())
-			route.Paths[0].Nh.Address = vppip.AddressUnionIP4(ip)
-		}
-	} else {
-		ip := [16]uint8{}
-		copy(ip[:], dst.IP.To16())
-		route.Prefix = vppip.Prefix{
-			Address: vppip.Address{
-				Af: vppip.ADDRESS_IP6,
-				Un: vppip.AddressUnionIP6(ip),
-			},
-			Len: uint8(prefixLen),
-		}
-		route.Paths[0].Proto = vppip.FIB_API_PATH_NH_PROTO_IP6
-		if gw != nil {
-			copy(ip[:], gw.To16())
-			route.Paths[0].Nh.Address = vppip.AddressUnionIP6(ip)
-		}
-	}
-
-	request := &vppip.IPRouteAddDel{
-		IsAdd:       isAdd,
-		IsMultipath: 0,
-		Route:       route,
-	}
-
-	response := &vppip.IPRouteAddDelReply{}
-
-	v.log.Debugf("Route add object: %+v", route)
-
-	err := v.ch.SendRequest(request).ReceiveReply(response)
-	if err != nil {
-		return errors.Wrapf(err, "cannot add/delete (%d) route in VPP", isAdd)
-	} else if response.Retval != 0 {
-		return fmt.Errorf("cannot add/delete (%d) route in VPP (retval %d)", isAdd, response.Retval)
-	}
 	return nil
 }

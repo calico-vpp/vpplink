@@ -68,14 +68,29 @@ func ToVppIpAddress(addr net.IP) vppip.Address {
 	return a
 }
 
-func FromVppIpAddress(vppIP vppip.Address) net.IP {
-	if vppIP.Af == vppip.ADDRESS_IP6 {
-		a := vppIP.Un.GetIP6()
+func FromVppIpAddressUnion(Un vppip.AddressUnion, isv6 bool) net.IP {
+	if isv6 {
+		a := Un.GetIP6()
 		return net.IP(a[:])
 	} else {
-		a := vppIP.Un.GetIP4()
+		a := Un.GetIP4()
 		return net.IP(a[:])
 	}
+}
+
+func FromVppIpPrefix(vppPrefix vppip.Prefix) *net.IPNet {
+	addressSize := 32
+	if vppPrefix.Address.Af == vppip.ADDRESS_IP6 {
+		addressSize = 128
+	}
+	return &net.IPNet{
+		IP:   FromVppIpAddress(vppPrefix.Address),
+		Mask: net.CIDRMask(int(vppPrefix.Len), addressSize),
+	}
+}
+
+func FromVppIpAddress(vppIP vppip.Address) net.IP {
+	return FromVppIpAddressUnion(vppIP.Un, vppIP.Af == vppip.ADDRESS_IP6)
 }
 
 func FromVppMacAddress(vppHwAddr vppip.MacAddress) net.HardwareAddr {

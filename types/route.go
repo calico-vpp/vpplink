@@ -25,6 +25,7 @@ type Route struct {
 	Dst       *net.IPNet
 	Gw        net.IP
 	Table     int
+	DstTable  int
 	SwIfIndex uint32
 }
 
