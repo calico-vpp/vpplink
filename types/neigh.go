@@ -21,10 +21,19 @@ import (
 	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
 )
 
+type IPNeighborFlags uint32
+
+const (
+	IPNeighborNone       IPNeighborFlags = IPNeighborFlags(vppip.IP_API_NEIGHBOR_FLAG_NONE)
+	IPNeighborStatic     IPNeighborFlags = IPNeighborFlags(vppip.IP_API_NEIGHBOR_FLAG_STATIC)
+	IPNeighborNoFibEntry IPNeighborFlags = IPNeighborFlags(vppip.IP_API_NEIGHBOR_FLAG_NO_FIB_ENTRY)
+)
+
 type Neighbor struct {
 	SwIfIndex    uint32
 	IP           net.IP
 	HardwareAddr net.HardwareAddr
+	Flags        IPNeighborFlags
 }
 
 func (n *Neighbor) GetVppMacAddress() vppip.MacAddress {
@@ -33,4 +42,54 @@ func (n *Neighbor) GetVppMacAddress() vppip.MacAddress {
 
 func (n *Neighbor) GetVppIPAddress() vppip.Address {
 	return ToVppIpAddress(n.IP)
+}
+
+func (n *Neighbor) GetVppNeighborFlags() vppip.IPNeighborFlags {
+	return vppip.IPNeighborFlags(n.Flags)
+}
+
+func FromVppNeighborFlags(flags vppip.IPNeighborFlags) IPNeighborFlags {
+	return IPNeighborFlags(flags)
+}
+
+func ToVppIpAddress(addr net.IP) vppip.Address {
+	a := vppip.Address{}
+	if addr.To4() == nil {
+		a.Af = vppip.ADDRESS_IP6
+		ip := [16]uint8{}
+		copy(ip[:], addr)
+		a.Un = vppip.AddressUnionIP6(ip)
+	} else {
+		a.Af = vppip.ADDRESS_IP4
+		ip := [4]uint8{}
+		copy(ip[:], addr.To4())
+		a.Un = vppip.AddressUnionIP4(ip)
+	}
+	return a
+}
+
+func FromVppIpAddress(vppIP vppip.Address) net.IP {
+	if vppIP.Af == vppip.ADDRESS_IP6 {
+		a := vppIP.Un.GetIP6()
+		return net.IP(a[:])
+	} else {
+		a := vppIP.Un.GetIP4()
+		return net.IP(a[:])
+	}
+}
+
+func FromVppMacAddress(vppHwAddr vppip.MacAddress) net.HardwareAddr {
+	return net.HardwareAddr(vppHwAddr[:])
+}
+
+func ToVppMacAddress(hardwareAddr net.HardwareAddr) vppip.MacAddress {
+	hwAddr := [6]uint8{}
+	copy(hwAddr[:], hardwareAddr)
+	return vppip.MacAddress(hwAddr)
+}
+
+func TobytesMacAddress(hardwareAddr net.HardwareAddr) []byte {
+	hwAddr := [6]uint8{}
+	copy(hwAddr[:], hardwareAddr)
+	return hwAddr[:]
 }

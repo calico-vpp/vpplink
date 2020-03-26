@@ -19,8 +19,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/19_08/ip"
 	"github.com/calico-vpp/vpplink/binapi/19_08/nat"
+	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
 
@@ -69,15 +69,15 @@ func (v *VppLink) addDelNat44Address(isAdd bool, address string) (err error) {
 	return nil
 }
 
-func (v *VppLink) AddNat44InterfaceAddress(swIfIndex uint32, flags nat.NatConfigFlags) error {
+func (v *VppLink) AddNat44InterfaceAddress(swIfIndex uint32, flags types.NatFlags) error {
 	return v.addDelNat44InterfaceAddress(true, swIfIndex, flags)
 }
 
-func (v *VppLink) DelNat44InterfaceAddress(swIfIndex uint32, flags nat.NatConfigFlags) error {
+func (v *VppLink) DelNat44InterfaceAddress(swIfIndex uint32, flags types.NatFlags) error {
 	return v.addDelNat44InterfaceAddress(false, swIfIndex, flags)
 }
 
-func (v *VppLink) addDelNat44InterfaceAddress(isAdd bool, swIfIndex uint32, flags nat.NatConfigFlags) (err error) {
+func (v *VppLink) addDelNat44InterfaceAddress(isAdd bool, swIfIndex uint32, flags types.NatFlags) (err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -85,7 +85,7 @@ func (v *VppLink) addDelNat44InterfaceAddress(isAdd bool, swIfIndex uint32, flag
 	request := &nat.Nat44AddDelInterfaceAddr{
 		IsAdd:     isAdd,
 		SwIfIndex: nat.InterfaceIndex(swIfIndex),
-		Flags:     flags,
+		Flags:     types.ToVppNatConfigFlags(flags),
 	}
 	err = v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
@@ -104,14 +104,14 @@ func (v *VppLink) DelNat44Address(address string) error {
 	return v.addDelNat44Address(false, address)
 }
 
-func (v *VppLink) addDelNat44Interface(isAdd bool, flags nat.NatConfigFlags, swIfIndex uint32) (err error) {
+func (v *VppLink) addDelNat44Interface(isAdd bool, flags types.NatFlags, swIfIndex uint32) (err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
 	response := &nat.Nat44InterfaceAddDelFeatureReply{}
 	request := &nat.Nat44InterfaceAddDelFeature{
 		IsAdd:     isAdd,
-		Flags:     flags,
+		Flags:     types.ToVppNatConfigFlags(flags),
 		SwIfIndex: nat.InterfaceIndex(swIfIndex),
 	}
 	err = v.ch.SendRequest(request).ReceiveReply(response)
@@ -124,19 +124,19 @@ func (v *VppLink) addDelNat44Interface(isAdd bool, flags nat.NatConfigFlags, swI
 }
 
 func (v *VppLink) AddNat44InsideInterface(swIfIndex uint32) error {
-	return v.addDelNat44Interface(true, nat.NAT_IS_INSIDE, swIfIndex)
+	return v.addDelNat44Interface(true, types.NatInside, swIfIndex)
 }
 
 func (v *VppLink) AddNat44OutsideInterface(swIfIndex uint32) error {
-	return v.addDelNat44Interface(true, nat.NAT_IS_OUTSIDE, swIfIndex)
+	return v.addDelNat44Interface(true, types.NatOutside, swIfIndex)
 }
 
 func (v *VppLink) DelNat44InsideInterface(swIfIndex uint32) error {
-	return v.addDelNat44Interface(false, nat.NAT_IS_INSIDE, swIfIndex)
+	return v.addDelNat44Interface(false, types.NatInside, swIfIndex)
 }
 
 func (v *VppLink) DelNat44OutsideInterface(swIfIndex uint32) error {
-	return v.addDelNat44Interface(false, nat.NAT_IS_OUTSIDE, swIfIndex)
+	return v.addDelNat44Interface(false, types.NatOutside, swIfIndex)
 }
 
 func (v *VppLink) getLBLocals(backends []string, port int32) (locals []nat.Nat44LbAddrPort) {
@@ -154,7 +154,7 @@ func (v *VppLink) getLBLocals(backends []string, port int32) (locals []nat.Nat44
 func (v *VppLink) addDelNat44LBStaticMapping(
 	isAdd bool,
 	extAddr string,
-	proto ip.IPProto,
+	proto types.IPProto,
 	extPort int32,
 	backends []string,
 	backendPort int32,
@@ -169,7 +169,7 @@ func (v *VppLink) addDelNat44LBStaticMapping(
 		Flags:        nat.NAT_IS_SELF_TWICE_NAT | nat.NAT_IS_OUT2IN_ONLY,
 		ExternalAddr: parseIP4Address(extAddr),
 		ExternalPort: uint16(extPort),
-		Protocol:     uint8(proto),
+		Protocol:     types.ToVppIPProto(proto),
 		Locals:       locals,
 	}
 	err = v.ch.SendRequest(request).ReceiveReply(response)
@@ -183,7 +183,7 @@ func (v *VppLink) addDelNat44LBStaticMapping(
 
 func (v *VppLink) AddNat44LBStaticMapping(
 	externalAddr string,
-	serviceProto ip.IPProto,
+	serviceProto types.IPProto,
 	externalPort int32,
 	backendIPs []string,
 	backendPort int32,
@@ -193,7 +193,7 @@ func (v *VppLink) AddNat44LBStaticMapping(
 
 func (v *VppLink) DelNat44LBStaticMapping(
 	externalAddr string,
-	serviceProto ip.IPProto,
+	serviceProto types.IPProto,
 	externalPort int32,
 ) error {
 	return v.addDelNat44LBStaticMapping(false, externalAddr, serviceProto, externalPort, []string{}, 0)
@@ -202,7 +202,7 @@ func (v *VppLink) DelNat44LBStaticMapping(
 func (v *VppLink) addDelNat44StaticMapping(
 	isAdd bool,
 	externalAddr string,
-	serviceProto ip.IPProto,
+	serviceProto types.IPProto,
 	externalPort int32,
 	backendIP string,
 	backendPort int32,
@@ -216,7 +216,7 @@ func (v *VppLink) addDelNat44StaticMapping(
 		Flags:             nat.NAT_IS_SELF_TWICE_NAT | nat.NAT_IS_OUT2IN_ONLY,
 		LocalIPAddress:    parseIP4Address(backendIP),
 		ExternalIPAddress: parseIP4Address(externalAddr),
-		Protocol:          uint8(serviceProto),
+		Protocol:          types.ToVppIPProto(serviceProto),
 		LocalPort:         uint16(backendPort),
 		ExternalPort:      uint16(externalPort),
 		ExternalSwIfIndex: 0xffffffff,
@@ -232,7 +232,7 @@ func (v *VppLink) addDelNat44StaticMapping(
 
 func (v *VppLink) AddNat44StaticMapping(
 	externalAddr string,
-	serviceProto ip.IPProto,
+	serviceProto types.IPProto,
 	externalPort int32,
 	backendIP string,
 	backendPort int32,
@@ -242,7 +242,7 @@ func (v *VppLink) AddNat44StaticMapping(
 
 func (v *VppLink) DelNat44StaticMapping(
 	externalAddr string,
-	serviceProto ip.IPProto,
+	serviceProto types.IPProto,
 	externalPort int32,
 ) error {
 	return v.addDelNat44StaticMapping(false, externalAddr, serviceProto, externalPort, "0.0.0.0", 0)
@@ -250,7 +250,7 @@ func (v *VppLink) DelNat44StaticMapping(
 
 func (v *VppLink) AddNat44LB(
 	serviceIP string,
-	serviceProto ip.IPProto,
+	serviceProto types.IPProto,
 	servicePort int32,
 	backendIPs []string,
 	backendPort int32,
@@ -266,7 +266,7 @@ func (v *VppLink) AddNat44LB(
 
 func (v *VppLink) DelNat44LB(
 	serviceIP string,
-	serviceProto ip.IPProto,
+	serviceProto types.IPProto,
 	servicePort int32,
 	backendCount int,
 ) error {

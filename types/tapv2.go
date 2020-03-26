@@ -23,7 +23,6 @@ type TapV2 struct {
 	ContNS         string
 	ContIfName     string
 	Tag            string
-	EnableIp6      bool
 	MacAddress     net.HardwareAddr
 	HostMacAddress net.HardwareAddr
 }

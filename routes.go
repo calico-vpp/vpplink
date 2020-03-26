@@ -69,7 +69,7 @@ func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd uint8) error {
 		IsAdd: isAdd,
 		Neighbor: vppip.IPNeighbor{
 			SwIfIndex:  uint32(neighbor.SwIfIndex),
-			Flags:      vppip.IP_API_NEIGHBOR_FLAG_NONE,
+			Flags:      neighbor.GetVppNeighborFlags(),
 			MacAddress: neighbor.GetVppMacAddress(),
 			IPAddress:  neighbor.GetVppIPAddress(),
 		},

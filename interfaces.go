@@ -224,7 +224,7 @@ func (v *VppLink) InterfaceAdminUp(swIfIndex uint32) error {
 	return v.interfaceAdminUpDown(swIfIndex, 1)
 }
 
-func (v *VppLink) GetInterfaceNeighbors(swIfIndex uint32, isIPv6 uint8) (err error, neighbors []vppip.IPNeighbor) {
+func (v *VppLink) GetInterfaceNeighbors(swIfIndex uint32, isIPv6 uint8) (err error, neighbors []types.Neighbor) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -243,7 +243,13 @@ func (v *VppLink) GetInterfaceNeighbors(swIfIndex uint32, isIPv6 uint8) (err err
 		if stop {
 			return nil, neighbors
 		}
-		neighbors = append(neighbors, response.Neighbor)
+		vppNeighbor := response.Neighbor
+		neighbors = append(neighbors, types.Neighbor{
+			SwIfIndex:    vppNeighbor.SwIfIndex,
+			Flags:        types.FromVppNeighborFlags(vppNeighbor.Flags),
+			IP:           types.FromVppIpAddress(vppNeighbor.IPAddress),
+			HardwareAddr: types.FromVppMacAddress(vppNeighbor.MacAddress),
+		})
 	}
 }
 

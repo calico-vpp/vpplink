@@ -16,35 +16,27 @@
 package types
 
 import (
-	"net"
-
 	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
 )
 
-func ToVppIpAddress(addr net.IP) vppip.Address {
-	a := vppip.Address{}
-	if addr.To4() == nil {
-		a.Af = vppip.ADDRESS_IP6
-		ip := [16]uint8{}
-		copy(ip[:], addr)
-		a.Un = vppip.AddressUnionIP6(ip)
-	} else {
-		a.Af = vppip.ADDRESS_IP4
-		ip := [4]uint8{}
-		copy(ip[:], addr.To4())
-		a.Un = vppip.AddressUnionIP4(ip)
+type IPProto uint32
+
+const (
+	INVALID IPProto = 0
+	UDP     IPProto = 1
+	SCTP    IPProto = 2
+	TCP     IPProto = 3
+)
+
+func ToVppIPProto(proto IPProto) uint8 {
+	switch proto {
+	case UDP:
+		return uint8(vppip.IP_API_PROTO_TCP)
+	case TCP:
+		return uint8(vppip.IP_API_PROTO_TCP)
+	case SCTP:
+		return uint8(vppip.IP_API_PROTO_SCTP)
+	default:
+		return ^uint8(0)
 	}
-	return a
-}
-
-func ToVppMacAddress(hardwareAddr net.HardwareAddr) vppip.MacAddress {
-	hwAddr := [6]uint8{}
-	copy(hwAddr[:], hardwareAddr)
-	return vppip.MacAddress(hwAddr)
-}
-
-func TobytesMacAddress(hardwareAddr net.HardwareAddr) []byte {
-	hwAddr := [6]uint8{}
-	copy(hwAddr[:], hardwareAddr)
-	return hwAddr[:]
 }
