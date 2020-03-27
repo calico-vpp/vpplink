@@ -20,8 +20,8 @@ import (
 )
 
 type TapV2 struct {
-	ContNS         string
-	ContIfName     string
+	HostNamespace  string
+	HostIfName     string
 	Tag            string
 	MacAddress     net.HardwareAddr
 	HostMacAddress net.HardwareAddr

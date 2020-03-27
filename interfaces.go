@@ -39,16 +39,22 @@ func (v *VppLink) CreateTapV2(tap *types.TapV2) (SwIfIndex uint32, err error) {
 		// TODO check namespace len < 64?
 		// TODO set MTU?
 		ID:               ^uint32(0),
-		HostNamespace:    []byte(tap.ContNS),
-		HostNamespaceSet: 1,
-		HostIfName:       []byte(tap.ContIfName),
-		HostIfNameSet:    1,
 		Tag:              []byte(tap.Tag),
 		MacAddress:       tap.GetVppMacAddress(),
-		HostMacAddr:      tap.GetVppHostMacAddress(),
-		HostMacAddrSet:   1,
-	}
 
+	}
+	if tap.HostNamespace != "" {
+		request.HostNamespaceSet = 1
+		request.HostNamespace = []byte(tap.HostNamespace)
+	}
+	if tap.HostIfName != "" {
+		request.HostIfName = []byte(tap.HostIfName)
+		request.HostIfNameSet = 1
+	}
+	if tap.HostMacAddress != nil {
+		request.HostMacAddr = tap.GetVppHostMacAddress()
+		request.HostMacAddrSet = 1
+	}
 	err = v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
 		return INVALID_SW_IF_INDEX, errors.Wrap(err, "Tap creation request failed")
