@@ -16,6 +16,8 @@
 package types
 
 import (
+	"net"
+
 	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
 )
 
@@ -27,6 +29,11 @@ const (
 	SCTP    IPProto = 2
 	TCP     IPProto = 3
 )
+
+type IfAddress struct {
+	IPNet     net.IPNet
+	SwIfIndex uint32
+}
 
 func ToVppIPProto(proto IPProto) uint8 {
 	switch proto {

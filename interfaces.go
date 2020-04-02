@@ -38,10 +38,9 @@ func (v *VppLink) CreateTapV2(tap *types.TapV2) (SwIfIndex uint32, err error) {
 	request := &tapv2.TapCreateV2{
 		// TODO check namespace len < 64?
 		// TODO set MTU?
-		ID:               ^uint32(0),
-		Tag:              []byte(tap.Tag),
-		MacAddress:       tap.GetVppMacAddress(),
-
+		ID:         ^uint32(0),
+		Tag:        []byte(tap.Tag),
+		MacAddress: tap.GetVppMacAddress(),
 	}
 	if tap.HostNamespace != "" {
 		request.HostNamespaceSet = 1
@@ -290,6 +289,33 @@ func (v *VppLink) interfaceSetUnnumbered(unnumberedSwIfIndex uint32, swIfIndex u
 		return errors.Wrapf(err, "setting interface unnumbered failed %d -> %d", unnumberedSwIfIndex, swIfIndex)
 	}
 	return nil
+}
+
+func (v *VppLink) AddrList(swIfIndex uint32, isv6 bool) (addresses []types.IfAddress, err error) {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+
+	request := &vppip.IPAddressDump{
+		SwIfIndex: swIfIndex,
+		IsIPv6:    BoolToU8(isv6),
+	}
+	stream := v.ch.SendMultiRequest(request)
+	for {
+		response := &vppip.IPAddressDetails{}
+		stop, err := stream.ReceiveReply(response)
+		if err != nil {
+			return addresses, errors.Wrapf(err, "error listing VPP interfaces addresses")
+		}
+		if stop {
+			break
+		}
+		address := types.IfAddress{
+			SwIfIndex: response.SwIfIndex,
+			IPNet:     *types.FromVppIpPrefix(vppip.Prefix(response.Prefix)),
+		}
+		addresses = append(addresses, address)
+	}
+	return addresses, nil
 }
 
 func (v *VppLink) InterfaceSetUnnumbered(unnumberedSwIfIndex uint32, swIfIndex uint32) error {
