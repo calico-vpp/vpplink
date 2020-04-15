@@ -18,15 +18,16 @@ package types
 import (
 	"net"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/ip"
+	"github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/ip_neighbor"
 )
 
 type IPNeighborFlags uint32
 
 const (
-	IPNeighborNone       IPNeighborFlags = IPNeighborFlags(vppip.IP_API_NEIGHBOR_FLAG_NONE)
-	IPNeighborStatic     IPNeighborFlags = IPNeighborFlags(vppip.IP_API_NEIGHBOR_FLAG_STATIC)
-	IPNeighborNoFibEntry IPNeighborFlags = IPNeighborFlags(vppip.IP_API_NEIGHBOR_FLAG_NO_FIB_ENTRY)
+	IPNeighborNone       IPNeighborFlags = IPNeighborFlags(ip_neighbor.IP_API_NEIGHBOR_FLAG_NONE)
+	IPNeighborStatic     IPNeighborFlags = IPNeighborFlags(ip_neighbor.IP_API_NEIGHBOR_FLAG_STATIC)
+	IPNeighborNoFibEntry IPNeighborFlags = IPNeighborFlags(ip_neighbor.IP_API_NEIGHBOR_FLAG_NO_FIB_ENTRY)
 )
 
 type Neighbor struct {
@@ -44,11 +45,14 @@ func (n *Neighbor) GetVppIPAddress() vppip.Address {
 	return ToVppIpAddress(n.IP)
 }
 
-func (n *Neighbor) GetVppNeighborFlags() vppip.IPNeighborFlags {
-	return vppip.IPNeighborFlags(n.Flags)
+func (n *Neighbor) GetVppNeighborAddress() ip_neighbor.Address {
+	return ToVppNeighborAddress(n.IP)
+}
+func (n *Neighbor) GetVppNeighborFlags() ip_neighbor.IPNeighborFlags {
+	return ip_neighbor.IPNeighborFlags(n.Flags)
 }
 
-func FromVppNeighborFlags(flags vppip.IPNeighborFlags) IPNeighborFlags {
+func FromVppNeighborFlags(flags ip_neighbor.IPNeighborFlags) IPNeighborFlags {
 	return IPNeighborFlags(flags)
 }
 
@@ -64,6 +68,22 @@ func ToVppIpAddress(addr net.IP) vppip.Address {
 		ip := [4]uint8{}
 		copy(ip[:], addr.To4())
 		a.Un = vppip.AddressUnionIP4(ip)
+	}
+	return a
+}
+
+func ToVppNeighborAddress(addr net.IP) ip_neighbor.Address {
+	a := ip_neighbor.Address{}
+	if addr.To4() == nil {
+		a.Af = ip_neighbor.ADDRESS_IP6
+		ip := [16]uint8{}
+		copy(ip[:], addr)
+		a.Un = ip_neighbor.AddressUnionIP6(ip)
+	} else {
+		a.Af = ip_neighbor.ADDRESS_IP4
+		ip := [4]uint8{}
+		copy(ip[:], addr.To4())
+		a.Un = ip_neighbor.AddressUnionIP4(ip)
 	}
 	return a
 }
@@ -89,11 +109,28 @@ func FromVppIpPrefix(vppPrefix vppip.Prefix) *net.IPNet {
 	}
 }
 
+func ToVppIpPrefix(prefix *net.IPNet) vppip.Prefix {
+	len, _ := prefix.Mask.Size()
+	r := vppip.Prefix{
+		Address: ToVppIpAddress(prefix.IP),
+		Len:     uint8(len),
+	}
+	return r
+}
+
 func FromVppIpAddress(vppIP vppip.Address) net.IP {
 	return FromVppIpAddressUnion(vppIP.Un, vppIP.Af == vppip.ADDRESS_IP6)
 }
 
+func FromVppNeighborAddress(vppIP ip_neighbor.Address) net.IP {
+	return FromVppIpAddressUnion(vppip.AddressUnion(vppIP.Un), vppIP.Af == ip_neighbor.ADDRESS_IP6)
+}
+
 func FromVppMacAddress(vppHwAddr vppip.MacAddress) net.HardwareAddr {
+	return net.HardwareAddr(vppHwAddr[:])
+}
+
+func FromVppNeighborMacAddress(vppHwAddr ip_neighbor.MacAddress) net.HardwareAddr {
 	return net.HardwareAddr(vppHwAddr[:])
 }
 
@@ -101,10 +138,4 @@ func ToVppMacAddress(hardwareAddr net.HardwareAddr) vppip.MacAddress {
 	hwAddr := [6]uint8{}
 	copy(hwAddr[:], hardwareAddr)
 	return vppip.MacAddress(hwAddr)
-}
-
-func TobytesMacAddress(hardwareAddr net.HardwareAddr) []byte {
-	hwAddr := [6]uint8{}
-	copy(hwAddr[:], hardwareAddr)
-	return hwAddr[:]
 }

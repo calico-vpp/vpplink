@@ -17,6 +17,8 @@ package types
 
 import (
 	"net"
+
+	"github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/tapv2"
 )
 
 type TapV2 struct {
@@ -27,10 +29,10 @@ type TapV2 struct {
 	HostMacAddress net.HardwareAddr
 }
 
-func (t *TapV2) GetVppHostMacAddress() []byte {
-	return TobytesMacAddress(t.HostMacAddress)
+func (t *TapV2) GetVppHostMacAddress() tapv2.MacAddress {
+	return tapv2.MacAddress(ToVppMacAddress(t.HostMacAddress))
 }
 
-func (t *TapV2) GetVppMacAddress() []byte {
-	return TobytesMacAddress(t.MacAddress)
+func (t *TapV2) GetVppMacAddress() tapv2.MacAddress {
+	return tapv2.MacAddress(ToVppMacAddress(t.MacAddress))
 }
