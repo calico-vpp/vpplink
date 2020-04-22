@@ -17,10 +17,11 @@ package ip
 import (
 	bytes "bytes"
 	context "context"
-	api "git.fd.io/govpp.git/api"
-	struc "github.com/lunixbochs/struc"
 	io "io"
 	strconv "strconv"
+
+	api "git.fd.io/govpp.git/api"
+	struc "github.com/lunixbochs/struc"
 )
 
 const (
@@ -673,8 +674,8 @@ type FibPath struct {
 	Flags      FibPathFlags
 	Proto      FibPathNhProto
 	Nh         FibPathNh
-	NLabels    uint8
-	LabelStack []FibMplsLabel `struc:"[16]FibMplsLabel"`
+	NLabels    uint8 `struc:"sizeof=LabelStack"`
+	LabelStack []FibMplsLabel
 }
 
 func (*FibPath) GetTypeName() string { return "fib_path" }
