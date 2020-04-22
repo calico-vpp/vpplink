@@ -204,6 +204,43 @@ func (v *VppLink) SearchInterfaceWithName(name string) (err error, swIfIndex uin
 	return nil, swIfIndex
 }
 
+func (v *VppLink) GetInterfaceDetails(swIfIndex uint32) (i *types.VppInterfaceDetails, err error) {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+
+	request := &interfaces.SwInterfaceDump{
+		SwIfIndex: interfaces.InterfaceIndex(swIfIndex),
+	}
+	stream := v.ch.SendMultiRequest(request)
+	for {
+		response := &interfaces.SwInterfaceDetails{}
+		stop, err := stream.ReceiveReply(response)
+		if err != nil {
+			v.log.Errorf("error listing VPP interfaces: %v", err)
+			return nil, err
+		}
+		if stop {
+			break
+		}
+		if uint32(response.SwIfIndex) != swIfIndex {
+			v.log.Debugf("Got interface that doesn't match filter, fix vpp")
+			continue
+		}
+		v.log.Debugf("found interface %d", response.SwIfIndex)
+		i = &types.VppInterfaceDetails{
+			SwIfIndex: uint32(response.SwIfIndex),
+			IsUp:      response.Flags&interfaces.IF_STATUS_API_FLAG_ADMIN_UP > 0,
+			Name:      response.InterfaceName,
+			Tag:       response.Tag,
+			Type:      response.InterfaceDevType,
+		}
+	}
+	if i == nil {
+		return nil, errors.New("Interface not found")
+	}
+	return i, nil
+}
+
 func (v *VppLink) interfaceAdminUpDown(swIfIndex uint32, up bool) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
