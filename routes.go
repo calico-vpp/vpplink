@@ -18,7 +18,8 @@ package vpplink
 import (
 	"fmt"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/19_08/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/ip"
+	"github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/ip_neighbor"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
@@ -27,7 +28,7 @@ const (
 	AnyInterface = ^uint32(0)
 )
 
-func (v *VppLink) GetRoutes(tableID uint32, isIPv6 uint8) (routes []types.Route, err error) {
+func (v *VppLink) GetRoutes(tableID uint32, isIPv6 bool) (routes []types.Route, err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -67,27 +68,27 @@ func (v *VppLink) GetRoutes(tableID uint32, isIPv6 uint8) (routes []types.Route,
 }
 
 func (v *VppLink) AddNeighbor(neighbor *types.Neighbor) error {
-	return v.addDelNeighbor(neighbor, 1)
+	return v.addDelNeighbor(neighbor, true)
 }
 
 func (v *VppLink) DelNeighbor(neighbor *types.Neighbor) error {
-	return v.addDelNeighbor(neighbor, 0)
+	return v.addDelNeighbor(neighbor, false)
 }
 
-func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd uint8) error {
+func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd bool) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
-	request := &vppip.IPNeighborAddDel{
+	request := &ip_neighbor.IPNeighborAddDel{
 		IsAdd: isAdd,
-		Neighbor: vppip.IPNeighbor{
-			SwIfIndex:  uint32(neighbor.SwIfIndex),
+		Neighbor: ip_neighbor.IPNeighbor{
+			SwIfIndex:  ip_neighbor.InterfaceIndex(neighbor.SwIfIndex),
 			Flags:      neighbor.GetVppNeighborFlags(),
-			MacAddress: neighbor.GetVppMacAddress(),
-			IPAddress:  neighbor.GetVppIPAddress(),
+			MacAddress: ip_neighbor.MacAddress(neighbor.GetVppMacAddress()),
+			IPAddress:  neighbor.GetVppNeighborAddress(),
 		},
 	}
-	response := &vppip.IPNeighborAddDelReply{}
+	response := &ip_neighbor.IPNeighborAddDelReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
 		return errors.Wrapf(err, "failed to add/delete (%d) neighbor from VPP", isAdd)
@@ -99,14 +100,14 @@ func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd uint8) error {
 }
 
 func (v *VppLink) RouteAdd(route *types.Route) error {
-	return v.addDelIPRoute(route, 1)
+	return v.addDelIPRoute(route, true)
 }
 
 func (v *VppLink) RouteDel(route *types.Route) error {
-	return v.addDelIPRoute(route, 0)
+	return v.addDelIPRoute(route, false)
 }
 
-func (v *VppLink) addDelIPRoute(route *types.Route, isAdd uint8) error {
+func (v *VppLink) addDelIPRoute(route *types.Route, isAdd bool) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 	prefixLen, _ := route.Dst.Mask.Size()
