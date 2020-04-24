@@ -18,7 +18,7 @@ package types
 import (
 	"net"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip"
 )
 
 type IPProto uint32
@@ -28,6 +28,8 @@ const (
 	UDP     IPProto = 1
 	SCTP    IPProto = 2
 	TCP     IPProto = 3
+	ICMP    IPProto = 4
+	ICMP6   IPProto = 5
 )
 
 type IfAddress struct {
@@ -43,6 +45,10 @@ func ToVppIPProto(proto IPProto) uint8 {
 		return uint8(vppip.IP_API_PROTO_TCP)
 	case SCTP:
 		return uint8(vppip.IP_API_PROTO_SCTP)
+	case ICMP:
+		return uint8(vppip.IP_API_PROTO_ICMP)
+	case ICMP6:
+		return uint8(vppip.IP_API_PROTO_ICMP6)
 	default:
 		return ^uint8(0)
 	}

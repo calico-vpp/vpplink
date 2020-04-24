@@ -18,7 +18,7 @@ package types
 import (
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/tapv2"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/tapv2"
 )
 
 type TapV2 struct {

@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/interfaces"
-	vppip "github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/ip"
-	"github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/ip_neighbor"
-	"github.com/calico-vpp/vpplink/binapi/20_05-rc0-540-g77ea42b/tapv2"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/interfaces"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip_neighbor"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/tapv2"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
