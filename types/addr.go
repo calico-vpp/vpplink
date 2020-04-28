@@ -40,7 +40,7 @@ type IfAddress struct {
 func ToVppIPProto(proto IPProto) uint8 {
 	switch proto {
 	case UDP:
-		return uint8(vppip.IP_API_PROTO_TCP)
+		return uint8(vppip.IP_API_PROTO_UDP)
 	case TCP:
 		return uint8(vppip.IP_API_PROTO_TCP)
 	case SCTP:
