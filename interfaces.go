@@ -32,7 +32,9 @@ const (
 	INVALID_SW_IF_INDEX = ^uint32(0)
 )
 
-func (v *VppLink) CreateTapV2(tap *types.TapV2) (SwIfIndex uint32, err error) {
+type NamespaceNotFound error
+
+func (v *VppLink) createTapV2(tap *types.TapV2, flags tapv2.TapFlags) (swIfIndex uint32, err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 	response := &tapv2.TapCreateV2Reply{}
@@ -42,6 +44,7 @@ func (v *VppLink) CreateTapV2(tap *types.TapV2) (SwIfIndex uint32, err error) {
 		ID:         ^uint32(0),
 		Tag:        tap.Tag,
 		MacAddress: tap.GetVppMacAddress(),
+		TapFlags:   flags,
 	}
 	if tap.HostNamespace != "" {
 		request.HostNamespaceSet = true
@@ -58,35 +61,24 @@ func (v *VppLink) CreateTapV2(tap *types.TapV2) (SwIfIndex uint32, err error) {
 	err = v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
 		return INVALID_SW_IF_INDEX, errors.Wrap(err, "Tap creation request failed")
+	} else if response.Retval == -12 {
+		return INVALID_SW_IF_INDEX, nil
 	} else if response.Retval != 0 {
 		return INVALID_SW_IF_INDEX, fmt.Errorf("Tap creation failed (retval %d). Request: %+v", response.Retval, request)
 	}
 	return uint32(response.SwIfIndex), err
+}
 
-	// Add VPP side fake address
-	// TODO: Only if v4 is enabled
-	// There is currently a hard limit in VPP to 1024 taps - so this should be safe
-	// vppIPAddress = []byte{169, 254, byte(response.SwIfIndex >> 8), byte(response.SwIfIndex)}
-	// err = v.AddInterfaceAddress(response.SwIfIndex, vppIPAddress, 32)
-	// if err != nil {
-	// 	return INVALID_SW_IF_INDEX, vppIPAddress, errors.Wrap(err, "error adding address to new tap")
-	// }
+func (v *VppLink) CreateOrAttachTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
+	swIfIndex, err = v.createTapV2(tap, tapv2.TAP_FLAG_PERSIST | tapv2.TAP_FLAG_ATTACH)
+	if err == nil && swIfIndex == INVALID_SW_IF_INDEX {
+		return v.createTapV2(tap, tapv2.TAP_FLAG_PERSIST)
+	}
+	return swIfIndex, err
+}
 
-	// // Set interface up
-	// err = v.InterfaceAdminUp(response.SwIfIndex)
-	// if err != nil {
-	// 	return INVALID_SW_IF_INDEX, vppIPAddress, errors.Wrap(err, "error setting new tap up")
-	// }
-
-	// // Add IPv6 neighbor entry if v6 is enabled
-	// if EnableIp6 {
-	// 	err = v.EnableInterfaceIP6(response.SwIfIndex)
-	// 	if err != nil {
-	// 		return INVALID_SW_IF_INDEX, vppIPAddress, errors.Wrap(err, "error enabling IPv6 on new tap")
-	// 	}
-	// 	// Compute a link local address from mac address, and set it
-	// }
-	// return response.SwIfIndex, vppIPAddress, err
+func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
+	return v.createTapV2(tap, 0 /* flags */)
 }
 
 func (v *VppLink) addDelInterfaceAddress(swIfIndex uint32, addr *net.IPNet, isAdd bool) error {
