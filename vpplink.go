@@ -56,13 +56,13 @@ func NewVppLink(socket string, logger *logrus.Entry) (*VppLink, error) {
 	}, nil
 }
 
-func (v *VppLink) Reconnect() error {
+func (v *VppLink) Reconnect() (err error) {
 	v.Close()
-	v.conn, err := govpp.Connect(v.socket)
+	v.conn, err = govpp.Connect(v.socket)
 	if err != nil {
 		return errors.Wrapf(err, "cannot re-connect to VPP on socket %s", v.socket)
 	}
-	v.ch, err := conn.NewAPIChannel()
+	v.ch, err = v.conn.NewAPIChannel()
 	if err != nil {
 		return errors.Wrap(err, "channel re-creation failed")
 	}
