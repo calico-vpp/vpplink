@@ -16,6 +16,8 @@
 package types
 
 import (
+	"fmt"
+	"net"
 	vppnat "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/nat"
 )
 
@@ -35,4 +37,22 @@ const (
 
 func ToVppNatConfigFlags(flags NatFlags) vppnat.NatConfigFlags {
 	return vppnat.NatConfigFlags(flags)
+}
+
+type Nat44Entry struct {
+	ServiceIP       net.IP
+	ServicePort     int32
+	Protocol        IPProto
+	BackendIPs      []net.IP
+	BackendPort     int32
+}
+
+func (n *Nat44Entry) String() string {
+	return fmt.Sprintf("%s %s:%d -> %+v:%d",
+		formatProto(n.Protocol),
+		n.ServiceIP.String(),
+		n.ServicePort,
+		n.BackendIPs,
+		n.BackendPort,
+	)
 }

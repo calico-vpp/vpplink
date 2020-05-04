@@ -53,3 +53,20 @@ func ToVppIPProto(proto IPProto) uint8 {
 		return ^uint8(0)
 	}
 }
+
+func formatProto(proto IPProto) string {
+	switch proto {
+	case UDP:
+		return "UDP"
+	case TCP:
+		return "TCP"
+	case SCTP:
+		return "SCTP"
+	case ICMP:
+		return "ICMP"
+	case ICMP6:
+		return "ICMP6"
+	default:
+		return "???"
+	}
+}

@@ -24,9 +24,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-func parseIP4Address(address string) nat.IP4Address {
+func parseIP4Address(address net.IP) nat.IP4Address {
 	var ip nat.IP4Address
-	copy(ip[:], net.ParseIP(address).To4()[0:4])
+	copy(ip[:], address.To4()[0:4])
 	return ip
 }
 
@@ -48,7 +48,7 @@ func (v *VppLink) EnableNatForwarding() (err error) {
 	return nil
 }
 
-func (v *VppLink) addDelNat44Address(isAdd bool, address string) (err error) {
+func (v *VppLink) addDelNat44Address(isAdd bool, address net.IP) (err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -96,11 +96,11 @@ func (v *VppLink) addDelNat44InterfaceAddress(isAdd bool, swIfIndex uint32, flag
 	return nil
 }
 
-func (v *VppLink) AddNat44Address(address string) error {
+func (v *VppLink) AddNat44Address(address net.IP) error {
 	return v.addDelNat44Address(true, address)
 }
 
-func (v *VppLink) DelNat44Address(address string) error {
+func (v *VppLink) DelNat44Address(address net.IP) error {
 	return v.addDelNat44Address(false, address)
 }
 
@@ -139,37 +139,30 @@ func (v *VppLink) DelNat44OutsideInterface(swIfIndex uint32) error {
 	return v.addDelNat44Interface(false, types.NatOutside, swIfIndex)
 }
 
-func (v *VppLink) getLBLocals(backends []string, port int32) (locals []nat.Nat44LbAddrPort) {
-	for _, ip := range backends {
-		v.log.Debugf("Adding local %s:%d", ip, port)
+func (v *VppLink) getLBLocals(entry *types.Nat44Entry) (locals []nat.Nat44LbAddrPort) {
+	for _, ip := range entry.BackendIPs {
+		v.log.Debugf("Adding local %s:%d", ip, entry.BackendPort)
 		locals = append(locals, nat.Nat44LbAddrPort{
 			Addr:        parseIP4Address(ip),
-			Port:        uint16(port),
+			Port:        uint16(entry.BackendPort),
 			Probability: uint8(10),
 		})
 	}
 	return locals
 }
 
-func (v *VppLink) addDelNat44LBStaticMapping(
-	isAdd bool,
-	extAddr string,
-	proto types.IPProto,
-	extPort int32,
-	backends []string,
-	backendPort int32,
-) (err error) {
+func (v *VppLink) addDelNat44LBStaticMapping(isAdd bool, entry *types.Nat44Entry) (err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
-	locals := v.getLBLocals(backends, backendPort)
+	locals := v.getLBLocals(entry)
 	response := &nat.Nat44AddDelLbStaticMappingReply{}
 	request := &nat.Nat44AddDelLbStaticMapping{
 		IsAdd:        isAdd,
 		Flags:        nat.NAT_IS_SELF_TWICE_NAT | nat.NAT_IS_OUT2IN_ONLY,
-		ExternalAddr: parseIP4Address(extAddr),
-		ExternalPort: uint16(extPort),
-		Protocol:     types.ToVppIPProto(proto),
+		ExternalAddr: parseIP4Address(entry.ServiceIP),
+		ExternalPort: uint16(entry.ServicePort),
+		Protocol:     types.ToVppIPProto(entry.Protocol),
 		Locals:       locals,
 	}
 	err = v.ch.SendRequest(request).ReceiveReply(response)
@@ -181,32 +174,15 @@ func (v *VppLink) addDelNat44LBStaticMapping(
 	return nil
 }
 
-func (v *VppLink) AddNat44LBStaticMapping(
-	externalAddr string,
-	serviceProto types.IPProto,
-	externalPort int32,
-	backendIPs []string,
-	backendPort int32,
-) error {
-	return v.addDelNat44LBStaticMapping(true, externalAddr, serviceProto, externalPort, backendIPs, backendPort)
+func (v *VppLink) AddNat44LBStaticMapping(entry *types.Nat44Entry) error {
+	return v.addDelNat44LBStaticMapping(true, entry)
 }
 
-func (v *VppLink) DelNat44LBStaticMapping(
-	externalAddr string,
-	serviceProto types.IPProto,
-	externalPort int32,
-) error {
-	return v.addDelNat44LBStaticMapping(false, externalAddr, serviceProto, externalPort, []string{}, 0)
+func (v *VppLink) DelNat44LBStaticMapping(entry *types.Nat44Entry) error {
+	return v.addDelNat44LBStaticMapping(false, entry)
 }
 
-func (v *VppLink) addDelNat44StaticMapping(
-	isAdd bool,
-	externalAddr string,
-	serviceProto types.IPProto,
-	externalPort int32,
-	backendIP string,
-	backendPort int32,
-) error {
+func (v *VppLink) addDelNat44StaticMapping(isAdd bool, entry *types.Nat44Entry) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -214,11 +190,11 @@ func (v *VppLink) addDelNat44StaticMapping(
 	request := &nat.Nat44AddDelStaticMapping{
 		IsAdd:             isAdd,
 		Flags:             nat.NAT_IS_SELF_TWICE_NAT | nat.NAT_IS_OUT2IN_ONLY,
-		LocalIPAddress:    parseIP4Address(backendIP),
-		ExternalIPAddress: parseIP4Address(externalAddr),
-		Protocol:          types.ToVppIPProto(serviceProto),
-		LocalPort:         uint16(backendPort),
-		ExternalPort:      uint16(externalPort),
+		LocalIPAddress:    parseIP4Address(entry.BackendIPs[0]),
+		ExternalIPAddress: parseIP4Address(entry.ServiceIP),
+		Protocol:          types.ToVppIPProto(entry.Protocol),
+		LocalPort:         uint16(entry.BackendPort),
+		ExternalPort:      uint16(entry.ServicePort),
 		ExternalSwIfIndex: 0xffffffff,
 	}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
@@ -230,51 +206,30 @@ func (v *VppLink) addDelNat44StaticMapping(
 	return nil
 }
 
-func (v *VppLink) AddNat44StaticMapping(
-	externalAddr string,
-	serviceProto types.IPProto,
-	externalPort int32,
-	backendIP string,
-	backendPort int32,
-) error {
-	return v.addDelNat44StaticMapping(true, externalAddr, serviceProto, externalPort, backendIP, backendPort)
+func (v *VppLink) AddNat44StaticMapping(entry *types.Nat44Entry) error {
+	return v.addDelNat44StaticMapping(true, entry)
 }
 
-func (v *VppLink) DelNat44StaticMapping(
-	externalAddr string,
-	serviceProto types.IPProto,
-	externalPort int32,
-) error {
-	return v.addDelNat44StaticMapping(false, externalAddr, serviceProto, externalPort, "0.0.0.0", 0)
+func (v *VppLink) DelNat44StaticMapping(entry *types.Nat44Entry) error {
+	return v.addDelNat44StaticMapping(false, entry)
 }
 
-func (v *VppLink) AddNat44LB(
-	serviceIP string,
-	serviceProto types.IPProto,
-	servicePort int32,
-	backendIPs []string,
-	backendPort int32,
-) error {
-	if len(backendIPs) == 0 {
-		return fmt.Errorf("No backends provided for NAT44")
+func (v *VppLink) AddNat44LB(entry *types.Nat44Entry) error {
+	if len(entry.BackendIPs) == 0 {
+		return nil
 	}
-	if len(backendIPs) == 1 {
-		return v.AddNat44StaticMapping(serviceIP, serviceProto, servicePort, backendIPs[0], backendPort)
+	if len(entry.BackendIPs) == 1 {
+		return v.AddNat44StaticMapping(entry)
 	}
-	return v.AddNat44LBStaticMapping(serviceIP, serviceProto, servicePort, backendIPs, backendPort)
+	return v.AddNat44LBStaticMapping(entry)
 }
 
-func (v *VppLink) DelNat44LB(
-	serviceIP string,
-	serviceProto types.IPProto,
-	servicePort int32,
-	backendCount int,
-) error {
-	if backendCount == 0 {
-		return fmt.Errorf("No backends provided for NAT44")
+func (v *VppLink) DelNat44LB(entry *types.Nat44Entry) error {
+	if len(entry.BackendIPs) == 0 {
+		return nil
 	}
-	if backendCount == 1 {
-		return v.DelNat44StaticMapping(serviceIP, serviceProto, servicePort)
+	if len(entry.BackendIPs) == 1 {
+		return v.DelNat44StaticMapping(entry)
 	}
-	return v.DelNat44LBStaticMapping(serviceIP, serviceProto, servicePort)
+	return v.DelNat44LBStaticMapping(entry)
 }
