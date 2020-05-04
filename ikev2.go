@@ -316,10 +316,10 @@ func (v *VppLink) SetIKEv2DefaultTransforms(profile string) (err error) {
 	}
 	return v.SetIKEv2ESPTransforms(
 		profile,
-		IKEv2EncryptionAlgorithmAES_CBC,
+		IKEv2EncryptionAlgorithmAES_GCM_16,
 		256,
-		IKEv2IntegrityAlgorithmAUTH_HMAC_SHA1_96,
-		IKEv2DHGroupECP_256,
+		IKEv2IntegrityAlgorithmNone,
+		IKEv2DHGroupMODP_2048_256,
 	)
 }
 
