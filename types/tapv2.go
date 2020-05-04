@@ -27,6 +27,7 @@ type TapV2 struct {
 	Tag            string
 	MacAddress     net.HardwareAddr
 	HostMacAddress net.HardwareAddr
+	RxQueues       int
 }
 
 func (t *TapV2) GetVppHostMacAddress() tapv2.MacAddress {

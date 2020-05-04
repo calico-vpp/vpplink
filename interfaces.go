@@ -41,10 +41,11 @@ func (v *VppLink) createTapV2(tap *types.TapV2, flags tapv2.TapFlags) (swIfIndex
 	request := &tapv2.TapCreateV2{
 		// TODO check namespace len < 64?
 		// TODO set MTU?
-		ID:         ^uint32(0),
-		Tag:        tap.Tag,
-		MacAddress: tap.GetVppMacAddress(),
-		TapFlags:   flags,
+		ID:          ^uint32(0),
+		Tag:         tap.Tag,
+		MacAddress:  tap.GetVppMacAddress(),
+		TapFlags:    flags,
+		NumRxQueues: uint8(tap.RxQueues),
 	}
 	if tap.HostNamespace != "" {
 		request.HostNamespaceSet = true
@@ -70,7 +71,7 @@ func (v *VppLink) createTapV2(tap *types.TapV2, flags tapv2.TapFlags) (swIfIndex
 }
 
 func (v *VppLink) CreateOrAttachTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
-	swIfIndex, err = v.createTapV2(tap, tapv2.TAP_FLAG_PERSIST | tapv2.TAP_FLAG_ATTACH)
+	swIfIndex, err = v.createTapV2(tap, tapv2.TAP_FLAG_PERSIST|tapv2.TAP_FLAG_ATTACH)
 	if err == nil && swIfIndex == INVALID_SW_IF_INDEX {
 		return v.createTapV2(tap, tapv2.TAP_FLAG_PERSIST)
 	}
