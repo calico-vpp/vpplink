@@ -21,6 +21,16 @@ import (
 	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/tapv2"
 )
 
+type TapFlags uint32
+
+const (
+	TapFlagGSO         TapFlags = 1
+	TapFlagCsumOffload TapFlags = 2
+	TapFlagPersist     TapFlags = 4
+	TapFlagAttach      TapFlags = 8
+	TapFlagTun         TapFlags = 16
+)
+
 type TapV2 struct {
 	HostNamespace  string
 	HostIfName     string
@@ -28,6 +38,7 @@ type TapV2 struct {
 	MacAddress     net.HardwareAddr
 	HostMacAddress net.HardwareAddr
 	RxQueues       int
+	Flags          TapFlags
 }
 
 func (t *TapV2) GetVppHostMacAddress() tapv2.MacAddress {
