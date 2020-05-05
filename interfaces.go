@@ -34,7 +34,7 @@ const (
 
 type NamespaceNotFound error
 
-func (v *VppLink) createTapV2(tap *types.TapV2, flags tapv2.TapFlags) (swIfIndex uint32, err error) {
+func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 	response := &tapv2.TapCreateV2Reply{}
@@ -44,7 +44,7 @@ func (v *VppLink) createTapV2(tap *types.TapV2, flags tapv2.TapFlags) (swIfIndex
 		ID:          ^uint32(0),
 		Tag:         tap.Tag,
 		MacAddress:  tap.GetVppMacAddress(),
-		TapFlags:    flags,
+		TapFlags:    tapv2.TapFlags(tap.Flags),
 		NumRxQueues: uint8(tap.RxQueues),
 	}
 	if tap.HostNamespace != "" {
@@ -71,15 +71,13 @@ func (v *VppLink) createTapV2(tap *types.TapV2, flags tapv2.TapFlags) (swIfIndex
 }
 
 func (v *VppLink) CreateOrAttachTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
-	swIfIndex, err = v.createTapV2(tap, tapv2.TAP_FLAG_PERSIST|tapv2.TAP_FLAG_ATTACH)
+	tap.Flags |= types.TapFlagPersist | types.TapFlagAttach
+	swIfIndex, err = v.CreateTapV2(tap)
 	if err == nil && swIfIndex == INVALID_SW_IF_INDEX {
-		return v.createTapV2(tap, tapv2.TAP_FLAG_PERSIST)
+		tap.Flags &= ^types.TapFlagAttach
+		return v.CreateTapV2(tap)
 	}
 	return swIfIndex, err
-}
-
-func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
-	return v.createTapV2(tap, 0 /* flags */)
 }
 
 func (v *VppLink) addDelInterfaceAddress(swIfIndex uint32, addr *net.IPNet, isAdd bool) error {
