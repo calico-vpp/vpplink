@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/gso"
 	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/interfaces"
 	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip"
 	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip_neighbor"
@@ -377,4 +378,27 @@ func (v *VppLink) PuntRedirect(sourceSwIfIndex, destSwIfIndex uint32, nh net.IP)
 		return fmt.Errorf("cannot set punt in VPP: %v %d", err, response.Retval)
 	}
 	return nil
+}
+
+func (v *VppLink) enableDisableGso(swIfIndex uint32, enable bool) error {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+	request := &gso.FeatureGsoEnableDisable{
+		SwIfIndex:     gso.InterfaceIndex(swIfIndex),
+		EnableDisable: enable,
+	}
+	response := &gso.FeatureGsoEnableDisableReply{}
+	err := v.ch.SendRequest(request).ReceiveReply(response)
+	if err != nil || response.Retval != 0 {
+		return fmt.Errorf("cannot configure gso: %v %d", err, response.Retval)
+	}
+	return nil
+}
+
+func (v *VppLink) EnableGSOFeature(swIfIndex uint32) error {
+	return v.enableDisableGso(swIfIndex, true)
+}
+
+func (v *VppLink) DisableGSOFeature(swIfIndex uint32) error {
+	return v.enableDisableGso(swIfIndex, false)
 }
