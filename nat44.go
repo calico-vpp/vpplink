@@ -31,6 +31,7 @@ func parseIP4Address(address net.IP) nat.IP4Address {
 }
 
 func (v *VppLink) EnableNatForwarding() (err error) {
+	return nil
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -49,6 +50,7 @@ func (v *VppLink) EnableNatForwarding() (err error) {
 }
 
 func (v *VppLink) addDelNat44Address(isAdd bool, address net.IP) (err error) {
+	return nil
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -78,6 +80,7 @@ func (v *VppLink) DelNat44InterfaceAddress(swIfIndex uint32, flags types.NatFlag
 }
 
 func (v *VppLink) addDelNat44InterfaceAddress(isAdd bool, swIfIndex uint32, flags types.NatFlags) (err error) {
+	return nil
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -105,6 +108,7 @@ func (v *VppLink) DelNat44Address(address net.IP) error {
 }
 
 func (v *VppLink) addDelNat44Interface(isAdd bool, flags types.NatFlags, swIfIndex uint32) (err error) {
+	return nil
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -152,6 +156,7 @@ func (v *VppLink) getLBLocals(entry *types.Nat44Entry) (locals []nat.Nat44LbAddr
 }
 
 func (v *VppLink) addDelNat44LBStaticMapping(isAdd bool, entry *types.Nat44Entry) (err error) {
+	return nil
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -183,6 +188,7 @@ func (v *VppLink) DelNat44LBStaticMapping(entry *types.Nat44Entry) error {
 }
 
 func (v *VppLink) addDelNat44StaticMapping(isAdd bool, entry *types.Nat44Entry) error {
+	return nil
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
