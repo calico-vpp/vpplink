@@ -674,8 +674,8 @@ type FibPath struct {
 	Flags      FibPathFlags
 	Proto      FibPathNhProto
 	Nh         FibPathNh
-	NLabels    uint8          `struc:"sizeof=LabelStack"`
-	LabelStack []FibMplsLabel `struc:"[16]FibMplsLabel"`
+	NLabels    uint8
+	LabelStack [16]FibMplsLabel `struc:"[16]FibMplsLabel"`
 }
 
 func (*FibPath) GetTypeName() string { return "fib_path" }
