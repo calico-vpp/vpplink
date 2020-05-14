@@ -99,6 +99,66 @@ func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd bool) error {
 	return nil
 }
 
+func (v *VppLink) RouteMAdd(route *types.MRoute) error {
+	return v.addDelIPMultiRoute(route, true)
+}
+
+func (v *VppLink) RouteMDel(route *types.MRoute) error {
+	return v.addDelIPMultiRoute(route, false)
+}
+
+func (v *VppLink) addDelIPMultiRoute(route *types.MRoute, isAdd bool) error {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+	prefixLen, _ := route.Dst.Mask.Size()
+
+	proto := vppip.FIB_API_PATH_NH_PROTO_IP4
+	if IsIP6(route.Dst.IP) {
+		proto = vppip.FIB_API_PATH_NH_PROTO_IP6
+	}
+
+	paths := make([]vppip.FibPath, len(route.SwIfIndex))
+	for _, swIfIndex := range route.SwIfIndex {
+		path := vppip.FibPath{
+			SwIfIndex:  uint32(swIfIndex),
+			TableID:    uint32(route.DstTable),
+			RpfID:      0,
+			Weight:     1,
+			Preference: 0,
+			Type:       vppip.FIB_API_PATH_TYPE_NORMAL,
+			Flags:      vppip.FIB_API_PATH_FLAG_NONE,
+			Proto:      proto,
+		}
+		if route.Gw != nil {
+			path.Nh.Address = route.GetVppGwAddress().Un
+		}
+		paths = append(paths, path)
+	}
+
+	vppRoute := vppip.IPRoute{
+		TableID: uint32(route.DstTable),
+		Prefix: vppip.Prefix{
+			Len:     uint8(prefixLen),
+			Address: route.GetVppDstAddress(),
+		},
+		Paths: paths,
+	}
+
+	request := &vppip.IPRouteAddDel{
+		IsAdd: isAdd,
+		Route: vppRoute,
+	}
+	response := &vppip.IPRouteAddDelReply{}
+	err := v.ch.SendRequest(request).ReceiveReply(response)
+	if err != nil {
+		return errors.Wrapf(err, "failed to add/delete (%d) route from VPP", isAdd)
+	} else if response.Retval != 0 {
+		return fmt.Errorf("failed to add/delete (%d) route from VPP (retval %d)", isAdd, response.Retval)
+	}
+	v.log.Debugf("added/deleted (%d) route %+v", isAdd, route)
+	return nil
+}
+
 func (v *VppLink) RouteAdd(route *types.Route) error {
 	return v.addDelIPRoute(route, true)
 }
