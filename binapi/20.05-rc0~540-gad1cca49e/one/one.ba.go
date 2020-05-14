@@ -5,7 +5,10 @@
 Package one is a generated VPP binary API for 'one' module.
 
 It consists of:
-	  5 types
+	 14 enums
+	  7 aliases
+	 14 types
+	  2 unions
 	108 messages
 	 54 services
 */
@@ -25,71 +28,775 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "one"
 	// APIVersion is the API version of this module.
-	APIVersion = "1.0.0"
+	APIVersion = "2.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0xde9891c3
+	VersionCrc = 0x288aaf5d
 )
+
+// AddressFamily represents VPP binary API enum 'address_family'.
+type AddressFamily uint8
+
+const (
+	ADDRESS_IP4 AddressFamily = 0
+	ADDRESS_IP6 AddressFamily = 1
+)
+
+var AddressFamily_name = map[uint8]string{
+	0: "ADDRESS_IP4",
+	1: "ADDRESS_IP6",
+}
+
+var AddressFamily_value = map[string]uint8{
+	"ADDRESS_IP4": 0,
+	"ADDRESS_IP6": 1,
+}
+
+func (x AddressFamily) String() string {
+	s, ok := AddressFamily_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// EidType represents VPP binary API enum 'eid_type'.
+type EidType uint8
+
+const (
+	EID_TYPE_API_PREFIX EidType = 0
+	EID_TYPE_API_MAC    EidType = 1
+	EID_TYPE_API_NSH    EidType = 2
+)
+
+var EidType_name = map[uint8]string{
+	0: "EID_TYPE_API_PREFIX",
+	1: "EID_TYPE_API_MAC",
+	2: "EID_TYPE_API_NSH",
+}
+
+var EidType_value = map[string]uint8{
+	"EID_TYPE_API_PREFIX": 0,
+	"EID_TYPE_API_MAC":    1,
+	"EID_TYPE_API_NSH":    2,
+}
+
+func (x EidType) String() string {
+	s, ok := EidType_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// HmacKeyID represents VPP binary API enum 'hmac_key_id'.
+type HmacKeyID uint8
+
+const (
+	KEY_ID_API_HMAC_NO_KEY      HmacKeyID = 0
+	KEY_ID_API_HMAC_SHA_1_96    HmacKeyID = 1
+	KEY_ID_API_HMAC_SHA_256_128 HmacKeyID = 2
+)
+
+var HmacKeyID_name = map[uint8]string{
+	0: "KEY_ID_API_HMAC_NO_KEY",
+	1: "KEY_ID_API_HMAC_SHA_1_96",
+	2: "KEY_ID_API_HMAC_SHA_256_128",
+}
+
+var HmacKeyID_value = map[string]uint8{
+	"KEY_ID_API_HMAC_NO_KEY":      0,
+	"KEY_ID_API_HMAC_SHA_1_96":    1,
+	"KEY_ID_API_HMAC_SHA_256_128": 2,
+}
+
+func (x HmacKeyID) String() string {
+	s, ok := HmacKeyID_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IfStatusFlags represents VPP binary API enum 'if_status_flags'.
+type IfStatusFlags uint32
+
+const (
+	IF_STATUS_API_FLAG_ADMIN_UP IfStatusFlags = 1
+	IF_STATUS_API_FLAG_LINK_UP  IfStatusFlags = 2
+)
+
+var IfStatusFlags_name = map[uint32]string{
+	1: "IF_STATUS_API_FLAG_ADMIN_UP",
+	2: "IF_STATUS_API_FLAG_LINK_UP",
+}
+
+var IfStatusFlags_value = map[string]uint32{
+	"IF_STATUS_API_FLAG_ADMIN_UP": 1,
+	"IF_STATUS_API_FLAG_LINK_UP":  2,
+}
+
+func (x IfStatusFlags) String() string {
+	s, ok := IfStatusFlags_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IfType represents VPP binary API enum 'if_type'.
+type IfType uint32
+
+const (
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
+)
+
+var IfType_name = map[uint32]string{
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
+}
+
+var IfType_value = map[string]uint32{
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
+}
+
+func (x IfType) String() string {
+	s, ok := IfType_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPDscp represents VPP binary API enum 'ip_dscp'.
+type IPDscp uint8
+
+const (
+	IP_API_DSCP_CS0  IPDscp = 0
+	IP_API_DSCP_CS1  IPDscp = 8
+	IP_API_DSCP_AF11 IPDscp = 10
+	IP_API_DSCP_AF12 IPDscp = 12
+	IP_API_DSCP_AF13 IPDscp = 14
+	IP_API_DSCP_CS2  IPDscp = 16
+	IP_API_DSCP_AF21 IPDscp = 18
+	IP_API_DSCP_AF22 IPDscp = 20
+	IP_API_DSCP_AF23 IPDscp = 22
+	IP_API_DSCP_CS3  IPDscp = 24
+	IP_API_DSCP_AF31 IPDscp = 26
+	IP_API_DSCP_AF32 IPDscp = 28
+	IP_API_DSCP_AF33 IPDscp = 30
+	IP_API_DSCP_CS4  IPDscp = 32
+	IP_API_DSCP_AF41 IPDscp = 34
+	IP_API_DSCP_AF42 IPDscp = 36
+	IP_API_DSCP_AF43 IPDscp = 38
+	IP_API_DSCP_CS5  IPDscp = 40
+	IP_API_DSCP_EF   IPDscp = 46
+	IP_API_DSCP_CS6  IPDscp = 48
+	IP_API_DSCP_CS7  IPDscp = 50
+)
+
+var IPDscp_name = map[uint8]string{
+	0:  "IP_API_DSCP_CS0",
+	8:  "IP_API_DSCP_CS1",
+	10: "IP_API_DSCP_AF11",
+	12: "IP_API_DSCP_AF12",
+	14: "IP_API_DSCP_AF13",
+	16: "IP_API_DSCP_CS2",
+	18: "IP_API_DSCP_AF21",
+	20: "IP_API_DSCP_AF22",
+	22: "IP_API_DSCP_AF23",
+	24: "IP_API_DSCP_CS3",
+	26: "IP_API_DSCP_AF31",
+	28: "IP_API_DSCP_AF32",
+	30: "IP_API_DSCP_AF33",
+	32: "IP_API_DSCP_CS4",
+	34: "IP_API_DSCP_AF41",
+	36: "IP_API_DSCP_AF42",
+	38: "IP_API_DSCP_AF43",
+	40: "IP_API_DSCP_CS5",
+	46: "IP_API_DSCP_EF",
+	48: "IP_API_DSCP_CS6",
+	50: "IP_API_DSCP_CS7",
+}
+
+var IPDscp_value = map[string]uint8{
+	"IP_API_DSCP_CS0":  0,
+	"IP_API_DSCP_CS1":  8,
+	"IP_API_DSCP_AF11": 10,
+	"IP_API_DSCP_AF12": 12,
+	"IP_API_DSCP_AF13": 14,
+	"IP_API_DSCP_CS2":  16,
+	"IP_API_DSCP_AF21": 18,
+	"IP_API_DSCP_AF22": 20,
+	"IP_API_DSCP_AF23": 22,
+	"IP_API_DSCP_CS3":  24,
+	"IP_API_DSCP_AF31": 26,
+	"IP_API_DSCP_AF32": 28,
+	"IP_API_DSCP_AF33": 30,
+	"IP_API_DSCP_CS4":  32,
+	"IP_API_DSCP_AF41": 34,
+	"IP_API_DSCP_AF42": 36,
+	"IP_API_DSCP_AF43": 38,
+	"IP_API_DSCP_CS5":  40,
+	"IP_API_DSCP_EF":   46,
+	"IP_API_DSCP_CS6":  48,
+	"IP_API_DSCP_CS7":  50,
+}
+
+func (x IPDscp) String() string {
+	s, ok := IPDscp_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPEcn represents VPP binary API enum 'ip_ecn'.
+type IPEcn uint8
+
+const (
+	IP_API_ECN_NONE IPEcn = 0
+	IP_API_ECN_ECT0 IPEcn = 1
+	IP_API_ECN_ECT1 IPEcn = 2
+	IP_API_ECN_CE   IPEcn = 3
+)
+
+var IPEcn_name = map[uint8]string{
+	0: "IP_API_ECN_NONE",
+	1: "IP_API_ECN_ECT0",
+	2: "IP_API_ECN_ECT1",
+	3: "IP_API_ECN_CE",
+}
+
+var IPEcn_value = map[string]uint8{
+	"IP_API_ECN_NONE": 0,
+	"IP_API_ECN_ECT0": 1,
+	"IP_API_ECN_ECT1": 2,
+	"IP_API_ECN_CE":   3,
+}
+
+func (x IPEcn) String() string {
+	s, ok := IPEcn_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPProto represents VPP binary API enum 'ip_proto'.
+type IPProto uint8
+
+const (
+	IP_API_PROTO_HOPOPT   IPProto = 0
+	IP_API_PROTO_ICMP     IPProto = 1
+	IP_API_PROTO_IGMP     IPProto = 2
+	IP_API_PROTO_TCP      IPProto = 6
+	IP_API_PROTO_UDP      IPProto = 17
+	IP_API_PROTO_GRE      IPProto = 47
+	IP_API_PROTO_ESP      IPProto = 50
+	IP_API_PROTO_AH       IPProto = 51
+	IP_API_PROTO_ICMP6    IPProto = 58
+	IP_API_PROTO_EIGRP    IPProto = 88
+	IP_API_PROTO_OSPF     IPProto = 89
+	IP_API_PROTO_SCTP     IPProto = 132
+	IP_API_PROTO_RESERVED IPProto = 255
+)
+
+var IPProto_name = map[uint8]string{
+	0:   "IP_API_PROTO_HOPOPT",
+	1:   "IP_API_PROTO_ICMP",
+	2:   "IP_API_PROTO_IGMP",
+	6:   "IP_API_PROTO_TCP",
+	17:  "IP_API_PROTO_UDP",
+	47:  "IP_API_PROTO_GRE",
+	50:  "IP_API_PROTO_ESP",
+	51:  "IP_API_PROTO_AH",
+	58:  "IP_API_PROTO_ICMP6",
+	88:  "IP_API_PROTO_EIGRP",
+	89:  "IP_API_PROTO_OSPF",
+	132: "IP_API_PROTO_SCTP",
+	255: "IP_API_PROTO_RESERVED",
+}
+
+var IPProto_value = map[string]uint8{
+	"IP_API_PROTO_HOPOPT":   0,
+	"IP_API_PROTO_ICMP":     1,
+	"IP_API_PROTO_IGMP":     2,
+	"IP_API_PROTO_TCP":      6,
+	"IP_API_PROTO_UDP":      17,
+	"IP_API_PROTO_GRE":      47,
+	"IP_API_PROTO_ESP":      50,
+	"IP_API_PROTO_AH":       51,
+	"IP_API_PROTO_ICMP6":    58,
+	"IP_API_PROTO_EIGRP":    88,
+	"IP_API_PROTO_OSPF":     89,
+	"IP_API_PROTO_SCTP":     132,
+	"IP_API_PROTO_RESERVED": 255,
+}
+
+func (x IPProto) String() string {
+	s, ok := IPProto_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// LinkDuplex represents VPP binary API enum 'link_duplex'.
+type LinkDuplex uint32
+
+const (
+	LINK_DUPLEX_API_UNKNOWN LinkDuplex = 0
+	LINK_DUPLEX_API_HALF    LinkDuplex = 1
+	LINK_DUPLEX_API_FULL    LinkDuplex = 2
+)
+
+var LinkDuplex_name = map[uint32]string{
+	0: "LINK_DUPLEX_API_UNKNOWN",
+	1: "LINK_DUPLEX_API_HALF",
+	2: "LINK_DUPLEX_API_FULL",
+}
+
+var LinkDuplex_value = map[string]uint32{
+	"LINK_DUPLEX_API_UNKNOWN": 0,
+	"LINK_DUPLEX_API_HALF":    1,
+	"LINK_DUPLEX_API_FULL":    2,
+}
+
+func (x LinkDuplex) String() string {
+	s, ok := LinkDuplex_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// MtuProto represents VPP binary API enum 'mtu_proto'.
+type MtuProto uint32
+
+const (
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
+)
+
+var MtuProto_name = map[uint32]string{
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
+}
+
+var MtuProto_value = map[string]uint32{
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
+}
+
+func (x MtuProto) String() string {
+	s, ok := MtuProto_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// OneFilter represents VPP binary API enum 'one_filter'.
+type OneFilter uint32
+
+const (
+	ONE_FILTER_API_ALL    OneFilter = 0
+	ONE_FILTER_API_LOCAL  OneFilter = 1
+	ONE_FILTER_API_REMOTE OneFilter = 2
+)
+
+var OneFilter_name = map[uint32]string{
+	0: "ONE_FILTER_API_ALL",
+	1: "ONE_FILTER_API_LOCAL",
+	2: "ONE_FILTER_API_REMOTE",
+}
+
+var OneFilter_value = map[string]uint32{
+	"ONE_FILTER_API_ALL":    0,
+	"ONE_FILTER_API_LOCAL":  1,
+	"ONE_FILTER_API_REMOTE": 2,
+}
+
+func (x OneFilter) String() string {
+	s, ok := OneFilter_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// OneMapMode represents VPP binary API enum 'one_map_mode'.
+type OneMapMode uint32
+
+const (
+	ONE_MAP_MODE_API_DST_ONLY OneMapMode = 0
+	ONE_MAP_MODE_API_SRC_DST  OneMapMode = 1
+)
+
+var OneMapMode_name = map[uint32]string{
+	0: "ONE_MAP_MODE_API_DST_ONLY",
+	1: "ONE_MAP_MODE_API_SRC_DST",
+}
+
+var OneMapMode_value = map[string]uint32{
+	"ONE_MAP_MODE_API_DST_ONLY": 0,
+	"ONE_MAP_MODE_API_SRC_DST":  1,
+}
+
+func (x OneMapMode) String() string {
+	s, ok := OneMapMode_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// RxMode represents VPP binary API enum 'rx_mode'.
+type RxMode uint32
+
+const (
+	RX_MODE_API_UNKNOWN   RxMode = 0
+	RX_MODE_API_POLLING   RxMode = 1
+	RX_MODE_API_INTERRUPT RxMode = 2
+	RX_MODE_API_ADAPTIVE  RxMode = 3
+	RX_MODE_API_DEFAULT   RxMode = 4
+)
+
+var RxMode_name = map[uint32]string{
+	0: "RX_MODE_API_UNKNOWN",
+	1: "RX_MODE_API_POLLING",
+	2: "RX_MODE_API_INTERRUPT",
+	3: "RX_MODE_API_ADAPTIVE",
+	4: "RX_MODE_API_DEFAULT",
+}
+
+var RxMode_value = map[string]uint32{
+	"RX_MODE_API_UNKNOWN":   0,
+	"RX_MODE_API_POLLING":   1,
+	"RX_MODE_API_INTERRUPT": 2,
+	"RX_MODE_API_ADAPTIVE":  3,
+	"RX_MODE_API_DEFAULT":   4,
+}
+
+func (x RxMode) String() string {
+	s, ok := RxMode_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// SubIfFlags represents VPP binary API enum 'sub_if_flags'.
+type SubIfFlags uint32
+
+const (
+	SUB_IF_API_FLAG_NO_TAGS           SubIfFlags = 1
+	SUB_IF_API_FLAG_ONE_TAG           SubIfFlags = 2
+	SUB_IF_API_FLAG_TWO_TAGS          SubIfFlags = 4
+	SUB_IF_API_FLAG_DOT1AD            SubIfFlags = 8
+	SUB_IF_API_FLAG_EXACT_MATCH       SubIfFlags = 16
+	SUB_IF_API_FLAG_DEFAULT           SubIfFlags = 32
+	SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY SubIfFlags = 64
+	SUB_IF_API_FLAG_INNER_VLAN_ID_ANY SubIfFlags = 128
+	SUB_IF_API_FLAG_MASK_VNET         SubIfFlags = 254
+	SUB_IF_API_FLAG_DOT1AH            SubIfFlags = 256
+)
+
+var SubIfFlags_name = map[uint32]string{
+	1:   "SUB_IF_API_FLAG_NO_TAGS",
+	2:   "SUB_IF_API_FLAG_ONE_TAG",
+	4:   "SUB_IF_API_FLAG_TWO_TAGS",
+	8:   "SUB_IF_API_FLAG_DOT1AD",
+	16:  "SUB_IF_API_FLAG_EXACT_MATCH",
+	32:  "SUB_IF_API_FLAG_DEFAULT",
+	64:  "SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY",
+	128: "SUB_IF_API_FLAG_INNER_VLAN_ID_ANY",
+	254: "SUB_IF_API_FLAG_MASK_VNET",
+	256: "SUB_IF_API_FLAG_DOT1AH",
+}
+
+var SubIfFlags_value = map[string]uint32{
+	"SUB_IF_API_FLAG_NO_TAGS":           1,
+	"SUB_IF_API_FLAG_ONE_TAG":           2,
+	"SUB_IF_API_FLAG_TWO_TAGS":          4,
+	"SUB_IF_API_FLAG_DOT1AD":            8,
+	"SUB_IF_API_FLAG_EXACT_MATCH":       16,
+	"SUB_IF_API_FLAG_DEFAULT":           32,
+	"SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY": 64,
+	"SUB_IF_API_FLAG_INNER_VLAN_ID_ANY": 128,
+	"SUB_IF_API_FLAG_MASK_VNET":         254,
+	"SUB_IF_API_FLAG_DOT1AH":            256,
+}
+
+func (x SubIfFlags) String() string {
+	s, ok := SubIfFlags_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// AddressWithPrefix represents VPP binary API alias 'address_with_prefix'.
+type AddressWithPrefix Prefix
+
+// InterfaceIndex represents VPP binary API alias 'interface_index'.
+type InterfaceIndex uint32
+
+// IP4Address represents VPP binary API alias 'ip4_address'.
+type IP4Address [4]uint8
+
+// IP4AddressWithPrefix represents VPP binary API alias 'ip4_address_with_prefix'.
+type IP4AddressWithPrefix IP4Prefix
+
+// IP6Address represents VPP binary API alias 'ip6_address'.
+type IP6Address [16]uint8
+
+// IP6AddressWithPrefix represents VPP binary API alias 'ip6_address_with_prefix'.
+type IP6AddressWithPrefix IP6Prefix
+
+// MacAddress represents VPP binary API alias 'mac_address'.
+type MacAddress [6]uint8
+
+// Address represents VPP binary API type 'address'.
+type Address struct {
+	Af AddressFamily
+	Un AddressUnion
+}
+
+func (*Address) GetTypeName() string { return "address" }
+
+// Eid represents VPP binary API type 'eid'.
+type Eid struct {
+	Type    EidType
+	Address EidAddress
+}
+
+func (*Eid) GetTypeName() string { return "eid" }
+
+// HmacKey represents VPP binary API type 'hmac_key'.
+type HmacKey struct {
+	ID  HmacKeyID
+	Key []byte `struc:"[64]byte"`
+}
+
+func (*HmacKey) GetTypeName() string { return "hmac_key" }
+
+// IP4Prefix represents VPP binary API type 'ip4_prefix'.
+type IP4Prefix struct {
+	Address IP4Address
+	Len     uint8
+}
+
+func (*IP4Prefix) GetTypeName() string { return "ip4_prefix" }
+
+// IP6Prefix represents VPP binary API type 'ip6_prefix'.
+type IP6Prefix struct {
+	Address IP6Address
+	Len     uint8
+}
+
+func (*IP6Prefix) GetTypeName() string { return "ip6_prefix" }
+
+// LocalLocator represents VPP binary API type 'local_locator'.
+type LocalLocator struct {
+	SwIfIndex InterfaceIndex
+	Priority  uint8
+	Weight    uint8
+}
+
+func (*LocalLocator) GetTypeName() string { return "local_locator" }
+
+// Mprefix represents VPP binary API type 'mprefix'.
+type Mprefix struct {
+	Af               AddressFamily
+	GrpAddressLength uint16
+	GrpAddress       AddressUnion
+	SrcAddress       AddressUnion
+}
+
+func (*Mprefix) GetTypeName() string { return "mprefix" }
+
+// Nsh represents VPP binary API type 'nsh'.
+type Nsh struct {
+	Spi uint32
+	Si  uint8
+}
+
+func (*Nsh) GetTypeName() string { return "nsh" }
 
 // OneAdjacency represents VPP binary API type 'one_adjacency'.
 type OneAdjacency struct {
-	EidType       uint8
-	Reid          []byte `struc:"[16]byte"`
-	Leid          []byte `struc:"[16]byte"`
-	ReidPrefixLen uint8
-	LeidPrefixLen uint8
+	Reid Eid
+	Leid Eid
 }
 
 func (*OneAdjacency) GetTypeName() string { return "one_adjacency" }
 
 // OneL2ArpEntry represents VPP binary API type 'one_l2_arp_entry'.
 type OneL2ArpEntry struct {
-	Mac []byte `struc:"[6]byte"`
-	IP4 uint32
+	Mac MacAddress
+	IP4 IP4Address
 }
 
 func (*OneL2ArpEntry) GetTypeName() string { return "one_l2_arp_entry" }
 
-// OneLocalLocator represents VPP binary API type 'one_local_locator'.
-type OneLocalLocator struct {
-	SwIfIndex uint32
-	Priority  uint8
-	Weight    uint8
-}
-
-func (*OneLocalLocator) GetTypeName() string { return "one_local_locator" }
-
 // OneNdpEntry represents VPP binary API type 'one_ndp_entry'.
 type OneNdpEntry struct {
-	Mac []byte `struc:"[6]byte"`
-	IP6 []byte `struc:"[16]byte"`
+	Mac MacAddress
+	IP6 IP6Address
 }
 
 func (*OneNdpEntry) GetTypeName() string { return "one_ndp_entry" }
 
-// OneRemoteLocator represents VPP binary API type 'one_remote_locator'.
-type OneRemoteLocator struct {
-	IsIP4    uint8
-	Priority uint8
-	Weight   uint8
-	Addr     []byte `struc:"[16]byte"`
+// Prefix represents VPP binary API type 'prefix'.
+type Prefix struct {
+	Address Address
+	Len     uint8
 }
 
-func (*OneRemoteLocator) GetTypeName() string { return "one_remote_locator" }
+func (*Prefix) GetTypeName() string { return "prefix" }
+
+// PrefixMatcher represents VPP binary API type 'prefix_matcher'.
+type PrefixMatcher struct {
+	Le uint8
+	Ge uint8
+}
+
+func (*PrefixMatcher) GetTypeName() string { return "prefix_matcher" }
+
+// RemoteLocator represents VPP binary API type 'remote_locator'.
+type RemoteLocator struct {
+	Priority  uint8
+	Weight    uint8
+	IPAddress Address
+}
+
+func (*RemoteLocator) GetTypeName() string { return "remote_locator" }
+
+// AddressUnion represents VPP binary API union 'address_union'.
+type AddressUnion struct {
+	XXX_UnionData [16]byte
+}
+
+func (*AddressUnion) GetTypeName() string { return "address_union" }
+
+func AddressUnionIP4(a IP4Address) (u AddressUnion) {
+	u.SetIP4(a)
+	return
+}
+func (u *AddressUnion) SetIP4(a IP4Address) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *AddressUnion) GetIP4() (a IP4Address) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+func AddressUnionIP6(a IP6Address) (u AddressUnion) {
+	u.SetIP6(a)
+	return
+}
+func (u *AddressUnion) SetIP6(a IP6Address) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *AddressUnion) GetIP6() (a IP6Address) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+// EidAddress represents VPP binary API union 'eid_address'.
+type EidAddress struct {
+	XXX_UnionData [6]byte
+}
+
+func (*EidAddress) GetTypeName() string { return "eid_address" }
+
+func EidAddressPrefix(a Prefix) (u EidAddress) {
+	u.SetPrefix(a)
+	return
+}
+func (u *EidAddress) SetPrefix(a Prefix) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *EidAddress) GetPrefix() (a Prefix) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+func EidAddressMac(a MacAddress) (u EidAddress) {
+	u.SetMac(a)
+	return
+}
+func (u *EidAddress) SetMac(a MacAddress) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *EidAddress) GetMac() (a MacAddress) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+func EidAddressNsh(a Nsh) (u EidAddress) {
+	u.SetNsh(a)
+	return
+}
+func (u *EidAddress) SetNsh(a Nsh) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *EidAddress) GetNsh() (a Nsh) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
 
 // OneAddDelAdjacency represents VPP binary API message 'one_add_del_adjacency'.
 type OneAddDelAdjacency struct {
-	IsAdd   uint8
-	Vni     uint32
-	EidType uint8
-	Reid    []byte `struc:"[16]byte"`
-	Leid    []byte `struc:"[16]byte"`
-	ReidLen uint8
-	LeidLen uint8
+	IsAdd uint8
+	Vni   uint32
+	Reid  Eid
+	Leid  Eid
 }
 
 func (m *OneAddDelAdjacency) Reset()                        { *m = OneAddDelAdjacency{} }
 func (*OneAddDelAdjacency) GetMessageName() string          { return "one_add_del_adjacency" }
-func (*OneAddDelAdjacency) GetCrcString() string            { return "f047390d" }
+func (*OneAddDelAdjacency) GetCrcString() string            { return "e48e7afe" }
 func (*OneAddDelAdjacency) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelAdjacencyReply represents VPP binary API message 'one_add_del_adjacency_reply'.
@@ -104,15 +811,14 @@ func (*OneAddDelAdjacencyReply) GetMessageType() api.MessageType { return api.Re
 
 // OneAddDelL2ArpEntry represents VPP binary API message 'one_add_del_l2_arp_entry'.
 type OneAddDelL2ArpEntry struct {
-	IsAdd uint8
-	Mac   []byte `struc:"[6]byte"`
+	IsAdd bool
 	Bd    uint32
-	IP4   uint32
+	Entry OneL2ArpEntry
 }
 
 func (m *OneAddDelL2ArpEntry) Reset()                        { *m = OneAddDelL2ArpEntry{} }
 func (*OneAddDelL2ArpEntry) GetMessageName() string          { return "one_add_del_l2_arp_entry" }
-func (*OneAddDelL2ArpEntry) GetCrcString() string            { return "a95cc2d7" }
+func (*OneAddDelL2ArpEntry) GetCrcString() string            { return "33209078" }
 func (*OneAddDelL2ArpEntry) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelL2ArpEntryReply represents VPP binary API message 'one_add_del_l2_arp_entry_reply'.
@@ -127,19 +833,16 @@ func (*OneAddDelL2ArpEntryReply) GetMessageType() api.MessageType { return api.R
 
 // OneAddDelLocalEid represents VPP binary API message 'one_add_del_local_eid'.
 type OneAddDelLocalEid struct {
-	IsAdd          uint8
-	EidType        uint8
-	Eid            []byte `struc:"[16]byte"`
-	PrefixLen      uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsAdd          bool
+	Eid            Eid
+	LocatorSetName string `struc:"[64]byte"`
 	Vni            uint32
-	KeyID          uint16
-	Key            []byte `struc:"[64]byte"`
+	Key            HmacKey
 }
 
 func (m *OneAddDelLocalEid) Reset()                        { *m = OneAddDelLocalEid{} }
 func (*OneAddDelLocalEid) GetMessageName() string          { return "one_add_del_local_eid" }
-func (*OneAddDelLocalEid) GetCrcString() string            { return "e6d00717" }
+func (*OneAddDelLocalEid) GetCrcString() string            { return "21f573bd" }
 func (*OneAddDelLocalEid) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelLocalEidReply represents VPP binary API message 'one_add_del_local_eid_reply'.
@@ -154,16 +857,16 @@ func (*OneAddDelLocalEidReply) GetMessageType() api.MessageType { return api.Rep
 
 // OneAddDelLocator represents VPP binary API message 'one_add_del_locator'.
 type OneAddDelLocator struct {
-	IsAdd          uint8
-	LocatorSetName []byte `struc:"[64]byte"`
-	SwIfIndex      uint32
+	IsAdd          bool
+	LocatorSetName string `struc:"[64]byte"`
+	SwIfIndex      InterfaceIndex
 	Priority       uint8
 	Weight         uint8
 }
 
 func (m *OneAddDelLocator) Reset()                        { *m = OneAddDelLocator{} }
 func (*OneAddDelLocator) GetMessageName() string          { return "one_add_del_locator" }
-func (*OneAddDelLocator) GetCrcString() string            { return "006a4240" }
+func (*OneAddDelLocator) GetCrcString() string            { return "af4d8f13" }
 func (*OneAddDelLocator) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelLocatorReply represents VPP binary API message 'one_add_del_locator_reply'.
@@ -178,15 +881,15 @@ func (*OneAddDelLocatorReply) GetMessageType() api.MessageType { return api.Repl
 
 // OneAddDelLocatorSet represents VPP binary API message 'one_add_del_locator_set'.
 type OneAddDelLocatorSet struct {
-	IsAdd          uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsAdd          bool
+	LocatorSetName string `struc:"[64]byte"`
 	LocatorNum     uint32 `struc:"sizeof=Locators"`
-	Locators       []OneLocalLocator
+	Locators       []LocalLocator
 }
 
 func (m *OneAddDelLocatorSet) Reset()                        { *m = OneAddDelLocatorSet{} }
 func (*OneAddDelLocatorSet) GetMessageName() string          { return "one_add_del_locator_set" }
-func (*OneAddDelLocatorSet) GetCrcString() string            { return "2e73b050" }
+func (*OneAddDelLocatorSet) GetCrcString() string            { return "6fcd6471" }
 func (*OneAddDelLocatorSet) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelLocatorSetReply represents VPP binary API message 'one_add_del_locator_set_reply'.
@@ -202,15 +905,15 @@ func (*OneAddDelLocatorSetReply) GetMessageType() api.MessageType { return api.R
 
 // OneAddDelMapRequestItrRlocs represents VPP binary API message 'one_add_del_map_request_itr_rlocs'.
 type OneAddDelMapRequestItrRlocs struct {
-	IsAdd          uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsAdd          bool
+	LocatorSetName string `struc:"[64]byte"`
 }
 
 func (m *OneAddDelMapRequestItrRlocs) Reset() { *m = OneAddDelMapRequestItrRlocs{} }
 func (*OneAddDelMapRequestItrRlocs) GetMessageName() string {
 	return "one_add_del_map_request_itr_rlocs"
 }
-func (*OneAddDelMapRequestItrRlocs) GetCrcString() string            { return "c7c6cb2f" }
+func (*OneAddDelMapRequestItrRlocs) GetCrcString() string            { return "6be88e45" }
 func (*OneAddDelMapRequestItrRlocs) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelMapRequestItrRlocsReply represents VPP binary API message 'one_add_del_map_request_itr_rlocs_reply'.
@@ -227,14 +930,13 @@ func (*OneAddDelMapRequestItrRlocsReply) GetMessageType() api.MessageType { retu
 
 // OneAddDelMapResolver represents VPP binary API message 'one_add_del_map_resolver'.
 type OneAddDelMapResolver struct {
-	IsAdd     uint8
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IsAdd     bool
+	IPAddress Address
 }
 
 func (m *OneAddDelMapResolver) Reset()                        { *m = OneAddDelMapResolver{} }
 func (*OneAddDelMapResolver) GetMessageName() string          { return "one_add_del_map_resolver" }
-func (*OneAddDelMapResolver) GetCrcString() string            { return "0ebcd37d" }
+func (*OneAddDelMapResolver) GetCrcString() string            { return "6598ea7c" }
 func (*OneAddDelMapResolver) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelMapResolverReply represents VPP binary API message 'one_add_del_map_resolver_reply'.
@@ -249,14 +951,13 @@ func (*OneAddDelMapResolverReply) GetMessageType() api.MessageType { return api.
 
 // OneAddDelMapServer represents VPP binary API message 'one_add_del_map_server'.
 type OneAddDelMapServer struct {
-	IsAdd     uint8
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IsAdd     bool
+	IPAddress Address
 }
 
 func (m *OneAddDelMapServer) Reset()                        { *m = OneAddDelMapServer{} }
 func (*OneAddDelMapServer) GetMessageName() string          { return "one_add_del_map_server" }
-func (*OneAddDelMapServer) GetCrcString() string            { return "0ebcd37d" }
+func (*OneAddDelMapServer) GetCrcString() string            { return "6598ea7c" }
 func (*OneAddDelMapServer) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelMapServerReply represents VPP binary API message 'one_add_del_map_server_reply'.
@@ -271,15 +972,14 @@ func (*OneAddDelMapServerReply) GetMessageType() api.MessageType { return api.Re
 
 // OneAddDelNdpEntry represents VPP binary API message 'one_add_del_ndp_entry'.
 type OneAddDelNdpEntry struct {
-	IsAdd uint8
-	Mac   []byte `struc:"[6]byte"`
+	IsAdd bool
 	Bd    uint32
-	IP6   []byte `struc:"[16]byte"`
+	Entry OneNdpEntry
 }
 
 func (m *OneAddDelNdpEntry) Reset()                        { *m = OneAddDelNdpEntry{} }
 func (*OneAddDelNdpEntry) GetMessageName() string          { return "one_add_del_ndp_entry" }
-func (*OneAddDelNdpEntry) GetCrcString() string            { return "e9468fe3" }
+func (*OneAddDelNdpEntry) GetCrcString() string            { return "d1629a2f" }
 func (*OneAddDelNdpEntry) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelNdpEntryReply represents VPP binary API message 'one_add_del_ndp_entry_reply'.
@@ -294,23 +994,20 @@ func (*OneAddDelNdpEntryReply) GetMessageType() api.MessageType { return api.Rep
 
 // OneAddDelRemoteMapping represents VPP binary API message 'one_add_del_remote_mapping'.
 type OneAddDelRemoteMapping struct {
-	IsAdd    uint8
-	IsSrcDst uint8
-	DelAll   uint8
+	IsAdd    bool
+	IsSrcDst bool
+	DelAll   bool
 	Vni      uint32
 	Action   uint8
-	EidType  uint8
-	Eid      []byte `struc:"[16]byte"`
-	EidLen   uint8
-	Seid     []byte `struc:"[16]byte"`
-	SeidLen  uint8
+	Deid     Eid
+	Seid     Eid
 	RlocNum  uint32 `struc:"sizeof=Rlocs"`
-	Rlocs    []OneRemoteLocator
+	Rlocs    []RemoteLocator
 }
 
 func (m *OneAddDelRemoteMapping) Reset()                        { *m = OneAddDelRemoteMapping{} }
 func (*OneAddDelRemoteMapping) GetMessageName() string          { return "one_add_del_remote_mapping" }
-func (*OneAddDelRemoteMapping) GetCrcString() string            { return "0b2010ec" }
+func (*OneAddDelRemoteMapping) GetCrcString() string            { return "fae8ed77" }
 func (*OneAddDelRemoteMapping) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneAddDelRemoteMappingReply represents VPP binary API message 'one_add_del_remote_mapping_reply'.
@@ -344,20 +1041,20 @@ type OneAdjacenciesGetReply struct {
 
 func (m *OneAdjacenciesGetReply) Reset()                        { *m = OneAdjacenciesGetReply{} }
 func (*OneAdjacenciesGetReply) GetMessageName() string          { return "one_adjacencies_get_reply" }
-func (*OneAdjacenciesGetReply) GetCrcString() string            { return "60a3c592" }
+func (*OneAdjacenciesGetReply) GetCrcString() string            { return "a8ed89a5" }
 func (*OneAdjacenciesGetReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneEidTableAddDelMap represents VPP binary API message 'one_eid_table_add_del_map'.
 type OneEidTableAddDelMap struct {
-	IsAdd   uint8
+	IsAdd   bool
 	Vni     uint32
 	DpTable uint32
-	IsL2    uint8
+	IsL2    bool
 }
 
 func (m *OneEidTableAddDelMap) Reset()                        { *m = OneEidTableAddDelMap{} }
 func (*OneEidTableAddDelMap) GetMessageName() string          { return "one_eid_table_add_del_map" }
-func (*OneEidTableAddDelMap) GetCrcString() string            { return "59e9975e" }
+func (*OneEidTableAddDelMap) GetCrcString() string            { return "9481416b" }
 func (*OneEidTableAddDelMap) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneEidTableAddDelMapReply represents VPP binary API message 'one_eid_table_add_del_map_reply'.
@@ -374,38 +1071,32 @@ func (*OneEidTableAddDelMapReply) GetMessageType() api.MessageType { return api.
 type OneEidTableDetails struct {
 	LocatorSetIndex uint32
 	Action          uint8
-	IsLocal         uint8
-	EidType         uint8
-	IsSrcDst        uint8
+	IsLocal         bool
+	IsSrcDst        bool
 	Vni             uint32
-	Eid             []byte `struc:"[16]byte"`
-	EidPrefixLen    uint8
-	Seid            []byte `struc:"[16]byte"`
-	SeidPrefixLen   uint8
+	Deid            Eid
+	Seid            Eid
 	TTL             uint32
 	Authoritative   uint8
-	KeyID           uint16
-	Key             []byte `struc:"[64]byte"`
+	Key             HmacKey
 }
 
 func (m *OneEidTableDetails) Reset()                        { *m = OneEidTableDetails{} }
 func (*OneEidTableDetails) GetMessageName() string          { return "one_eid_table_details" }
-func (*OneEidTableDetails) GetCrcString() string            { return "dcd9f414" }
+func (*OneEidTableDetails) GetCrcString() string            { return "4bc32e3a" }
 func (*OneEidTableDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneEidTableDump represents VPP binary API message 'one_eid_table_dump'.
 type OneEidTableDump struct {
-	EidSet       uint8
-	PrefixLength uint8
-	Vni          uint32
-	EidType      uint8
-	Eid          []byte `struc:"[16]byte"`
-	Filter       uint8
+	EidSet bool
+	Vni    uint32
+	Eid    Eid
+	Filter OneFilter
 }
 
 func (m *OneEidTableDump) Reset()                        { *m = OneEidTableDump{} }
 func (*OneEidTableDump) GetMessageName() string          { return "one_eid_table_dump" }
-func (*OneEidTableDump) GetCrcString() string            { return "e0df64da" }
+func (*OneEidTableDump) GetCrcString() string            { return "95151038" }
 func (*OneEidTableDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneEidTableMapDetails represents VPP binary API message 'one_eid_table_map_details'.
@@ -421,12 +1112,12 @@ func (*OneEidTableMapDetails) GetMessageType() api.MessageType { return api.Repl
 
 // OneEidTableMapDump represents VPP binary API message 'one_eid_table_map_dump'.
 type OneEidTableMapDump struct {
-	IsL2 uint8
+	IsL2 bool
 }
 
 func (m *OneEidTableMapDump) Reset()                        { *m = OneEidTableMapDump{} }
 func (*OneEidTableMapDump) GetMessageName() string          { return "one_eid_table_map_dump" }
-func (*OneEidTableMapDump) GetCrcString() string            { return "67c54650" }
+func (*OneEidTableMapDump) GetCrcString() string            { return "d6cf0c3d" }
 func (*OneEidTableMapDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneEidTableVniDetails represents VPP binary API message 'one_eid_table_vni_details'.
@@ -449,22 +1140,22 @@ func (*OneEidTableVniDump) GetMessageType() api.MessageType { return api.Request
 
 // OneEnableDisable represents VPP binary API message 'one_enable_disable'.
 type OneEnableDisable struct {
-	IsEn uint8
+	IsEnable bool
 }
 
 func (m *OneEnableDisable) Reset()                        { *m = OneEnableDisable{} }
 func (*OneEnableDisable) GetMessageName() string          { return "one_enable_disable" }
-func (*OneEnableDisable) GetCrcString() string            { return "eb0e943b" }
+func (*OneEnableDisable) GetCrcString() string            { return "c264d7bf" }
 func (*OneEnableDisable) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneEnableDisablePetrMode represents VPP binary API message 'one_enable_disable_petr_mode'.
 type OneEnableDisablePetrMode struct {
-	IsEn uint8
+	IsEnable bool
 }
 
 func (m *OneEnableDisablePetrMode) Reset()                        { *m = OneEnableDisablePetrMode{} }
 func (*OneEnableDisablePetrMode) GetMessageName() string          { return "one_enable_disable_petr_mode" }
-func (*OneEnableDisablePetrMode) GetCrcString() string            { return "eb0e943b" }
+func (*OneEnableDisablePetrMode) GetCrcString() string            { return "c264d7bf" }
 func (*OneEnableDisablePetrMode) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneEnableDisablePetrModeReply represents VPP binary API message 'one_enable_disable_petr_mode_reply'.
@@ -481,12 +1172,12 @@ func (*OneEnableDisablePetrModeReply) GetMessageType() api.MessageType { return 
 
 // OneEnableDisablePitrMode represents VPP binary API message 'one_enable_disable_pitr_mode'.
 type OneEnableDisablePitrMode struct {
-	IsEn uint8
+	IsEnable bool
 }
 
 func (m *OneEnableDisablePitrMode) Reset()                        { *m = OneEnableDisablePitrMode{} }
 func (*OneEnableDisablePitrMode) GetMessageName() string          { return "one_enable_disable_pitr_mode" }
-func (*OneEnableDisablePitrMode) GetCrcString() string            { return "eb0e943b" }
+func (*OneEnableDisablePitrMode) GetCrcString() string            { return "c264d7bf" }
 func (*OneEnableDisablePitrMode) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneEnableDisablePitrModeReply represents VPP binary API message 'one_enable_disable_pitr_mode_reply'.
@@ -513,12 +1204,12 @@ func (*OneEnableDisableReply) GetMessageType() api.MessageType { return api.Repl
 
 // OneEnableDisableXtrMode represents VPP binary API message 'one_enable_disable_xtr_mode'.
 type OneEnableDisableXtrMode struct {
-	IsEn uint8
+	IsEnable bool
 }
 
 func (m *OneEnableDisableXtrMode) Reset()                        { *m = OneEnableDisableXtrMode{} }
 func (*OneEnableDisableXtrMode) GetMessageName() string          { return "one_enable_disable_xtr_mode" }
-func (*OneEnableDisableXtrMode) GetCrcString() string            { return "eb0e943b" }
+func (*OneEnableDisableXtrMode) GetCrcString() string            { return "c264d7bf" }
 func (*OneEnableDisableXtrMode) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneEnableDisableXtrModeReply represents VPP binary API message 'one_enable_disable_xtr_mode_reply'.
@@ -544,14 +1235,14 @@ func (*OneGetMapRequestItrRlocs) GetMessageType() api.MessageType { return api.R
 // OneGetMapRequestItrRlocsReply represents VPP binary API message 'one_get_map_request_itr_rlocs_reply'.
 type OneGetMapRequestItrRlocsReply struct {
 	Retval         int32
-	LocatorSetName []byte `struc:"[64]byte"`
+	LocatorSetName string `struc:"[64]byte"`
 }
 
 func (m *OneGetMapRequestItrRlocsReply) Reset() { *m = OneGetMapRequestItrRlocsReply{} }
 func (*OneGetMapRequestItrRlocsReply) GetMessageName() string {
 	return "one_get_map_request_itr_rlocs_reply"
 }
-func (*OneGetMapRequestItrRlocsReply) GetCrcString() string            { return "9f56f6f7" }
+func (*OneGetMapRequestItrRlocsReply) GetCrcString() string            { return "76580f3a" }
 func (*OneGetMapRequestItrRlocsReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneGetTransportProtocol represents VPP binary API message 'one_get_transport_protocol'.
@@ -614,65 +1305,64 @@ type OneL2ArpEntriesGetReply struct {
 
 func (m *OneL2ArpEntriesGetReply) Reset()                        { *m = OneL2ArpEntriesGetReply{} }
 func (*OneL2ArpEntriesGetReply) GetMessageName() string          { return "one_l2_arp_entries_get_reply" }
-func (*OneL2ArpEntriesGetReply) GetCrcString() string            { return "88e54ded" }
+func (*OneL2ArpEntriesGetReply) GetCrcString() string            { return "b0a47bbe" }
 func (*OneL2ArpEntriesGetReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneLocatorDetails represents VPP binary API message 'one_locator_details'.
 type OneLocatorDetails struct {
 	Local     uint8
-	SwIfIndex uint32
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	SwIfIndex InterfaceIndex
+	IPAddress Address
 	Priority  uint8
 	Weight    uint8
 }
 
 func (m *OneLocatorDetails) Reset()                        { *m = OneLocatorDetails{} }
 func (*OneLocatorDetails) GetMessageName() string          { return "one_locator_details" }
-func (*OneLocatorDetails) GetCrcString() string            { return "b3988a30" }
+func (*OneLocatorDetails) GetCrcString() string            { return "c0c4c2a7" }
 func (*OneLocatorDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneLocatorDump represents VPP binary API message 'one_locator_dump'.
 type OneLocatorDump struct {
 	LsIndex    uint32
-	LsName     []byte `struc:"[64]byte"`
-	IsIndexSet uint8
+	LsName     string `struc:"[64]byte"`
+	IsIndexSet bool
 }
 
 func (m *OneLocatorDump) Reset()                        { *m = OneLocatorDump{} }
 func (*OneLocatorDump) GetMessageName() string          { return "one_locator_dump" }
-func (*OneLocatorDump) GetCrcString() string            { return "f27d5050" }
+func (*OneLocatorDump) GetCrcString() string            { return "9b11076c" }
 func (*OneLocatorDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneLocatorSetDetails represents VPP binary API message 'one_locator_set_details'.
 type OneLocatorSetDetails struct {
 	LsIndex uint32
-	LsName  []byte `struc:"[64]byte"`
+	LsName  string `struc:"[64]byte"`
 }
 
 func (m *OneLocatorSetDetails) Reset()                        { *m = OneLocatorSetDetails{} }
 func (*OneLocatorSetDetails) GetMessageName() string          { return "one_locator_set_details" }
-func (*OneLocatorSetDetails) GetCrcString() string            { return "6b846882" }
+func (*OneLocatorSetDetails) GetCrcString() string            { return "5b33a105" }
 func (*OneLocatorSetDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneLocatorSetDump represents VPP binary API message 'one_locator_set_dump'.
 type OneLocatorSetDump struct {
-	Filter uint8
+	Filter OneFilter
 }
 
 func (m *OneLocatorSetDump) Reset()                        { *m = OneLocatorSetDump{} }
 func (*OneLocatorSetDump) GetMessageName() string          { return "one_locator_set_dump" }
-func (*OneLocatorSetDump) GetCrcString() string            { return "c79e8ab0" }
+func (*OneLocatorSetDump) GetCrcString() string            { return "71190768" }
 func (*OneLocatorSetDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneMapRegisterEnableDisable represents VPP binary API message 'one_map_register_enable_disable'.
 type OneMapRegisterEnableDisable struct {
-	IsEnabled uint8
+	IsEnable bool
 }
 
 func (m *OneMapRegisterEnableDisable) Reset()                        { *m = OneMapRegisterEnableDisable{} }
 func (*OneMapRegisterEnableDisable) GetMessageName() string          { return "one_map_register_enable_disable" }
-func (*OneMapRegisterEnableDisable) GetCrcString() string            { return "294103d1" }
+func (*OneMapRegisterEnableDisable) GetCrcString() string            { return "c264d7bf" }
 func (*OneMapRegisterEnableDisable) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneMapRegisterEnableDisableReply represents VPP binary API message 'one_map_register_enable_disable_reply'.
@@ -735,12 +1425,12 @@ func (*OneMapRegisterSetTTLReply) GetMessageType() api.MessageType { return api.
 
 // OneMapRequestMode represents VPP binary API message 'one_map_request_mode'.
 type OneMapRequestMode struct {
-	Mode uint8
+	Mode OneMapMode
 }
 
 func (m *OneMapRequestMode) Reset()                        { *m = OneMapRequestMode{} }
 func (*OneMapRequestMode) GetMessageName() string          { return "one_map_request_mode" }
-func (*OneMapRequestMode) GetCrcString() string            { return "f3f93ce9" }
+func (*OneMapRequestMode) GetCrcString() string            { return "ffa5d2f5" }
 func (*OneMapRequestMode) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneMapRequestModeReply represents VPP binary API message 'one_map_request_mode_reply'.
@@ -755,13 +1445,12 @@ func (*OneMapRequestModeReply) GetMessageType() api.MessageType { return api.Rep
 
 // OneMapResolverDetails represents VPP binary API message 'one_map_resolver_details'.
 type OneMapResolverDetails struct {
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IPAddress Address
 }
 
 func (m *OneMapResolverDetails) Reset()                        { *m = OneMapResolverDetails{} }
 func (*OneMapResolverDetails) GetMessageName() string          { return "one_map_resolver_details" }
-func (*OneMapResolverDetails) GetCrcString() string            { return "60a5f5ca" }
+func (*OneMapResolverDetails) GetCrcString() string            { return "82a09deb" }
 func (*OneMapResolverDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneMapResolverDump represents VPP binary API message 'one_map_resolver_dump'.
@@ -774,13 +1463,12 @@ func (*OneMapResolverDump) GetMessageType() api.MessageType { return api.Request
 
 // OneMapServerDetails represents VPP binary API message 'one_map_server_details'.
 type OneMapServerDetails struct {
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IPAddress Address
 }
 
 func (m *OneMapServerDetails) Reset()                        { *m = OneMapServerDetails{} }
 func (*OneMapServerDetails) GetMessageName() string          { return "one_map_server_details" }
-func (*OneMapServerDetails) GetCrcString() string            { return "60a5f5ca" }
+func (*OneMapServerDetails) GetCrcString() string            { return "82a09deb" }
 func (*OneMapServerDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneMapServerDump represents VPP binary API message 'one_map_server_dump'.
@@ -830,18 +1518,18 @@ type OneNdpEntriesGetReply struct {
 
 func (m *OneNdpEntriesGetReply) Reset()                        { *m = OneNdpEntriesGetReply{} }
 func (*OneNdpEntriesGetReply) GetMessageName() string          { return "one_ndp_entries_get_reply" }
-func (*OneNdpEntriesGetReply) GetCrcString() string            { return "d0822f37" }
+func (*OneNdpEntriesGetReply) GetCrcString() string            { return "0bd34161" }
 func (*OneNdpEntriesGetReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneNshSetLocatorSet represents VPP binary API message 'one_nsh_set_locator_set'.
 type OneNshSetLocatorSet struct {
-	IsAdd  uint8
-	LsName []byte `struc:"[64]byte"`
+	IsAdd  bool
+	LsName string `struc:"[64]byte"`
 }
 
 func (m *OneNshSetLocatorSet) Reset()                        { *m = OneNshSetLocatorSet{} }
 func (*OneNshSetLocatorSet) GetMessageName() string          { return "one_nsh_set_locator_set" }
-func (*OneNshSetLocatorSet) GetCrcString() string            { return "7aa022dd" }
+func (*OneNshSetLocatorSet) GetCrcString() string            { return "486e2b76" }
 func (*OneNshSetLocatorSet) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneNshSetLocatorSetReply represents VPP binary API message 'one_nsh_set_locator_set_reply'.
@@ -856,13 +1544,13 @@ func (*OneNshSetLocatorSetReply) GetMessageType() api.MessageType { return api.R
 
 // OnePitrSetLocatorSet represents VPP binary API message 'one_pitr_set_locator_set'.
 type OnePitrSetLocatorSet struct {
-	IsAdd  uint8
-	LsName []byte `struc:"[64]byte"`
+	IsAdd  bool
+	LsName string `struc:"[64]byte"`
 }
 
 func (m *OnePitrSetLocatorSet) Reset()                        { *m = OnePitrSetLocatorSet{} }
 func (*OnePitrSetLocatorSet) GetMessageName() string          { return "one_pitr_set_locator_set" }
-func (*OnePitrSetLocatorSet) GetCrcString() string            { return "7aa022dd" }
+func (*OnePitrSetLocatorSet) GetCrcString() string            { return "486e2b76" }
 func (*OnePitrSetLocatorSet) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OnePitrSetLocatorSetReply represents VPP binary API message 'one_pitr_set_locator_set_reply'.
@@ -877,12 +1565,12 @@ func (*OnePitrSetLocatorSetReply) GetMessageType() api.MessageType { return api.
 
 // OneRlocProbeEnableDisable represents VPP binary API message 'one_rloc_probe_enable_disable'.
 type OneRlocProbeEnableDisable struct {
-	IsEnabled uint8
+	IsEnable bool
 }
 
 func (m *OneRlocProbeEnableDisable) Reset()                        { *m = OneRlocProbeEnableDisable{} }
 func (*OneRlocProbeEnableDisable) GetMessageName() string          { return "one_rloc_probe_enable_disable" }
-func (*OneRlocProbeEnableDisable) GetCrcString() string            { return "294103d1" }
+func (*OneRlocProbeEnableDisable) GetCrcString() string            { return "c264d7bf" }
 func (*OneRlocProbeEnableDisable) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneRlocProbeEnableDisableReply represents VPP binary API message 'one_rloc_probe_enable_disable_reply'.
@@ -929,13 +1617,13 @@ func (*OneShowPetrMode) GetMessageType() api.MessageType { return api.RequestMes
 
 // OneShowPetrModeReply represents VPP binary API message 'one_show_petr_mode_reply'.
 type OneShowPetrModeReply struct {
-	Retval int32
-	IsEn   uint8
+	Retval   int32
+	IsEnable bool
 }
 
 func (m *OneShowPetrModeReply) Reset()                        { *m = OneShowPetrModeReply{} }
 func (*OneShowPetrModeReply) GetMessageName() string          { return "one_show_petr_mode_reply" }
-func (*OneShowPetrModeReply) GetCrcString() string            { return "6b4c29dc" }
+func (*OneShowPetrModeReply) GetCrcString() string            { return "f15abb16" }
 func (*OneShowPetrModeReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneShowPitrMode represents VPP binary API message 'one_show_pitr_mode'.
@@ -948,13 +1636,13 @@ func (*OneShowPitrMode) GetMessageType() api.MessageType { return api.RequestMes
 
 // OneShowPitrModeReply represents VPP binary API message 'one_show_pitr_mode_reply'.
 type OneShowPitrModeReply struct {
-	Retval int32
-	IsEn   uint8
+	Retval   int32
+	IsEnable bool
 }
 
 func (m *OneShowPitrModeReply) Reset()                        { *m = OneShowPitrModeReply{} }
 func (*OneShowPitrModeReply) GetMessageName() string          { return "one_show_pitr_mode_reply" }
-func (*OneShowPitrModeReply) GetCrcString() string            { return "6b4c29dc" }
+func (*OneShowPitrModeReply) GetCrcString() string            { return "f15abb16" }
 func (*OneShowPitrModeReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneShowXtrMode represents VPP binary API message 'one_show_xtr_mode'.
@@ -967,33 +1655,29 @@ func (*OneShowXtrMode) GetMessageType() api.MessageType { return api.RequestMess
 
 // OneShowXtrModeReply represents VPP binary API message 'one_show_xtr_mode_reply'.
 type OneShowXtrModeReply struct {
-	Retval int32
-	IsEn   uint8
+	Retval   int32
+	IsEnable bool
 }
 
 func (m *OneShowXtrModeReply) Reset()                        { *m = OneShowXtrModeReply{} }
 func (*OneShowXtrModeReply) GetMessageName() string          { return "one_show_xtr_mode_reply" }
-func (*OneShowXtrModeReply) GetCrcString() string            { return "6b4c29dc" }
+func (*OneShowXtrModeReply) GetCrcString() string            { return "f15abb16" }
 func (*OneShowXtrModeReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneStatsDetails represents VPP binary API message 'one_stats_details'.
 type OneStatsDetails struct {
-	Vni         uint32
-	EidType     uint8
-	Deid        []byte `struc:"[16]byte"`
-	Seid        []byte `struc:"[16]byte"`
-	DeidPrefLen uint8
-	SeidPrefLen uint8
-	IsIP4       uint8
-	Rloc        []byte `struc:"[16]byte"`
-	Lloc        []byte `struc:"[16]byte"`
-	PktCount    uint32
-	Bytes       uint32
+	Vni      uint32
+	Deid     Eid
+	Seid     Eid
+	Rloc     Address
+	Lloc     Address
+	PktCount uint32
+	Bytes    uint32
 }
 
 func (m *OneStatsDetails) Reset()                        { *m = OneStatsDetails{} }
 func (*OneStatsDetails) GetMessageName() string          { return "one_stats_details" }
-func (*OneStatsDetails) GetCrcString() string            { return "e1a34a05" }
+func (*OneStatsDetails) GetCrcString() string            { return "ff6ef238" }
 func (*OneStatsDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // OneStatsDump represents VPP binary API message 'one_stats_dump'.
@@ -1006,12 +1690,12 @@ func (*OneStatsDump) GetMessageType() api.MessageType { return api.RequestMessag
 
 // OneStatsEnableDisable represents VPP binary API message 'one_stats_enable_disable'.
 type OneStatsEnableDisable struct {
-	IsEn uint8
+	IsEnable bool
 }
 
 func (m *OneStatsEnableDisable) Reset()                        { *m = OneStatsEnableDisable{} }
 func (*OneStatsEnableDisable) GetMessageName() string          { return "one_stats_enable_disable" }
-func (*OneStatsEnableDisable) GetCrcString() string            { return "eb0e943b" }
+func (*OneStatsEnableDisable) GetCrcString() string            { return "c264d7bf" }
 func (*OneStatsEnableDisable) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneStatsEnableDisableReply represents VPP binary API message 'one_stats_enable_disable_reply'.
@@ -1044,14 +1728,13 @@ func (*OneStatsFlushReply) GetMessageType() api.MessageType { return api.ReplyMe
 
 // OneUsePetr represents VPP binary API message 'one_use_petr'.
 type OneUsePetr struct {
-	IsIP4   uint8
-	Address []byte `struc:"[16]byte"`
-	IsAdd   uint8
+	IPAddress Address
+	IsAdd     bool
 }
 
 func (m *OneUsePetr) Reset()                        { *m = OneUsePetr{} }
 func (*OneUsePetr) GetMessageName() string          { return "one_use_petr" }
-func (*OneUsePetr) GetCrcString() string            { return "6910787d" }
+func (*OneUsePetr) GetCrcString() string            { return "9e141831" }
 func (*OneUsePetr) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // OneUsePetrReply represents VPP binary API message 'one_use_petr_reply'.
@@ -1103,15 +1786,15 @@ func (*ShowOneMapRegisterState) GetMessageType() api.MessageType { return api.Re
 
 // ShowOneMapRegisterStateReply represents VPP binary API message 'show_one_map_register_state_reply'.
 type ShowOneMapRegisterStateReply struct {
-	Retval    int32
-	IsEnabled uint8
+	Retval   int32
+	IsEnable bool
 }
 
 func (m *ShowOneMapRegisterStateReply) Reset() { *m = ShowOneMapRegisterStateReply{} }
 func (*ShowOneMapRegisterStateReply) GetMessageName() string {
 	return "show_one_map_register_state_reply"
 }
-func (*ShowOneMapRegisterStateReply) GetCrcString() string            { return "14304fbc" }
+func (*ShowOneMapRegisterStateReply) GetCrcString() string            { return "f15abb16" }
 func (*ShowOneMapRegisterStateReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowOneMapRegisterTTL represents VPP binary API message 'show_one_map_register_ttl'.
@@ -1144,12 +1827,12 @@ func (*ShowOneMapRequestMode) GetMessageType() api.MessageType { return api.Requ
 // ShowOneMapRequestModeReply represents VPP binary API message 'show_one_map_request_mode_reply'.
 type ShowOneMapRequestModeReply struct {
 	Retval int32
-	Mode   uint8
+	Mode   OneMapMode
 }
 
 func (m *ShowOneMapRequestModeReply) Reset()                        { *m = ShowOneMapRequestModeReply{} }
 func (*ShowOneMapRequestModeReply) GetMessageName() string          { return "show_one_map_request_mode_reply" }
-func (*ShowOneMapRequestModeReply) GetCrcString() string            { return "d423107c" }
+func (*ShowOneMapRequestModeReply) GetCrcString() string            { return "d41f3c1d" }
 func (*ShowOneMapRequestModeReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowOneNshMapping represents VPP binary API message 'show_one_nsh_mapping'.
@@ -1163,13 +1846,13 @@ func (*ShowOneNshMapping) GetMessageType() api.MessageType { return api.RequestM
 // ShowOneNshMappingReply represents VPP binary API message 'show_one_nsh_mapping_reply'.
 type ShowOneNshMappingReply struct {
 	Retval         int32
-	IsSet          uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsSet          bool
+	LocatorSetName string `struc:"[64]byte"`
 }
 
 func (m *ShowOneNshMappingReply) Reset()                        { *m = ShowOneNshMappingReply{} }
 func (*ShowOneNshMappingReply) GetMessageName() string          { return "show_one_nsh_mapping_reply" }
-func (*ShowOneNshMappingReply) GetCrcString() string            { return "f2ff364e" }
+func (*ShowOneNshMappingReply) GetCrcString() string            { return "46478c02" }
 func (*ShowOneNshMappingReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowOnePitr represents VPP binary API message 'show_one_pitr'.
@@ -1183,13 +1866,13 @@ func (*ShowOnePitr) GetMessageType() api.MessageType { return api.RequestMessage
 // ShowOnePitrReply represents VPP binary API message 'show_one_pitr_reply'.
 type ShowOnePitrReply struct {
 	Retval         int32
-	Status         uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	Status         bool
+	LocatorSetName string `struc:"[64]byte"`
 }
 
 func (m *ShowOnePitrReply) Reset()                        { *m = ShowOnePitrReply{} }
 func (*ShowOnePitrReply) GetMessageName() string          { return "show_one_pitr_reply" }
-func (*ShowOnePitrReply) GetCrcString() string            { return "dca512cc" }
+func (*ShowOnePitrReply) GetCrcString() string            { return "a2d1a49f" }
 func (*ShowOnePitrReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowOneRlocProbeState represents VPP binary API message 'show_one_rloc_probe_state'.
@@ -1202,13 +1885,13 @@ func (*ShowOneRlocProbeState) GetMessageType() api.MessageType { return api.Requ
 
 // ShowOneRlocProbeStateReply represents VPP binary API message 'show_one_rloc_probe_state_reply'.
 type ShowOneRlocProbeStateReply struct {
-	Retval    int32
-	IsEnabled uint8
+	Retval   int32
+	IsEnable bool
 }
 
 func (m *ShowOneRlocProbeStateReply) Reset()                        { *m = ShowOneRlocProbeStateReply{} }
 func (*ShowOneRlocProbeStateReply) GetMessageName() string          { return "show_one_rloc_probe_state_reply" }
-func (*ShowOneRlocProbeStateReply) GetCrcString() string            { return "14304fbc" }
+func (*ShowOneRlocProbeStateReply) GetCrcString() string            { return "f15abb16" }
 func (*ShowOneRlocProbeStateReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowOneStatsEnableDisable represents VPP binary API message 'show_one_stats_enable_disable'.
@@ -1221,15 +1904,15 @@ func (*ShowOneStatsEnableDisable) GetMessageType() api.MessageType { return api.
 
 // ShowOneStatsEnableDisableReply represents VPP binary API message 'show_one_stats_enable_disable_reply'.
 type ShowOneStatsEnableDisableReply struct {
-	Retval int32
-	IsEn   uint8
+	Retval   int32
+	IsEnable bool
 }
 
 func (m *ShowOneStatsEnableDisableReply) Reset() { *m = ShowOneStatsEnableDisableReply{} }
 func (*ShowOneStatsEnableDisableReply) GetMessageName() string {
 	return "show_one_stats_enable_disable_reply"
 }
-func (*ShowOneStatsEnableDisableReply) GetCrcString() string            { return "6b4c29dc" }
+func (*ShowOneStatsEnableDisableReply) GetCrcString() string            { return "f15abb16" }
 func (*ShowOneStatsEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowOneStatus represents VPP binary API message 'show_one_status'.
@@ -1243,13 +1926,13 @@ func (*ShowOneStatus) GetMessageType() api.MessageType { return api.RequestMessa
 // ShowOneStatusReply represents VPP binary API message 'show_one_status_reply'.
 type ShowOneStatusReply struct {
 	Retval        int32
-	FeatureStatus uint8
-	GpeStatus     uint8
+	FeatureStatus bool
+	GpeStatus     bool
 }
 
 func (m *ShowOneStatusReply) Reset()                        { *m = ShowOneStatusReply{} }
 func (*ShowOneStatusReply) GetMessageName() string          { return "show_one_status_reply" }
-func (*ShowOneStatusReply) GetCrcString() string            { return "ddcf48ef" }
+func (*ShowOneStatusReply) GetCrcString() string            { return "961bb25b" }
 func (*ShowOneStatusReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowOneUsePetr represents VPP binary API message 'show_one_use_petr'.
@@ -1262,15 +1945,14 @@ func (*ShowOneUsePetr) GetMessageType() api.MessageType { return api.RequestMess
 
 // ShowOneUsePetrReply represents VPP binary API message 'show_one_use_petr_reply'.
 type ShowOneUsePetrReply struct {
-	Retval  int32
-	Status  uint8
-	IsIP4   uint8
-	Address []byte `struc:"[16]byte"`
+	Retval    int32
+	Status    bool
+	IPAddress Address
 }
 
 func (m *ShowOneUsePetrReply) Reset()                        { *m = ShowOneUsePetrReply{} }
 func (*ShowOneUsePetrReply) GetMessageName() string          { return "show_one_use_petr_reply" }
-func (*ShowOneUsePetrReply) GetCrcString() string            { return "1eb21916" }
+func (*ShowOneUsePetrReply) GetCrcString() string            { return "10e744a6" }
 func (*ShowOneUsePetrReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 func init() {

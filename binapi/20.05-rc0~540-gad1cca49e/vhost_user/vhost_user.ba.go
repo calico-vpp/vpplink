@@ -26,9 +26,9 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "vhost_user"
 	// APIVersion is the API version of this module.
-	APIVersion = "4.0.0"
+	APIVersion = "4.0.1"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0xb547a33d
+	VersionCrc = 0x3df14dfe
 )
 
 // IfStatusFlags represents VPP binary API enum 'if_status_flags'.
@@ -61,24 +61,24 @@ func (x IfStatusFlags) String() string {
 type IfType uint32
 
 const (
-	IF_API_TYPE_HARDWARE IfType = 1
-	IF_API_TYPE_SUB      IfType = 2
-	IF_API_TYPE_P2P      IfType = 3
-	IF_API_TYPE_PIPE     IfType = 4
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
 )
 
 var IfType_name = map[uint32]string{
-	1: "IF_API_TYPE_HARDWARE",
-	2: "IF_API_TYPE_SUB",
-	3: "IF_API_TYPE_P2P",
-	4: "IF_API_TYPE_PIPE",
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
 }
 
 var IfType_value = map[string]uint32{
-	"IF_API_TYPE_HARDWARE": 1,
-	"IF_API_TYPE_SUB":      2,
-	"IF_API_TYPE_P2P":      3,
-	"IF_API_TYPE_PIPE":     4,
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
 }
 
 func (x IfType) String() string {
@@ -122,27 +122,24 @@ func (x LinkDuplex) String() string {
 type MtuProto uint32
 
 const (
-	MTU_PROTO_API_L3   MtuProto = 1
-	MTU_PROTO_API_IP4  MtuProto = 2
-	MTU_PROTO_API_IP6  MtuProto = 3
-	MTU_PROTO_API_MPLS MtuProto = 4
-	MTU_PROTO_API_N    MtuProto = 5
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
 )
 
 var MtuProto_name = map[uint32]string{
-	1: "MTU_PROTO_API_L3",
-	2: "MTU_PROTO_API_IP4",
-	3: "MTU_PROTO_API_IP6",
-	4: "MTU_PROTO_API_MPLS",
-	5: "MTU_PROTO_API_N",
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
 }
 
 var MtuProto_value = map[string]uint32{
-	"MTU_PROTO_API_L3":   1,
-	"MTU_PROTO_API_IP4":  2,
-	"MTU_PROTO_API_IP6":  3,
-	"MTU_PROTO_API_MPLS": 4,
-	"MTU_PROTO_API_N":    5,
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
 }
 
 func (x MtuProto) String() string {
@@ -343,6 +340,7 @@ type CreateVhostUserIf struct {
 	DisableMrgRxbuf     bool
 	DisableIndirectDesc bool
 	EnableGso           bool
+	EnablePacked        bool
 	CustomDevInstance   uint32
 	UseCustomMac        bool
 	MacAddress          MacAddress
@@ -351,7 +349,7 @@ type CreateVhostUserIf struct {
 
 func (m *CreateVhostUserIf) Reset()                        { *m = CreateVhostUserIf{} }
 func (*CreateVhostUserIf) GetMessageName() string          { return "create_vhost_user_if" }
-func (*CreateVhostUserIf) GetCrcString() string            { return "591ee951" }
+func (*CreateVhostUserIf) GetCrcString() string            { return "c785c6fc" }
 func (*CreateVhostUserIf) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // CreateVhostUserIfReply represents VPP binary API message 'create_vhost_user_if_reply'.
@@ -392,12 +390,13 @@ type ModifyVhostUserIf struct {
 	SockFilename      string `struc:"[256]byte"`
 	Renumber          bool
 	EnableGso         bool
+	EnablePacked      bool
 	CustomDevInstance uint32
 }
 
 func (m *ModifyVhostUserIf) Reset()                        { *m = ModifyVhostUserIf{} }
 func (*ModifyVhostUserIf) GetMessageName() string          { return "modify_vhost_user_if" }
-func (*ModifyVhostUserIf) GetCrcString() string            { return "fcfeaf16" }
+func (*ModifyVhostUserIf) GetCrcString() string            { return "0e71d40b" }
 func (*ModifyVhostUserIf) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // ModifyVhostUserIfReply represents VPP binary API message 'modify_vhost_user_if_reply'.

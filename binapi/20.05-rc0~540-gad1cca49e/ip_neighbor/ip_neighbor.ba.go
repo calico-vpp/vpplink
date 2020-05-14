@@ -9,8 +9,8 @@ It consists of:
 	  7 aliases
 	  7 types
 	  1 union
-	  9 messages
-	  4 services
+	 15 messages
+	  7 services
 */
 package ip_neighbor
 
@@ -30,7 +30,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "1.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x76d7cd45
+	VersionCrc = 0xe6512b94
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -89,24 +89,24 @@ func (x IfStatusFlags) String() string {
 type IfType uint32
 
 const (
-	IF_API_TYPE_HARDWARE IfType = 1
-	IF_API_TYPE_SUB      IfType = 2
-	IF_API_TYPE_P2P      IfType = 3
-	IF_API_TYPE_PIPE     IfType = 4
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
 )
 
 var IfType_name = map[uint32]string{
-	1: "IF_API_TYPE_HARDWARE",
-	2: "IF_API_TYPE_SUB",
-	3: "IF_API_TYPE_P2P",
-	4: "IF_API_TYPE_PIPE",
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
 }
 
 var IfType_value = map[string]uint32{
-	"IF_API_TYPE_HARDWARE": 1,
-	"IF_API_TYPE_SUB":      2,
-	"IF_API_TYPE_P2P":      3,
-	"IF_API_TYPE_PIPE":     4,
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
 }
 
 func (x IfType) String() string {
@@ -353,27 +353,24 @@ func (x LinkDuplex) String() string {
 type MtuProto uint32
 
 const (
-	MTU_PROTO_API_L3   MtuProto = 1
-	MTU_PROTO_API_IP4  MtuProto = 2
-	MTU_PROTO_API_IP6  MtuProto = 3
-	MTU_PROTO_API_MPLS MtuProto = 4
-	MTU_PROTO_API_N    MtuProto = 5
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
 )
 
 var MtuProto_name = map[uint32]string{
-	1: "MTU_PROTO_API_L3",
-	2: "MTU_PROTO_API_IP4",
-	3: "MTU_PROTO_API_IP6",
-	4: "MTU_PROTO_API_MPLS",
-	5: "MTU_PROTO_API_N",
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
 }
 
 var MtuProto_value = map[string]uint32{
-	"MTU_PROTO_API_L3":   1,
-	"MTU_PROTO_API_IP4":  2,
-	"MTU_PROTO_API_IP6":  3,
-	"MTU_PROTO_API_MPLS": 4,
-	"MTU_PROTO_API_N":    5,
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
 }
 
 func (x MtuProto) String() string {
@@ -669,6 +666,63 @@ func (*IPNeighborEvent) GetMessageName() string          { return "ip_neighbor_e
 func (*IPNeighborEvent) GetCrcString() string            { return "83933131" }
 func (*IPNeighborEvent) GetMessageType() api.MessageType { return api.EventMessage }
 
+// IPNeighborFlush represents VPP binary API message 'ip_neighbor_flush'.
+type IPNeighborFlush struct {
+	Af        AddressFamily
+	SwIfIndex InterfaceIndex
+}
+
+func (m *IPNeighborFlush) Reset()                        { *m = IPNeighborFlush{} }
+func (*IPNeighborFlush) GetMessageName() string          { return "ip_neighbor_flush" }
+func (*IPNeighborFlush) GetCrcString() string            { return "16aa35d2" }
+func (*IPNeighborFlush) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// IPNeighborFlushReply represents VPP binary API message 'ip_neighbor_flush_reply'.
+type IPNeighborFlushReply struct {
+	Retval int32
+}
+
+func (m *IPNeighborFlushReply) Reset()                        { *m = IPNeighborFlushReply{} }
+func (*IPNeighborFlushReply) GetMessageName() string          { return "ip_neighbor_flush_reply" }
+func (*IPNeighborFlushReply) GetCrcString() string            { return "e8d4e804" }
+func (*IPNeighborFlushReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
+// IPNeighborReplaceBegin represents VPP binary API message 'ip_neighbor_replace_begin'.
+type IPNeighborReplaceBegin struct{}
+
+func (m *IPNeighborReplaceBegin) Reset()                        { *m = IPNeighborReplaceBegin{} }
+func (*IPNeighborReplaceBegin) GetMessageName() string          { return "ip_neighbor_replace_begin" }
+func (*IPNeighborReplaceBegin) GetCrcString() string            { return "51077d14" }
+func (*IPNeighborReplaceBegin) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// IPNeighborReplaceBeginReply represents VPP binary API message 'ip_neighbor_replace_begin_reply'.
+type IPNeighborReplaceBeginReply struct {
+	Retval int32
+}
+
+func (m *IPNeighborReplaceBeginReply) Reset()                        { *m = IPNeighborReplaceBeginReply{} }
+func (*IPNeighborReplaceBeginReply) GetMessageName() string          { return "ip_neighbor_replace_begin_reply" }
+func (*IPNeighborReplaceBeginReply) GetCrcString() string            { return "e8d4e804" }
+func (*IPNeighborReplaceBeginReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
+// IPNeighborReplaceEnd represents VPP binary API message 'ip_neighbor_replace_end'.
+type IPNeighborReplaceEnd struct{}
+
+func (m *IPNeighborReplaceEnd) Reset()                        { *m = IPNeighborReplaceEnd{} }
+func (*IPNeighborReplaceEnd) GetMessageName() string          { return "ip_neighbor_replace_end" }
+func (*IPNeighborReplaceEnd) GetCrcString() string            { return "51077d14" }
+func (*IPNeighborReplaceEnd) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// IPNeighborReplaceEndReply represents VPP binary API message 'ip_neighbor_replace_end_reply'.
+type IPNeighborReplaceEndReply struct {
+	Retval int32
+}
+
+func (m *IPNeighborReplaceEndReply) Reset()                        { *m = IPNeighborReplaceEndReply{} }
+func (*IPNeighborReplaceEndReply) GetMessageName() string          { return "ip_neighbor_replace_end_reply" }
+func (*IPNeighborReplaceEndReply) GetCrcString() string            { return "e8d4e804" }
+func (*IPNeighborReplaceEndReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
 // WantIPNeighborEvents represents VPP binary API message 'want_ip_neighbor_events'.
 type WantIPNeighborEvents struct {
 	Enable    bool
@@ -700,6 +754,12 @@ func init() {
 	api.RegisterMessage((*IPNeighborDetails)(nil), "ip_neighbor.IPNeighborDetails")
 	api.RegisterMessage((*IPNeighborDump)(nil), "ip_neighbor.IPNeighborDump")
 	api.RegisterMessage((*IPNeighborEvent)(nil), "ip_neighbor.IPNeighborEvent")
+	api.RegisterMessage((*IPNeighborFlush)(nil), "ip_neighbor.IPNeighborFlush")
+	api.RegisterMessage((*IPNeighborFlushReply)(nil), "ip_neighbor.IPNeighborFlushReply")
+	api.RegisterMessage((*IPNeighborReplaceBegin)(nil), "ip_neighbor.IPNeighborReplaceBegin")
+	api.RegisterMessage((*IPNeighborReplaceBeginReply)(nil), "ip_neighbor.IPNeighborReplaceBeginReply")
+	api.RegisterMessage((*IPNeighborReplaceEnd)(nil), "ip_neighbor.IPNeighborReplaceEnd")
+	api.RegisterMessage((*IPNeighborReplaceEndReply)(nil), "ip_neighbor.IPNeighborReplaceEndReply")
 	api.RegisterMessage((*WantIPNeighborEvents)(nil), "ip_neighbor.WantIPNeighborEvents")
 	api.RegisterMessage((*WantIPNeighborEventsReply)(nil), "ip_neighbor.WantIPNeighborEventsReply")
 }
@@ -714,6 +774,12 @@ func AllMessages() []api.Message {
 		(*IPNeighborDetails)(nil),
 		(*IPNeighborDump)(nil),
 		(*IPNeighborEvent)(nil),
+		(*IPNeighborFlush)(nil),
+		(*IPNeighborFlushReply)(nil),
+		(*IPNeighborReplaceBegin)(nil),
+		(*IPNeighborReplaceBeginReply)(nil),
+		(*IPNeighborReplaceEnd)(nil),
+		(*IPNeighborReplaceEndReply)(nil),
 		(*WantIPNeighborEvents)(nil),
 		(*WantIPNeighborEventsReply)(nil),
 	}
@@ -724,6 +790,9 @@ type RPCService interface {
 	DumpIPNeighbor(ctx context.Context, in *IPNeighborDump) (RPCService_DumpIPNeighborClient, error)
 	IPNeighborAddDel(ctx context.Context, in *IPNeighborAddDel) (*IPNeighborAddDelReply, error)
 	IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error)
+	IPNeighborFlush(ctx context.Context, in *IPNeighborFlush) (*IPNeighborFlushReply, error)
+	IPNeighborReplaceBegin(ctx context.Context, in *IPNeighborReplaceBegin) (*IPNeighborReplaceBeginReply, error)
+	IPNeighborReplaceEnd(ctx context.Context, in *IPNeighborReplaceEnd) (*IPNeighborReplaceEndReply, error)
 	WantIPNeighborEvents(ctx context.Context, in *WantIPNeighborEvents) (*WantIPNeighborEventsReply, error)
 }
 
@@ -772,6 +841,33 @@ func (c *serviceClient) IPNeighborAddDel(ctx context.Context, in *IPNeighborAddD
 
 func (c *serviceClient) IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error) {
 	out := new(IPNeighborConfigReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) IPNeighborFlush(ctx context.Context, in *IPNeighborFlush) (*IPNeighborFlushReply, error) {
+	out := new(IPNeighborFlushReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) IPNeighborReplaceBegin(ctx context.Context, in *IPNeighborReplaceBegin) (*IPNeighborReplaceBeginReply, error) {
+	out := new(IPNeighborReplaceBeginReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) IPNeighborReplaceEnd(ctx context.Context, in *IPNeighborReplaceEnd) (*IPNeighborReplaceEndReply, error) {
+	out := new(IPNeighborReplaceEndReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err
