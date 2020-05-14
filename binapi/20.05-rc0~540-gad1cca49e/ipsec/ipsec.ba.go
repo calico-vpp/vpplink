@@ -30,7 +30,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "3.0.2"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x58cd6218
+	VersionCrc = 0x6a839805
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -89,24 +89,24 @@ func (x IfStatusFlags) String() string {
 type IfType uint32
 
 const (
-	IF_API_TYPE_HARDWARE IfType = 1
-	IF_API_TYPE_SUB      IfType = 2
-	IF_API_TYPE_P2P      IfType = 3
-	IF_API_TYPE_PIPE     IfType = 4
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
 )
 
 var IfType_name = map[uint32]string{
-	1: "IF_API_TYPE_HARDWARE",
-	2: "IF_API_TYPE_SUB",
-	3: "IF_API_TYPE_P2P",
-	4: "IF_API_TYPE_PIPE",
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
 }
 
 var IfType_value = map[string]uint32{
-	"IF_API_TYPE_HARDWARE": 1,
-	"IF_API_TYPE_SUB":      2,
-	"IF_API_TYPE_P2P":      3,
-	"IF_API_TYPE_PIPE":     4,
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
 }
 
 func (x IfType) String() string {
@@ -520,27 +520,24 @@ func (x LinkDuplex) String() string {
 type MtuProto uint32
 
 const (
-	MTU_PROTO_API_L3   MtuProto = 1
-	MTU_PROTO_API_IP4  MtuProto = 2
-	MTU_PROTO_API_IP6  MtuProto = 3
-	MTU_PROTO_API_MPLS MtuProto = 4
-	MTU_PROTO_API_N    MtuProto = 5
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
 )
 
 var MtuProto_name = map[uint32]string{
-	1: "MTU_PROTO_API_L3",
-	2: "MTU_PROTO_API_IP4",
-	3: "MTU_PROTO_API_IP6",
-	4: "MTU_PROTO_API_MPLS",
-	5: "MTU_PROTO_API_N",
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
 }
 
 var MtuProto_value = map[string]uint32{
-	"MTU_PROTO_API_L3":   1,
-	"MTU_PROTO_API_IP4":  2,
-	"MTU_PROTO_API_IP6":  3,
-	"MTU_PROTO_API_MPLS": 4,
-	"MTU_PROTO_API_N":    5,
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
 }
 
 func (x MtuProto) String() string {
@@ -692,6 +689,8 @@ type IpsecSadEntry struct {
 	TunnelDst          Address
 	TxTableID          uint32
 	Salt               uint32
+	UDPSrcPort         uint16
+	UDPDstPort         uint16
 }
 
 func (*IpsecSadEntry) GetTypeName() string { return "ipsec_sad_entry" }
@@ -860,7 +859,7 @@ type IpsecSaDetails struct {
 
 func (m *IpsecSaDetails) Reset()                        { *m = IpsecSaDetails{} }
 func (*IpsecSaDetails) GetMessageName() string          { return "ipsec_sa_details" }
-func (*IpsecSaDetails) GetCrcString() string            { return "28a22afb" }
+func (*IpsecSaDetails) GetCrcString() string            { return "b30c7f41" }
 func (*IpsecSaDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // IpsecSaDump represents VPP binary API message 'ipsec_sa_dump'.
@@ -881,7 +880,7 @@ type IpsecSadEntryAddDel struct {
 
 func (m *IpsecSadEntryAddDel) Reset()                        { *m = IpsecSadEntryAddDel{} }
 func (*IpsecSadEntryAddDel) GetMessageName() string          { return "ipsec_sad_entry_add_del" }
-func (*IpsecSadEntryAddDel) GetCrcString() string            { return "57cc13fa" }
+func (*IpsecSadEntryAddDel) GetCrcString() string            { return "b8def364" }
 func (*IpsecSadEntryAddDel) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // IpsecSadEntryAddDelReply represents VPP binary API message 'ipsec_sad_entry_add_del_reply'.
