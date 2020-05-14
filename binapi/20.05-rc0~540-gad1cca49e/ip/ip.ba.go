@@ -9,8 +9,8 @@ It consists of:
 	  7 aliases
 	 14 types
 	  1 union
-	 58 messages
-	 29 services
+	 60 messages
+	 30 services
 */
 package ip
 
@@ -30,7 +30,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "3.0.1"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x9bb913d8
+	VersionCrc = 0x765d74b1
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -209,24 +209,24 @@ func (x IfStatusFlags) String() string {
 type IfType uint32
 
 const (
-	IF_API_TYPE_HARDWARE IfType = 1
-	IF_API_TYPE_SUB      IfType = 2
-	IF_API_TYPE_P2P      IfType = 3
-	IF_API_TYPE_PIPE     IfType = 4
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
 )
 
 var IfType_name = map[uint32]string{
-	1: "IF_API_TYPE_HARDWARE",
-	2: "IF_API_TYPE_SUB",
-	3: "IF_API_TYPE_P2P",
-	4: "IF_API_TYPE_PIPE",
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
 }
 
 var IfType_value = map[string]uint32{
-	"IF_API_TYPE_HARDWARE": 1,
-	"IF_API_TYPE_SUB":      2,
-	"IF_API_TYPE_P2P":      3,
-	"IF_API_TYPE_PIPE":     4,
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
 }
 
 func (x IfType) String() string {
@@ -508,27 +508,24 @@ func (x MfibItfFlags) String() string {
 type MtuProto uint32
 
 const (
-	MTU_PROTO_API_L3   MtuProto = 1
-	MTU_PROTO_API_IP4  MtuProto = 2
-	MTU_PROTO_API_IP6  MtuProto = 3
-	MTU_PROTO_API_MPLS MtuProto = 4
-	MTU_PROTO_API_N    MtuProto = 5
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
 )
 
 var MtuProto_name = map[uint32]string{
-	1: "MTU_PROTO_API_L3",
-	2: "MTU_PROTO_API_IP4",
-	3: "MTU_PROTO_API_IP6",
-	4: "MTU_PROTO_API_MPLS",
-	5: "MTU_PROTO_API_N",
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
 }
 
 var MtuProto_value = map[string]uint32{
-	"MTU_PROTO_API_L3":   1,
-	"MTU_PROTO_API_IP4":  2,
-	"MTU_PROTO_API_IP6":  3,
-	"MTU_PROTO_API_MPLS": 4,
-	"MTU_PROTO_API_N":    5,
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
 }
 
 func (x MtuProto) String() string {
@@ -1197,6 +1194,29 @@ func (*IPRouteDump) GetMessageName() string          { return "ip_route_dump" }
 func (*IPRouteDump) GetCrcString() string            { return "b9d2e09e" }
 func (*IPRouteDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
+// IPRouteLookup represents VPP binary API message 'ip_route_lookup'.
+type IPRouteLookup struct {
+	TableID uint32
+	Exact   uint8
+	Prefix  Prefix
+}
+
+func (m *IPRouteLookup) Reset()                        { *m = IPRouteLookup{} }
+func (*IPRouteLookup) GetMessageName() string          { return "ip_route_lookup" }
+func (*IPRouteLookup) GetCrcString() string            { return "e2986185" }
+func (*IPRouteLookup) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// IPRouteLookupReply represents VPP binary API message 'ip_route_lookup_reply'.
+type IPRouteLookupReply struct {
+	Retval int32
+	Route  IPRoute
+}
+
+func (m *IPRouteLookupReply) Reset()                        { *m = IPRouteLookupReply{} }
+func (*IPRouteLookupReply) GetMessageName() string          { return "ip_route_lookup_reply" }
+func (*IPRouteLookupReply) GetCrcString() string            { return "ae99de8e" }
+func (*IPRouteLookupReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
 // IPSourceAndPortRangeCheckAddDel represents VPP binary API message 'ip_source_and_port_range_check_add_del'.
 type IPSourceAndPortRangeCheckAddDel struct {
 	IsAdd          bool
@@ -1522,6 +1542,8 @@ func init() {
 	api.RegisterMessage((*IPRouteAddDelReply)(nil), "ip.IPRouteAddDelReply")
 	api.RegisterMessage((*IPRouteDetails)(nil), "ip.IPRouteDetails")
 	api.RegisterMessage((*IPRouteDump)(nil), "ip.IPRouteDump")
+	api.RegisterMessage((*IPRouteLookup)(nil), "ip.IPRouteLookup")
+	api.RegisterMessage((*IPRouteLookupReply)(nil), "ip.IPRouteLookupReply")
 	api.RegisterMessage((*IPSourceAndPortRangeCheckAddDel)(nil), "ip.IPSourceAndPortRangeCheckAddDel")
 	api.RegisterMessage((*IPSourceAndPortRangeCheckAddDelReply)(nil), "ip.IPSourceAndPortRangeCheckAddDelReply")
 	api.RegisterMessage((*IPSourceAndPortRangeCheckInterfaceAddDel)(nil), "ip.IPSourceAndPortRangeCheckInterfaceAddDel")
@@ -1585,6 +1607,8 @@ func AllMessages() []api.Message {
 		(*IPRouteAddDelReply)(nil),
 		(*IPRouteDetails)(nil),
 		(*IPRouteDump)(nil),
+		(*IPRouteLookup)(nil),
+		(*IPRouteLookupReply)(nil),
 		(*IPSourceAndPortRangeCheckAddDel)(nil),
 		(*IPSourceAndPortRangeCheckAddDelReply)(nil),
 		(*IPSourceAndPortRangeCheckInterfaceAddDel)(nil),
@@ -1634,6 +1658,7 @@ type RPCService interface {
 	IPReassemblyGet(ctx context.Context, in *IPReassemblyGet) (*IPReassemblyGetReply, error)
 	IPReassemblySet(ctx context.Context, in *IPReassemblySet) (*IPReassemblySetReply, error)
 	IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*IPRouteAddDelReply, error)
+	IPRouteLookup(ctx context.Context, in *IPRouteLookup) (*IPRouteLookupReply, error)
 	IPSourceAndPortRangeCheckAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckAddDel) (*IPSourceAndPortRangeCheckAddDelReply, error)
 	IPSourceAndPortRangeCheckInterfaceAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckInterfaceAddDel) (*IPSourceAndPortRangeCheckInterfaceAddDelReply, error)
 	IPTableAddDel(ctx context.Context, in *IPTableAddDel) (*IPTableAddDelReply, error)
@@ -1996,6 +2021,15 @@ func (c *serviceClient) IPReassemblySet(ctx context.Context, in *IPReassemblySet
 
 func (c *serviceClient) IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*IPRouteAddDelReply, error) {
 	out := new(IPRouteAddDelReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) IPRouteLookup(ctx context.Context, in *IPRouteLookup) (*IPRouteLookupReply, error) {
+	out := new(IPRouteLookupReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err

@@ -5,7 +5,10 @@
 Package lisp is a generated VPP binary API for 'lisp' module.
 
 It consists of:
-	  3 types
+	 13 enums
+	  7 aliases
+	 12 types
+	  2 unions
 	 60 messages
 	 30 services
 */
@@ -25,55 +28,733 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "lisp"
 	// APIVersion is the API version of this module.
-	APIVersion = "1.0.0"
+	APIVersion = "2.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x681568f8
+	VersionCrc = 0xf2d169ad
 )
+
+// AddressFamily represents VPP binary API enum 'address_family'.
+type AddressFamily uint8
+
+const (
+	ADDRESS_IP4 AddressFamily = 0
+	ADDRESS_IP6 AddressFamily = 1
+)
+
+var AddressFamily_name = map[uint8]string{
+	0: "ADDRESS_IP4",
+	1: "ADDRESS_IP6",
+}
+
+var AddressFamily_value = map[string]uint8{
+	"ADDRESS_IP4": 0,
+	"ADDRESS_IP6": 1,
+}
+
+func (x AddressFamily) String() string {
+	s, ok := AddressFamily_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// EidType represents VPP binary API enum 'eid_type'.
+type EidType uint8
+
+const (
+	EID_TYPE_API_PREFIX EidType = 0
+	EID_TYPE_API_MAC    EidType = 1
+	EID_TYPE_API_NSH    EidType = 2
+)
+
+var EidType_name = map[uint8]string{
+	0: "EID_TYPE_API_PREFIX",
+	1: "EID_TYPE_API_MAC",
+	2: "EID_TYPE_API_NSH",
+}
+
+var EidType_value = map[string]uint8{
+	"EID_TYPE_API_PREFIX": 0,
+	"EID_TYPE_API_MAC":    1,
+	"EID_TYPE_API_NSH":    2,
+}
+
+func (x EidType) String() string {
+	s, ok := EidType_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// HmacKeyID represents VPP binary API enum 'hmac_key_id'.
+type HmacKeyID uint8
+
+const (
+	KEY_ID_API_HMAC_NO_KEY      HmacKeyID = 0
+	KEY_ID_API_HMAC_SHA_1_96    HmacKeyID = 1
+	KEY_ID_API_HMAC_SHA_256_128 HmacKeyID = 2
+)
+
+var HmacKeyID_name = map[uint8]string{
+	0: "KEY_ID_API_HMAC_NO_KEY",
+	1: "KEY_ID_API_HMAC_SHA_1_96",
+	2: "KEY_ID_API_HMAC_SHA_256_128",
+}
+
+var HmacKeyID_value = map[string]uint8{
+	"KEY_ID_API_HMAC_NO_KEY":      0,
+	"KEY_ID_API_HMAC_SHA_1_96":    1,
+	"KEY_ID_API_HMAC_SHA_256_128": 2,
+}
+
+func (x HmacKeyID) String() string {
+	s, ok := HmacKeyID_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IfStatusFlags represents VPP binary API enum 'if_status_flags'.
+type IfStatusFlags uint32
+
+const (
+	IF_STATUS_API_FLAG_ADMIN_UP IfStatusFlags = 1
+	IF_STATUS_API_FLAG_LINK_UP  IfStatusFlags = 2
+)
+
+var IfStatusFlags_name = map[uint32]string{
+	1: "IF_STATUS_API_FLAG_ADMIN_UP",
+	2: "IF_STATUS_API_FLAG_LINK_UP",
+}
+
+var IfStatusFlags_value = map[string]uint32{
+	"IF_STATUS_API_FLAG_ADMIN_UP": 1,
+	"IF_STATUS_API_FLAG_LINK_UP":  2,
+}
+
+func (x IfStatusFlags) String() string {
+	s, ok := IfStatusFlags_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IfType represents VPP binary API enum 'if_type'.
+type IfType uint32
+
+const (
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
+)
+
+var IfType_name = map[uint32]string{
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
+}
+
+var IfType_value = map[string]uint32{
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
+}
+
+func (x IfType) String() string {
+	s, ok := IfType_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPDscp represents VPP binary API enum 'ip_dscp'.
+type IPDscp uint8
+
+const (
+	IP_API_DSCP_CS0  IPDscp = 0
+	IP_API_DSCP_CS1  IPDscp = 8
+	IP_API_DSCP_AF11 IPDscp = 10
+	IP_API_DSCP_AF12 IPDscp = 12
+	IP_API_DSCP_AF13 IPDscp = 14
+	IP_API_DSCP_CS2  IPDscp = 16
+	IP_API_DSCP_AF21 IPDscp = 18
+	IP_API_DSCP_AF22 IPDscp = 20
+	IP_API_DSCP_AF23 IPDscp = 22
+	IP_API_DSCP_CS3  IPDscp = 24
+	IP_API_DSCP_AF31 IPDscp = 26
+	IP_API_DSCP_AF32 IPDscp = 28
+	IP_API_DSCP_AF33 IPDscp = 30
+	IP_API_DSCP_CS4  IPDscp = 32
+	IP_API_DSCP_AF41 IPDscp = 34
+	IP_API_DSCP_AF42 IPDscp = 36
+	IP_API_DSCP_AF43 IPDscp = 38
+	IP_API_DSCP_CS5  IPDscp = 40
+	IP_API_DSCP_EF   IPDscp = 46
+	IP_API_DSCP_CS6  IPDscp = 48
+	IP_API_DSCP_CS7  IPDscp = 50
+)
+
+var IPDscp_name = map[uint8]string{
+	0:  "IP_API_DSCP_CS0",
+	8:  "IP_API_DSCP_CS1",
+	10: "IP_API_DSCP_AF11",
+	12: "IP_API_DSCP_AF12",
+	14: "IP_API_DSCP_AF13",
+	16: "IP_API_DSCP_CS2",
+	18: "IP_API_DSCP_AF21",
+	20: "IP_API_DSCP_AF22",
+	22: "IP_API_DSCP_AF23",
+	24: "IP_API_DSCP_CS3",
+	26: "IP_API_DSCP_AF31",
+	28: "IP_API_DSCP_AF32",
+	30: "IP_API_DSCP_AF33",
+	32: "IP_API_DSCP_CS4",
+	34: "IP_API_DSCP_AF41",
+	36: "IP_API_DSCP_AF42",
+	38: "IP_API_DSCP_AF43",
+	40: "IP_API_DSCP_CS5",
+	46: "IP_API_DSCP_EF",
+	48: "IP_API_DSCP_CS6",
+	50: "IP_API_DSCP_CS7",
+}
+
+var IPDscp_value = map[string]uint8{
+	"IP_API_DSCP_CS0":  0,
+	"IP_API_DSCP_CS1":  8,
+	"IP_API_DSCP_AF11": 10,
+	"IP_API_DSCP_AF12": 12,
+	"IP_API_DSCP_AF13": 14,
+	"IP_API_DSCP_CS2":  16,
+	"IP_API_DSCP_AF21": 18,
+	"IP_API_DSCP_AF22": 20,
+	"IP_API_DSCP_AF23": 22,
+	"IP_API_DSCP_CS3":  24,
+	"IP_API_DSCP_AF31": 26,
+	"IP_API_DSCP_AF32": 28,
+	"IP_API_DSCP_AF33": 30,
+	"IP_API_DSCP_CS4":  32,
+	"IP_API_DSCP_AF41": 34,
+	"IP_API_DSCP_AF42": 36,
+	"IP_API_DSCP_AF43": 38,
+	"IP_API_DSCP_CS5":  40,
+	"IP_API_DSCP_EF":   46,
+	"IP_API_DSCP_CS6":  48,
+	"IP_API_DSCP_CS7":  50,
+}
+
+func (x IPDscp) String() string {
+	s, ok := IPDscp_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPEcn represents VPP binary API enum 'ip_ecn'.
+type IPEcn uint8
+
+const (
+	IP_API_ECN_NONE IPEcn = 0
+	IP_API_ECN_ECT0 IPEcn = 1
+	IP_API_ECN_ECT1 IPEcn = 2
+	IP_API_ECN_CE   IPEcn = 3
+)
+
+var IPEcn_name = map[uint8]string{
+	0: "IP_API_ECN_NONE",
+	1: "IP_API_ECN_ECT0",
+	2: "IP_API_ECN_ECT1",
+	3: "IP_API_ECN_CE",
+}
+
+var IPEcn_value = map[string]uint8{
+	"IP_API_ECN_NONE": 0,
+	"IP_API_ECN_ECT0": 1,
+	"IP_API_ECN_ECT1": 2,
+	"IP_API_ECN_CE":   3,
+}
+
+func (x IPEcn) String() string {
+	s, ok := IPEcn_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPProto represents VPP binary API enum 'ip_proto'.
+type IPProto uint8
+
+const (
+	IP_API_PROTO_HOPOPT   IPProto = 0
+	IP_API_PROTO_ICMP     IPProto = 1
+	IP_API_PROTO_IGMP     IPProto = 2
+	IP_API_PROTO_TCP      IPProto = 6
+	IP_API_PROTO_UDP      IPProto = 17
+	IP_API_PROTO_GRE      IPProto = 47
+	IP_API_PROTO_ESP      IPProto = 50
+	IP_API_PROTO_AH       IPProto = 51
+	IP_API_PROTO_ICMP6    IPProto = 58
+	IP_API_PROTO_EIGRP    IPProto = 88
+	IP_API_PROTO_OSPF     IPProto = 89
+	IP_API_PROTO_SCTP     IPProto = 132
+	IP_API_PROTO_RESERVED IPProto = 255
+)
+
+var IPProto_name = map[uint8]string{
+	0:   "IP_API_PROTO_HOPOPT",
+	1:   "IP_API_PROTO_ICMP",
+	2:   "IP_API_PROTO_IGMP",
+	6:   "IP_API_PROTO_TCP",
+	17:  "IP_API_PROTO_UDP",
+	47:  "IP_API_PROTO_GRE",
+	50:  "IP_API_PROTO_ESP",
+	51:  "IP_API_PROTO_AH",
+	58:  "IP_API_PROTO_ICMP6",
+	88:  "IP_API_PROTO_EIGRP",
+	89:  "IP_API_PROTO_OSPF",
+	132: "IP_API_PROTO_SCTP",
+	255: "IP_API_PROTO_RESERVED",
+}
+
+var IPProto_value = map[string]uint8{
+	"IP_API_PROTO_HOPOPT":   0,
+	"IP_API_PROTO_ICMP":     1,
+	"IP_API_PROTO_IGMP":     2,
+	"IP_API_PROTO_TCP":      6,
+	"IP_API_PROTO_UDP":      17,
+	"IP_API_PROTO_GRE":      47,
+	"IP_API_PROTO_ESP":      50,
+	"IP_API_PROTO_AH":       51,
+	"IP_API_PROTO_ICMP6":    58,
+	"IP_API_PROTO_EIGRP":    88,
+	"IP_API_PROTO_OSPF":     89,
+	"IP_API_PROTO_SCTP":     132,
+	"IP_API_PROTO_RESERVED": 255,
+}
+
+func (x IPProto) String() string {
+	s, ok := IPProto_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// LinkDuplex represents VPP binary API enum 'link_duplex'.
+type LinkDuplex uint32
+
+const (
+	LINK_DUPLEX_API_UNKNOWN LinkDuplex = 0
+	LINK_DUPLEX_API_HALF    LinkDuplex = 1
+	LINK_DUPLEX_API_FULL    LinkDuplex = 2
+)
+
+var LinkDuplex_name = map[uint32]string{
+	0: "LINK_DUPLEX_API_UNKNOWN",
+	1: "LINK_DUPLEX_API_HALF",
+	2: "LINK_DUPLEX_API_FULL",
+}
+
+var LinkDuplex_value = map[string]uint32{
+	"LINK_DUPLEX_API_UNKNOWN": 0,
+	"LINK_DUPLEX_API_HALF":    1,
+	"LINK_DUPLEX_API_FULL":    2,
+}
+
+func (x LinkDuplex) String() string {
+	s, ok := LinkDuplex_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// LispLocatorSetFilter represents VPP binary API enum 'lisp_locator_set_filter'.
+type LispLocatorSetFilter uint8
+
+const (
+	LISP_LOCATOR_SET_FILTER_API_ALL    LispLocatorSetFilter = 0
+	LISP_LOCATOR_SET_FILTER_API_LOCAL  LispLocatorSetFilter = 1
+	LISP_LOCATOR_SET_FILTER_API_REMOTE LispLocatorSetFilter = 2
+)
+
+var LispLocatorSetFilter_name = map[uint8]string{
+	0: "LISP_LOCATOR_SET_FILTER_API_ALL",
+	1: "LISP_LOCATOR_SET_FILTER_API_LOCAL",
+	2: "LISP_LOCATOR_SET_FILTER_API_REMOTE",
+}
+
+var LispLocatorSetFilter_value = map[string]uint8{
+	"LISP_LOCATOR_SET_FILTER_API_ALL":    0,
+	"LISP_LOCATOR_SET_FILTER_API_LOCAL":  1,
+	"LISP_LOCATOR_SET_FILTER_API_REMOTE": 2,
+}
+
+func (x LispLocatorSetFilter) String() string {
+	s, ok := LispLocatorSetFilter_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// MtuProto represents VPP binary API enum 'mtu_proto'.
+type MtuProto uint32
+
+const (
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
+)
+
+var MtuProto_name = map[uint32]string{
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
+}
+
+var MtuProto_value = map[string]uint32{
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
+}
+
+func (x MtuProto) String() string {
+	s, ok := MtuProto_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// RxMode represents VPP binary API enum 'rx_mode'.
+type RxMode uint32
+
+const (
+	RX_MODE_API_UNKNOWN   RxMode = 0
+	RX_MODE_API_POLLING   RxMode = 1
+	RX_MODE_API_INTERRUPT RxMode = 2
+	RX_MODE_API_ADAPTIVE  RxMode = 3
+	RX_MODE_API_DEFAULT   RxMode = 4
+)
+
+var RxMode_name = map[uint32]string{
+	0: "RX_MODE_API_UNKNOWN",
+	1: "RX_MODE_API_POLLING",
+	2: "RX_MODE_API_INTERRUPT",
+	3: "RX_MODE_API_ADAPTIVE",
+	4: "RX_MODE_API_DEFAULT",
+}
+
+var RxMode_value = map[string]uint32{
+	"RX_MODE_API_UNKNOWN":   0,
+	"RX_MODE_API_POLLING":   1,
+	"RX_MODE_API_INTERRUPT": 2,
+	"RX_MODE_API_ADAPTIVE":  3,
+	"RX_MODE_API_DEFAULT":   4,
+}
+
+func (x RxMode) String() string {
+	s, ok := RxMode_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// SubIfFlags represents VPP binary API enum 'sub_if_flags'.
+type SubIfFlags uint32
+
+const (
+	SUB_IF_API_FLAG_NO_TAGS           SubIfFlags = 1
+	SUB_IF_API_FLAG_ONE_TAG           SubIfFlags = 2
+	SUB_IF_API_FLAG_TWO_TAGS          SubIfFlags = 4
+	SUB_IF_API_FLAG_DOT1AD            SubIfFlags = 8
+	SUB_IF_API_FLAG_EXACT_MATCH       SubIfFlags = 16
+	SUB_IF_API_FLAG_DEFAULT           SubIfFlags = 32
+	SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY SubIfFlags = 64
+	SUB_IF_API_FLAG_INNER_VLAN_ID_ANY SubIfFlags = 128
+	SUB_IF_API_FLAG_MASK_VNET         SubIfFlags = 254
+	SUB_IF_API_FLAG_DOT1AH            SubIfFlags = 256
+)
+
+var SubIfFlags_name = map[uint32]string{
+	1:   "SUB_IF_API_FLAG_NO_TAGS",
+	2:   "SUB_IF_API_FLAG_ONE_TAG",
+	4:   "SUB_IF_API_FLAG_TWO_TAGS",
+	8:   "SUB_IF_API_FLAG_DOT1AD",
+	16:  "SUB_IF_API_FLAG_EXACT_MATCH",
+	32:  "SUB_IF_API_FLAG_DEFAULT",
+	64:  "SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY",
+	128: "SUB_IF_API_FLAG_INNER_VLAN_ID_ANY",
+	254: "SUB_IF_API_FLAG_MASK_VNET",
+	256: "SUB_IF_API_FLAG_DOT1AH",
+}
+
+var SubIfFlags_value = map[string]uint32{
+	"SUB_IF_API_FLAG_NO_TAGS":           1,
+	"SUB_IF_API_FLAG_ONE_TAG":           2,
+	"SUB_IF_API_FLAG_TWO_TAGS":          4,
+	"SUB_IF_API_FLAG_DOT1AD":            8,
+	"SUB_IF_API_FLAG_EXACT_MATCH":       16,
+	"SUB_IF_API_FLAG_DEFAULT":           32,
+	"SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY": 64,
+	"SUB_IF_API_FLAG_INNER_VLAN_ID_ANY": 128,
+	"SUB_IF_API_FLAG_MASK_VNET":         254,
+	"SUB_IF_API_FLAG_DOT1AH":            256,
+}
+
+func (x SubIfFlags) String() string {
+	s, ok := SubIfFlags_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// AddressWithPrefix represents VPP binary API alias 'address_with_prefix'.
+type AddressWithPrefix Prefix
+
+// InterfaceIndex represents VPP binary API alias 'interface_index'.
+type InterfaceIndex uint32
+
+// IP4Address represents VPP binary API alias 'ip4_address'.
+type IP4Address [4]uint8
+
+// IP4AddressWithPrefix represents VPP binary API alias 'ip4_address_with_prefix'.
+type IP4AddressWithPrefix IP4Prefix
+
+// IP6Address represents VPP binary API alias 'ip6_address'.
+type IP6Address [16]uint8
+
+// IP6AddressWithPrefix represents VPP binary API alias 'ip6_address_with_prefix'.
+type IP6AddressWithPrefix IP6Prefix
+
+// MacAddress represents VPP binary API alias 'mac_address'.
+type MacAddress [6]uint8
+
+// Address represents VPP binary API type 'address'.
+type Address struct {
+	Af AddressFamily
+	Un AddressUnion
+}
+
+func (*Address) GetTypeName() string { return "address" }
+
+// Eid represents VPP binary API type 'eid'.
+type Eid struct {
+	Type    EidType
+	Address EidAddress
+}
+
+func (*Eid) GetTypeName() string { return "eid" }
+
+// HmacKey represents VPP binary API type 'hmac_key'.
+type HmacKey struct {
+	ID  HmacKeyID
+	Key []byte `struc:"[64]byte"`
+}
+
+func (*HmacKey) GetTypeName() string { return "hmac_key" }
+
+// IP4Prefix represents VPP binary API type 'ip4_prefix'.
+type IP4Prefix struct {
+	Address IP4Address
+	Len     uint8
+}
+
+func (*IP4Prefix) GetTypeName() string { return "ip4_prefix" }
+
+// IP6Prefix represents VPP binary API type 'ip6_prefix'.
+type IP6Prefix struct {
+	Address IP6Address
+	Len     uint8
+}
+
+func (*IP6Prefix) GetTypeName() string { return "ip6_prefix" }
 
 // LispAdjacency represents VPP binary API type 'lisp_adjacency'.
 type LispAdjacency struct {
-	EidType       uint8
-	Reid          []byte `struc:"[16]byte"`
-	Leid          []byte `struc:"[16]byte"`
-	ReidPrefixLen uint8
-	LeidPrefixLen uint8
+	Reid Eid
+	Leid Eid
 }
 
 func (*LispAdjacency) GetTypeName() string { return "lisp_adjacency" }
 
 // LocalLocator represents VPP binary API type 'local_locator'.
 type LocalLocator struct {
-	SwIfIndex uint32
+	SwIfIndex InterfaceIndex
 	Priority  uint8
 	Weight    uint8
 }
 
 func (*LocalLocator) GetTypeName() string { return "local_locator" }
 
+// Mprefix represents VPP binary API type 'mprefix'.
+type Mprefix struct {
+	Af               AddressFamily
+	GrpAddressLength uint16
+	GrpAddress       AddressUnion
+	SrcAddress       AddressUnion
+}
+
+func (*Mprefix) GetTypeName() string { return "mprefix" }
+
+// Nsh represents VPP binary API type 'nsh'.
+type Nsh struct {
+	Spi uint32
+	Si  uint8
+}
+
+func (*Nsh) GetTypeName() string { return "nsh" }
+
+// Prefix represents VPP binary API type 'prefix'.
+type Prefix struct {
+	Address Address
+	Len     uint8
+}
+
+func (*Prefix) GetTypeName() string { return "prefix" }
+
+// PrefixMatcher represents VPP binary API type 'prefix_matcher'.
+type PrefixMatcher struct {
+	Le uint8
+	Ge uint8
+}
+
+func (*PrefixMatcher) GetTypeName() string { return "prefix_matcher" }
+
 // RemoteLocator represents VPP binary API type 'remote_locator'.
 type RemoteLocator struct {
-	IsIP4    uint8
-	Priority uint8
-	Weight   uint8
-	Addr     []byte `struc:"[16]byte"`
+	Priority  uint8
+	Weight    uint8
+	IPAddress Address
 }
 
 func (*RemoteLocator) GetTypeName() string { return "remote_locator" }
 
+// AddressUnion represents VPP binary API union 'address_union'.
+type AddressUnion struct {
+	XXX_UnionData [16]byte
+}
+
+func (*AddressUnion) GetTypeName() string { return "address_union" }
+
+func AddressUnionIP4(a IP4Address) (u AddressUnion) {
+	u.SetIP4(a)
+	return
+}
+func (u *AddressUnion) SetIP4(a IP4Address) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *AddressUnion) GetIP4() (a IP4Address) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+func AddressUnionIP6(a IP6Address) (u AddressUnion) {
+	u.SetIP6(a)
+	return
+}
+func (u *AddressUnion) SetIP6(a IP6Address) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *AddressUnion) GetIP6() (a IP6Address) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+// EidAddress represents VPP binary API union 'eid_address'.
+type EidAddress struct {
+	XXX_UnionData [6]byte
+}
+
+func (*EidAddress) GetTypeName() string { return "eid_address" }
+
+func EidAddressPrefix(a Prefix) (u EidAddress) {
+	u.SetPrefix(a)
+	return
+}
+func (u *EidAddress) SetPrefix(a Prefix) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *EidAddress) GetPrefix() (a Prefix) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+func EidAddressMac(a MacAddress) (u EidAddress) {
+	u.SetMac(a)
+	return
+}
+func (u *EidAddress) SetMac(a MacAddress) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *EidAddress) GetMac() (a MacAddress) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
+func EidAddressNsh(a Nsh) (u EidAddress) {
+	u.SetNsh(a)
+	return
+}
+func (u *EidAddress) SetNsh(a Nsh) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.XXX_UnionData[:], b.Bytes())
+}
+func (u *EidAddress) GetNsh() (a Nsh) {
+	var b = bytes.NewReader(u.XXX_UnionData[:])
+	struc.Unpack(b, &a)
+	return
+}
+
 // LispAddDelAdjacency represents VPP binary API message 'lisp_add_del_adjacency'.
 type LispAddDelAdjacency struct {
-	IsAdd   uint8
-	Vni     uint32
-	EidType uint8
-	Reid    []byte `struc:"[16]byte"`
-	Leid    []byte `struc:"[16]byte"`
-	ReidLen uint8
-	LeidLen uint8
+	IsAdd bool
+	Vni   uint32
+	Reid  Eid
+	Leid  Eid
 }
 
 func (m *LispAddDelAdjacency) Reset()                        { *m = LispAddDelAdjacency{} }
 func (*LispAddDelAdjacency) GetMessageName() string          { return "lisp_add_del_adjacency" }
-func (*LispAddDelAdjacency) GetCrcString() string            { return "f047390d" }
+func (*LispAddDelAdjacency) GetCrcString() string            { return "cf5edb61" }
 func (*LispAddDelAdjacency) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelAdjacencyReply represents VPP binary API message 'lisp_add_del_adjacency_reply'.
@@ -88,19 +769,16 @@ func (*LispAddDelAdjacencyReply) GetMessageType() api.MessageType { return api.R
 
 // LispAddDelLocalEid represents VPP binary API message 'lisp_add_del_local_eid'.
 type LispAddDelLocalEid struct {
-	IsAdd          uint8
-	EidType        uint8
-	Eid            []byte `struc:"[16]byte"`
-	PrefixLen      uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsAdd          bool
+	Eid            Eid
+	LocatorSetName string `struc:"[64]byte"`
 	Vni            uint32
-	KeyID          uint16
-	Key            []byte `struc:"[64]byte"`
+	Key            HmacKey
 }
 
 func (m *LispAddDelLocalEid) Reset()                        { *m = LispAddDelLocalEid{} }
 func (*LispAddDelLocalEid) GetMessageName() string          { return "lisp_add_del_local_eid" }
-func (*LispAddDelLocalEid) GetCrcString() string            { return "e6d00717" }
+func (*LispAddDelLocalEid) GetCrcString() string            { return "21f573bd" }
 func (*LispAddDelLocalEid) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelLocalEidReply represents VPP binary API message 'lisp_add_del_local_eid_reply'.
@@ -115,16 +793,16 @@ func (*LispAddDelLocalEidReply) GetMessageType() api.MessageType { return api.Re
 
 // LispAddDelLocator represents VPP binary API message 'lisp_add_del_locator'.
 type LispAddDelLocator struct {
-	IsAdd          uint8
-	LocatorSetName []byte `struc:"[64]byte"`
-	SwIfIndex      uint32
+	IsAdd          bool
+	LocatorSetName string `struc:"[64]byte"`
+	SwIfIndex      InterfaceIndex
 	Priority       uint8
 	Weight         uint8
 }
 
 func (m *LispAddDelLocator) Reset()                        { *m = LispAddDelLocator{} }
 func (*LispAddDelLocator) GetMessageName() string          { return "lisp_add_del_locator" }
-func (*LispAddDelLocator) GetCrcString() string            { return "006a4240" }
+func (*LispAddDelLocator) GetCrcString() string            { return "af4d8f13" }
 func (*LispAddDelLocator) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelLocatorReply represents VPP binary API message 'lisp_add_del_locator_reply'.
@@ -139,15 +817,15 @@ func (*LispAddDelLocatorReply) GetMessageType() api.MessageType { return api.Rep
 
 // LispAddDelLocatorSet represents VPP binary API message 'lisp_add_del_locator_set'.
 type LispAddDelLocatorSet struct {
-	IsAdd          uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsAdd          bool
+	LocatorSetName string `struc:"[64]byte"`
 	LocatorNum     uint32 `struc:"sizeof=Locators"`
 	Locators       []LocalLocator
 }
 
 func (m *LispAddDelLocatorSet) Reset()                        { *m = LispAddDelLocatorSet{} }
 func (*LispAddDelLocatorSet) GetMessageName() string          { return "lisp_add_del_locator_set" }
-func (*LispAddDelLocatorSet) GetCrcString() string            { return "06968e38" }
+func (*LispAddDelLocatorSet) GetCrcString() string            { return "6fcd6471" }
 func (*LispAddDelLocatorSet) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelLocatorSetReply represents VPP binary API message 'lisp_add_del_locator_set_reply'.
@@ -163,15 +841,15 @@ func (*LispAddDelLocatorSetReply) GetMessageType() api.MessageType { return api.
 
 // LispAddDelMapRequestItrRlocs represents VPP binary API message 'lisp_add_del_map_request_itr_rlocs'.
 type LispAddDelMapRequestItrRlocs struct {
-	IsAdd          uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsAdd          bool
+	LocatorSetName string `struc:"[64]byte"`
 }
 
 func (m *LispAddDelMapRequestItrRlocs) Reset() { *m = LispAddDelMapRequestItrRlocs{} }
 func (*LispAddDelMapRequestItrRlocs) GetMessageName() string {
 	return "lisp_add_del_map_request_itr_rlocs"
 }
-func (*LispAddDelMapRequestItrRlocs) GetCrcString() string            { return "c7c6cb2f" }
+func (*LispAddDelMapRequestItrRlocs) GetCrcString() string            { return "6be88e45" }
 func (*LispAddDelMapRequestItrRlocs) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelMapRequestItrRlocsReply represents VPP binary API message 'lisp_add_del_map_request_itr_rlocs_reply'.
@@ -188,14 +866,13 @@ func (*LispAddDelMapRequestItrRlocsReply) GetMessageType() api.MessageType { ret
 
 // LispAddDelMapResolver represents VPP binary API message 'lisp_add_del_map_resolver'.
 type LispAddDelMapResolver struct {
-	IsAdd     uint8
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IsAdd     bool
+	IPAddress Address
 }
 
 func (m *LispAddDelMapResolver) Reset()                        { *m = LispAddDelMapResolver{} }
 func (*LispAddDelMapResolver) GetMessageName() string          { return "lisp_add_del_map_resolver" }
-func (*LispAddDelMapResolver) GetCrcString() string            { return "0ebcd37d" }
+func (*LispAddDelMapResolver) GetCrcString() string            { return "6598ea7c" }
 func (*LispAddDelMapResolver) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelMapResolverReply represents VPP binary API message 'lisp_add_del_map_resolver_reply'.
@@ -210,14 +887,13 @@ func (*LispAddDelMapResolverReply) GetMessageType() api.MessageType { return api
 
 // LispAddDelMapServer represents VPP binary API message 'lisp_add_del_map_server'.
 type LispAddDelMapServer struct {
-	IsAdd     uint8
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IsAdd     bool
+	IPAddress Address
 }
 
 func (m *LispAddDelMapServer) Reset()                        { *m = LispAddDelMapServer{} }
 func (*LispAddDelMapServer) GetMessageName() string          { return "lisp_add_del_map_server" }
-func (*LispAddDelMapServer) GetCrcString() string            { return "0ebcd37d" }
+func (*LispAddDelMapServer) GetCrcString() string            { return "6598ea7c" }
 func (*LispAddDelMapServer) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelMapServerReply represents VPP binary API message 'lisp_add_del_map_server_reply'.
@@ -232,23 +908,20 @@ func (*LispAddDelMapServerReply) GetMessageType() api.MessageType { return api.R
 
 // LispAddDelRemoteMapping represents VPP binary API message 'lisp_add_del_remote_mapping'.
 type LispAddDelRemoteMapping struct {
-	IsAdd    uint8
-	IsSrcDst uint8
-	DelAll   uint8
+	IsAdd    bool
+	IsSrcDst bool
+	DelAll   bool
 	Vni      uint32
 	Action   uint8
-	EidType  uint8
-	Eid      []byte `struc:"[16]byte"`
-	EidLen   uint8
-	Seid     []byte `struc:"[16]byte"`
-	SeidLen  uint8
+	Deid     Eid
+	Seid     Eid
 	RlocNum  uint32 `struc:"sizeof=Rlocs"`
 	Rlocs    []RemoteLocator
 }
 
 func (m *LispAddDelRemoteMapping) Reset()                        { *m = LispAddDelRemoteMapping{} }
 func (*LispAddDelRemoteMapping) GetMessageName() string          { return "lisp_add_del_remote_mapping" }
-func (*LispAddDelRemoteMapping) GetCrcString() string            { return "b879c3a9" }
+func (*LispAddDelRemoteMapping) GetCrcString() string            { return "fae8ed77" }
 func (*LispAddDelRemoteMapping) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispAddDelRemoteMappingReply represents VPP binary API message 'lisp_add_del_remote_mapping_reply'.
@@ -282,20 +955,20 @@ type LispAdjacenciesGetReply struct {
 
 func (m *LispAdjacenciesGetReply) Reset()                        { *m = LispAdjacenciesGetReply{} }
 func (*LispAdjacenciesGetReply) GetMessageName() string          { return "lisp_adjacencies_get_reply" }
-func (*LispAdjacenciesGetReply) GetCrcString() string            { return "ada0f464" }
+func (*LispAdjacenciesGetReply) GetCrcString() string            { return "3f97bcdd" }
 func (*LispAdjacenciesGetReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // LispEidTableAddDelMap represents VPP binary API message 'lisp_eid_table_add_del_map'.
 type LispEidTableAddDelMap struct {
-	IsAdd   uint8
+	IsAdd   bool
 	Vni     uint32
 	DpTable uint32
-	IsL2    uint8
+	IsL2    bool
 }
 
 func (m *LispEidTableAddDelMap) Reset()                        { *m = LispEidTableAddDelMap{} }
 func (*LispEidTableAddDelMap) GetMessageName() string          { return "lisp_eid_table_add_del_map" }
-func (*LispEidTableAddDelMap) GetCrcString() string            { return "59e9975e" }
+func (*LispEidTableAddDelMap) GetCrcString() string            { return "9481416b" }
 func (*LispEidTableAddDelMap) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispEidTableAddDelMapReply represents VPP binary API message 'lisp_eid_table_add_del_map_reply'.
@@ -312,23 +985,19 @@ func (*LispEidTableAddDelMapReply) GetMessageType() api.MessageType { return api
 type LispEidTableDetails struct {
 	LocatorSetIndex uint32
 	Action          uint8
-	IsLocal         uint8
-	EidType         uint8
-	IsSrcDst        uint8
+	IsLocal         bool
+	IsSrcDst        bool
 	Vni             uint32
-	Eid             []byte `struc:"[16]byte"`
-	EidPrefixLen    uint8
-	Seid            []byte `struc:"[16]byte"`
-	SeidPrefixLen   uint8
+	Deid            Eid
+	Seid            Eid
 	TTL             uint32
 	Authoritative   uint8
-	KeyID           uint16
-	Key             []byte `struc:"[64]byte"`
+	Key             HmacKey
 }
 
 func (m *LispEidTableDetails) Reset()                        { *m = LispEidTableDetails{} }
 func (*LispEidTableDetails) GetMessageName() string          { return "lisp_eid_table_details" }
-func (*LispEidTableDetails) GetCrcString() string            { return "dcd9f414" }
+func (*LispEidTableDetails) GetCrcString() string            { return "4bc32e3a" }
 func (*LispEidTableDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // LispEidTableDump represents VPP binary API message 'lisp_eid_table_dump'.
@@ -336,14 +1005,13 @@ type LispEidTableDump struct {
 	EidSet       uint8
 	PrefixLength uint8
 	Vni          uint32
-	EidType      uint8
-	Eid          []byte `struc:"[16]byte"`
-	Filter       uint8
+	Eid          Eid
+	Filter       LispLocatorSetFilter
 }
 
 func (m *LispEidTableDump) Reset()                        { *m = LispEidTableDump{} }
 func (*LispEidTableDump) GetMessageName() string          { return "lisp_eid_table_dump" }
-func (*LispEidTableDump) GetCrcString() string            { return "e0df64da" }
+func (*LispEidTableDump) GetCrcString() string            { return "b959b73b" }
 func (*LispEidTableDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispEidTableMapDetails represents VPP binary API message 'lisp_eid_table_map_details'.
@@ -359,12 +1027,12 @@ func (*LispEidTableMapDetails) GetMessageType() api.MessageType { return api.Rep
 
 // LispEidTableMapDump represents VPP binary API message 'lisp_eid_table_map_dump'.
 type LispEidTableMapDump struct {
-	IsL2 uint8
+	IsL2 bool
 }
 
 func (m *LispEidTableMapDump) Reset()                        { *m = LispEidTableMapDump{} }
 func (*LispEidTableMapDump) GetMessageName() string          { return "lisp_eid_table_map_dump" }
-func (*LispEidTableMapDump) GetCrcString() string            { return "67c54650" }
+func (*LispEidTableMapDump) GetCrcString() string            { return "d6cf0c3d" }
 func (*LispEidTableMapDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispEidTableVniDetails represents VPP binary API message 'lisp_eid_table_vni_details'.
@@ -387,12 +1055,12 @@ func (*LispEidTableVniDump) GetMessageType() api.MessageType { return api.Reques
 
 // LispEnableDisable represents VPP binary API message 'lisp_enable_disable'.
 type LispEnableDisable struct {
-	IsEn uint8
+	IsEnable bool
 }
 
 func (m *LispEnableDisable) Reset()                        { *m = LispEnableDisable{} }
 func (*LispEnableDisable) GetMessageName() string          { return "lisp_enable_disable" }
-func (*LispEnableDisable) GetCrcString() string            { return "eb0e943b" }
+func (*LispEnableDisable) GetCrcString() string            { return "c264d7bf" }
 func (*LispEnableDisable) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispEnableDisableReply represents VPP binary API message 'lisp_enable_disable_reply'.
@@ -416,74 +1084,73 @@ func (*LispGetMapRequestItrRlocs) GetMessageType() api.MessageType { return api.
 // LispGetMapRequestItrRlocsReply represents VPP binary API message 'lisp_get_map_request_itr_rlocs_reply'.
 type LispGetMapRequestItrRlocsReply struct {
 	Retval         int32
-	LocatorSetName []byte `struc:"[64]byte"`
+	LocatorSetName string `struc:"[64]byte"`
 }
 
 func (m *LispGetMapRequestItrRlocsReply) Reset() { *m = LispGetMapRequestItrRlocsReply{} }
 func (*LispGetMapRequestItrRlocsReply) GetMessageName() string {
 	return "lisp_get_map_request_itr_rlocs_reply"
 }
-func (*LispGetMapRequestItrRlocsReply) GetCrcString() string            { return "9f56f6f7" }
+func (*LispGetMapRequestItrRlocsReply) GetCrcString() string            { return "76580f3a" }
 func (*LispGetMapRequestItrRlocsReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // LispLocatorDetails represents VPP binary API message 'lisp_locator_details'.
 type LispLocatorDetails struct {
 	Local     uint8
-	SwIfIndex uint32
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	SwIfIndex InterfaceIndex
+	IPAddress Address
 	Priority  uint8
 	Weight    uint8
 }
 
 func (m *LispLocatorDetails) Reset()                        { *m = LispLocatorDetails{} }
 func (*LispLocatorDetails) GetMessageName() string          { return "lisp_locator_details" }
-func (*LispLocatorDetails) GetCrcString() string            { return "b3988a30" }
+func (*LispLocatorDetails) GetCrcString() string            { return "c0c4c2a7" }
 func (*LispLocatorDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // LispLocatorDump represents VPP binary API message 'lisp_locator_dump'.
 type LispLocatorDump struct {
 	LsIndex    uint32
-	LsName     []byte `struc:"[64]byte"`
+	LsName     string `struc:"[64]byte"`
 	IsIndexSet uint8
 }
 
 func (m *LispLocatorDump) Reset()                        { *m = LispLocatorDump{} }
 func (*LispLocatorDump) GetMessageName() string          { return "lisp_locator_dump" }
-func (*LispLocatorDump) GetCrcString() string            { return "f27d5050" }
+func (*LispLocatorDump) GetCrcString() string            { return "b954fad7" }
 func (*LispLocatorDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispLocatorSetDetails represents VPP binary API message 'lisp_locator_set_details'.
 type LispLocatorSetDetails struct {
 	LsIndex uint32
-	LsName  []byte `struc:"[64]byte"`
+	LsName  string `struc:"[64]byte"`
 }
 
 func (m *LispLocatorSetDetails) Reset()                        { *m = LispLocatorSetDetails{} }
 func (*LispLocatorSetDetails) GetMessageName() string          { return "lisp_locator_set_details" }
-func (*LispLocatorSetDetails) GetCrcString() string            { return "6b846882" }
+func (*LispLocatorSetDetails) GetCrcString() string            { return "5b33a105" }
 func (*LispLocatorSetDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // LispLocatorSetDump represents VPP binary API message 'lisp_locator_set_dump'.
 type LispLocatorSetDump struct {
-	Filter uint8
+	Filter LispLocatorSetFilter
 }
 
 func (m *LispLocatorSetDump) Reset()                        { *m = LispLocatorSetDump{} }
 func (*LispLocatorSetDump) GetMessageName() string          { return "lisp_locator_set_dump" }
-func (*LispLocatorSetDump) GetCrcString() string            { return "c79e8ab0" }
+func (*LispLocatorSetDump) GetCrcString() string            { return "c2cb5922" }
 func (*LispLocatorSetDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispMapRegisterEnableDisable represents VPP binary API message 'lisp_map_register_enable_disable'.
 type LispMapRegisterEnableDisable struct {
-	IsEnabled uint8
+	IsEnable bool
 }
 
 func (m *LispMapRegisterEnableDisable) Reset() { *m = LispMapRegisterEnableDisable{} }
 func (*LispMapRegisterEnableDisable) GetMessageName() string {
 	return "lisp_map_register_enable_disable"
 }
-func (*LispMapRegisterEnableDisable) GetCrcString() string            { return "294103d1" }
+func (*LispMapRegisterEnableDisable) GetCrcString() string            { return "c264d7bf" }
 func (*LispMapRegisterEnableDisable) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispMapRegisterEnableDisableReply represents VPP binary API message 'lisp_map_register_enable_disable_reply'.
@@ -500,12 +1167,12 @@ func (*LispMapRegisterEnableDisableReply) GetMessageType() api.MessageType { ret
 
 // LispMapRequestMode represents VPP binary API message 'lisp_map_request_mode'.
 type LispMapRequestMode struct {
-	Mode uint8
+	IsSrcDst bool
 }
 
 func (m *LispMapRequestMode) Reset()                        { *m = LispMapRequestMode{} }
 func (*LispMapRequestMode) GetMessageName() string          { return "lisp_map_request_mode" }
-func (*LispMapRequestMode) GetCrcString() string            { return "f3f93ce9" }
+func (*LispMapRequestMode) GetCrcString() string            { return "f43c26ae" }
 func (*LispMapRequestMode) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispMapRequestModeReply represents VPP binary API message 'lisp_map_request_mode_reply'.
@@ -520,13 +1187,12 @@ func (*LispMapRequestModeReply) GetMessageType() api.MessageType { return api.Re
 
 // LispMapResolverDetails represents VPP binary API message 'lisp_map_resolver_details'.
 type LispMapResolverDetails struct {
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IPAddress Address
 }
 
 func (m *LispMapResolverDetails) Reset()                        { *m = LispMapResolverDetails{} }
 func (*LispMapResolverDetails) GetMessageName() string          { return "lisp_map_resolver_details" }
-func (*LispMapResolverDetails) GetCrcString() string            { return "60a5f5ca" }
+func (*LispMapResolverDetails) GetCrcString() string            { return "82a09deb" }
 func (*LispMapResolverDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // LispMapResolverDump represents VPP binary API message 'lisp_map_resolver_dump'.
@@ -539,13 +1205,12 @@ func (*LispMapResolverDump) GetMessageType() api.MessageType { return api.Reques
 
 // LispMapServerDetails represents VPP binary API message 'lisp_map_server_details'.
 type LispMapServerDetails struct {
-	IsIPv6    uint8
-	IPAddress []byte `struc:"[16]byte"`
+	IPAddress Address
 }
 
 func (m *LispMapServerDetails) Reset()                        { *m = LispMapServerDetails{} }
 func (*LispMapServerDetails) GetMessageName() string          { return "lisp_map_server_details" }
-func (*LispMapServerDetails) GetCrcString() string            { return "60a5f5ca" }
+func (*LispMapServerDetails) GetCrcString() string            { return "82a09deb" }
 func (*LispMapServerDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // LispMapServerDump represents VPP binary API message 'lisp_map_server_dump'.
@@ -558,13 +1223,13 @@ func (*LispMapServerDump) GetMessageType() api.MessageType { return api.RequestM
 
 // LispPitrSetLocatorSet represents VPP binary API message 'lisp_pitr_set_locator_set'.
 type LispPitrSetLocatorSet struct {
-	IsAdd  uint8
-	LsName []byte `struc:"[64]byte"`
+	IsAdd  bool
+	LsName string `struc:"[64]byte"`
 }
 
 func (m *LispPitrSetLocatorSet) Reset()                        { *m = LispPitrSetLocatorSet{} }
 func (*LispPitrSetLocatorSet) GetMessageName() string          { return "lisp_pitr_set_locator_set" }
-func (*LispPitrSetLocatorSet) GetCrcString() string            { return "7aa022dd" }
+func (*LispPitrSetLocatorSet) GetCrcString() string            { return "486e2b76" }
 func (*LispPitrSetLocatorSet) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispPitrSetLocatorSetReply represents VPP binary API message 'lisp_pitr_set_locator_set_reply'.
@@ -579,12 +1244,12 @@ func (*LispPitrSetLocatorSetReply) GetMessageType() api.MessageType { return api
 
 // LispRlocProbeEnableDisable represents VPP binary API message 'lisp_rloc_probe_enable_disable'.
 type LispRlocProbeEnableDisable struct {
-	IsEnabled uint8
+	IsEnable bool
 }
 
 func (m *LispRlocProbeEnableDisable) Reset()                        { *m = LispRlocProbeEnableDisable{} }
 func (*LispRlocProbeEnableDisable) GetMessageName() string          { return "lisp_rloc_probe_enable_disable" }
-func (*LispRlocProbeEnableDisable) GetCrcString() string            { return "294103d1" }
+func (*LispRlocProbeEnableDisable) GetCrcString() string            { return "c264d7bf" }
 func (*LispRlocProbeEnableDisable) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispRlocProbeEnableDisableReply represents VPP binary API message 'lisp_rloc_probe_enable_disable_reply'.
@@ -601,14 +1266,13 @@ func (*LispRlocProbeEnableDisableReply) GetMessageType() api.MessageType { retur
 
 // LispUsePetr represents VPP binary API message 'lisp_use_petr'.
 type LispUsePetr struct {
-	IsIP4   uint8
-	Address []byte `struc:"[16]byte"`
-	IsAdd   uint8
+	IPAddress Address
+	IsAdd     bool
 }
 
 func (m *LispUsePetr) Reset()                        { *m = LispUsePetr{} }
 func (*LispUsePetr) GetMessageName() string          { return "lisp_use_petr" }
-func (*LispUsePetr) GetCrcString() string            { return "6910787d" }
+func (*LispUsePetr) GetCrcString() string            { return "9e141831" }
 func (*LispUsePetr) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // LispUsePetrReply represents VPP binary API message 'lisp_use_petr_reply'.
@@ -632,14 +1296,14 @@ func (*ShowLispMapRegisterState) GetMessageType() api.MessageType { return api.R
 // ShowLispMapRegisterStateReply represents VPP binary API message 'show_lisp_map_register_state_reply'.
 type ShowLispMapRegisterStateReply struct {
 	Retval    int32
-	IsEnabled uint8
+	IsEnabled bool
 }
 
 func (m *ShowLispMapRegisterStateReply) Reset() { *m = ShowLispMapRegisterStateReply{} }
 func (*ShowLispMapRegisterStateReply) GetMessageName() string {
 	return "show_lisp_map_register_state_reply"
 }
-func (*ShowLispMapRegisterStateReply) GetCrcString() string            { return "14304fbc" }
+func (*ShowLispMapRegisterStateReply) GetCrcString() string            { return "e33a377b" }
 func (*ShowLispMapRegisterStateReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowLispMapRequestMode represents VPP binary API message 'show_lisp_map_request_mode'.
@@ -652,15 +1316,15 @@ func (*ShowLispMapRequestMode) GetMessageType() api.MessageType { return api.Req
 
 // ShowLispMapRequestModeReply represents VPP binary API message 'show_lisp_map_request_mode_reply'.
 type ShowLispMapRequestModeReply struct {
-	Retval int32
-	Mode   uint8
+	Retval   int32
+	IsSrcDst bool
 }
 
 func (m *ShowLispMapRequestModeReply) Reset() { *m = ShowLispMapRequestModeReply{} }
 func (*ShowLispMapRequestModeReply) GetMessageName() string {
 	return "show_lisp_map_request_mode_reply"
 }
-func (*ShowLispMapRequestModeReply) GetCrcString() string            { return "d423107c" }
+func (*ShowLispMapRequestModeReply) GetCrcString() string            { return "5b05038e" }
 func (*ShowLispMapRequestModeReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowLispPitr represents VPP binary API message 'show_lisp_pitr'.
@@ -674,13 +1338,13 @@ func (*ShowLispPitr) GetMessageType() api.MessageType { return api.RequestMessag
 // ShowLispPitrReply represents VPP binary API message 'show_lisp_pitr_reply'.
 type ShowLispPitrReply struct {
 	Retval         int32
-	Status         uint8
-	LocatorSetName []byte `struc:"[64]byte"`
+	IsEnabled      bool
+	LocatorSetName string `struc:"[64]byte"`
 }
 
 func (m *ShowLispPitrReply) Reset()                        { *m = ShowLispPitrReply{} }
 func (*ShowLispPitrReply) GetMessageName() string          { return "show_lisp_pitr_reply" }
-func (*ShowLispPitrReply) GetCrcString() string            { return "dca512cc" }
+func (*ShowLispPitrReply) GetCrcString() string            { return "27aa69b1" }
 func (*ShowLispPitrReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowLispRlocProbeState represents VPP binary API message 'show_lisp_rloc_probe_state'.
@@ -694,14 +1358,14 @@ func (*ShowLispRlocProbeState) GetMessageType() api.MessageType { return api.Req
 // ShowLispRlocProbeStateReply represents VPP binary API message 'show_lisp_rloc_probe_state_reply'.
 type ShowLispRlocProbeStateReply struct {
 	Retval    int32
-	IsEnabled uint8
+	IsEnabled bool
 }
 
 func (m *ShowLispRlocProbeStateReply) Reset() { *m = ShowLispRlocProbeStateReply{} }
 func (*ShowLispRlocProbeStateReply) GetMessageName() string {
 	return "show_lisp_rloc_probe_state_reply"
 }
-func (*ShowLispRlocProbeStateReply) GetCrcString() string            { return "14304fbc" }
+func (*ShowLispRlocProbeStateReply) GetCrcString() string            { return "e33a377b" }
 func (*ShowLispRlocProbeStateReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowLispStatus represents VPP binary API message 'show_lisp_status'.
@@ -715,13 +1379,13 @@ func (*ShowLispStatus) GetMessageType() api.MessageType { return api.RequestMess
 // ShowLispStatusReply represents VPP binary API message 'show_lisp_status_reply'.
 type ShowLispStatusReply struct {
 	Retval        int32
-	FeatureStatus uint8
-	GpeStatus     uint8
+	IsLispEnabled bool
+	IsGpeEnabled  bool
 }
 
 func (m *ShowLispStatusReply) Reset()                        { *m = ShowLispStatusReply{} }
 func (*ShowLispStatusReply) GetMessageName() string          { return "show_lisp_status_reply" }
-func (*ShowLispStatusReply) GetCrcString() string            { return "ddcf48ef" }
+func (*ShowLispStatusReply) GetCrcString() string            { return "9e8f10c0" }
 func (*ShowLispStatusReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 // ShowLispUsePetr represents VPP binary API message 'show_lisp_use_petr'.
@@ -734,15 +1398,14 @@ func (*ShowLispUsePetr) GetMessageType() api.MessageType { return api.RequestMes
 
 // ShowLispUsePetrReply represents VPP binary API message 'show_lisp_use_petr_reply'.
 type ShowLispUsePetrReply struct {
-	Retval  int32
-	Status  uint8
-	IsIP4   uint8
-	Address []byte `struc:"[16]byte"`
+	Retval       int32
+	IsPetrEnable bool
+	IPAddress    Address
 }
 
 func (m *ShowLispUsePetrReply) Reset()                        { *m = ShowLispUsePetrReply{} }
 func (*ShowLispUsePetrReply) GetMessageName() string          { return "show_lisp_use_petr_reply" }
-func (*ShowLispUsePetrReply) GetCrcString() string            { return "1eb21916" }
+func (*ShowLispUsePetrReply) GetCrcString() string            { return "dcad8a81" }
 func (*ShowLispUsePetrReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
 func init() {

@@ -28,9 +28,9 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "session"
 	// APIVersion is the API version of this module.
-	APIVersion = "3.1.0"
+	APIVersion = "3.2.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x1b6d5e00
+	VersionCrc = 0x9aa0ebc0
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -89,24 +89,24 @@ func (x IfStatusFlags) String() string {
 type IfType uint32
 
 const (
-	IF_API_TYPE_HARDWARE IfType = 1
-	IF_API_TYPE_SUB      IfType = 2
-	IF_API_TYPE_P2P      IfType = 3
-	IF_API_TYPE_PIPE     IfType = 4
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
 )
 
 var IfType_name = map[uint32]string{
-	1: "IF_API_TYPE_HARDWARE",
-	2: "IF_API_TYPE_SUB",
-	3: "IF_API_TYPE_P2P",
-	4: "IF_API_TYPE_PIPE",
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
 }
 
 var IfType_value = map[string]uint32{
-	"IF_API_TYPE_HARDWARE": 1,
-	"IF_API_TYPE_SUB":      2,
-	"IF_API_TYPE_P2P":      3,
-	"IF_API_TYPE_PIPE":     4,
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
 }
 
 func (x IfType) String() string {
@@ -324,27 +324,24 @@ func (x LinkDuplex) String() string {
 type MtuProto uint32
 
 const (
-	MTU_PROTO_API_L3   MtuProto = 1
-	MTU_PROTO_API_IP4  MtuProto = 2
-	MTU_PROTO_API_IP6  MtuProto = 3
-	MTU_PROTO_API_MPLS MtuProto = 4
-	MTU_PROTO_API_N    MtuProto = 5
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
 )
 
 var MtuProto_name = map[uint32]string{
-	1: "MTU_PROTO_API_L3",
-	2: "MTU_PROTO_API_IP4",
-	3: "MTU_PROTO_API_IP6",
-	4: "MTU_PROTO_API_MPLS",
-	5: "MTU_PROTO_API_N",
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
 }
 
 var MtuProto_value = map[string]uint32{
-	"MTU_PROTO_API_L3":   1,
-	"MTU_PROTO_API_IP4":  2,
-	"MTU_PROTO_API_IP6":  3,
-	"MTU_PROTO_API_MPLS": 4,
-	"MTU_PROTO_API_N":    5,
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
 }
 
 func (x MtuProto) String() string {
@@ -638,14 +635,14 @@ func (*AppAddCertKeyPairReply) GetMessageType() api.MessageType { return api.Rep
 
 // AppAttach represents VPP binary API message 'app_attach'.
 type AppAttach struct {
-	Options            []uint64 `struc:"[17]uint64"`
+	Options            []uint64 `struc:"[18]uint64"`
 	XXX_NamespaceIDLen uint32   `struc:"sizeof=NamespaceID"`
 	NamespaceID        string
 }
 
 func (m *AppAttach) Reset()                        { *m = AppAttach{} }
 func (*AppAttach) GetMessageName() string          { return "app_attach" }
-func (*AppAttach) GetCrcString() string            { return "b3e932af" }
+func (*AppAttach) GetCrcString() string            { return "5f4a260d" }
 func (*AppAttach) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // AppAttachReply represents VPP binary API message 'app_attach_reply'.

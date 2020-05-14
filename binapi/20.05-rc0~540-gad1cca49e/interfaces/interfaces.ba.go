@@ -9,8 +9,8 @@ It consists of:
 	  7 aliases
 	  6 types
 	  1 union
-	 53 messages
-	 26 services
+	 57 messages
+	 28 services
 */
 package interfaces
 
@@ -30,7 +30,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "3.2.2"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0xb818a0be
+	VersionCrc = 0x58d4cf5a
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -89,24 +89,24 @@ func (x IfStatusFlags) String() string {
 type IfType uint32
 
 const (
-	IF_API_TYPE_HARDWARE IfType = 1
-	IF_API_TYPE_SUB      IfType = 2
-	IF_API_TYPE_P2P      IfType = 3
-	IF_API_TYPE_PIPE     IfType = 4
+	IF_API_TYPE_HARDWARE IfType = 0
+	IF_API_TYPE_SUB      IfType = 1
+	IF_API_TYPE_P2P      IfType = 2
+	IF_API_TYPE_PIPE     IfType = 3
 )
 
 var IfType_name = map[uint32]string{
-	1: "IF_API_TYPE_HARDWARE",
-	2: "IF_API_TYPE_SUB",
-	3: "IF_API_TYPE_P2P",
-	4: "IF_API_TYPE_PIPE",
+	0: "IF_API_TYPE_HARDWARE",
+	1: "IF_API_TYPE_SUB",
+	2: "IF_API_TYPE_P2P",
+	3: "IF_API_TYPE_PIPE",
 }
 
 var IfType_value = map[string]uint32{
-	"IF_API_TYPE_HARDWARE": 1,
-	"IF_API_TYPE_SUB":      2,
-	"IF_API_TYPE_P2P":      3,
-	"IF_API_TYPE_PIPE":     4,
+	"IF_API_TYPE_HARDWARE": 0,
+	"IF_API_TYPE_SUB":      1,
+	"IF_API_TYPE_P2P":      2,
+	"IF_API_TYPE_PIPE":     3,
 }
 
 func (x IfType) String() string {
@@ -324,27 +324,24 @@ func (x LinkDuplex) String() string {
 type MtuProto uint32
 
 const (
-	MTU_PROTO_API_L3   MtuProto = 1
-	MTU_PROTO_API_IP4  MtuProto = 2
-	MTU_PROTO_API_IP6  MtuProto = 3
-	MTU_PROTO_API_MPLS MtuProto = 4
-	MTU_PROTO_API_N    MtuProto = 5
+	MTU_PROTO_API_L3   MtuProto = 0
+	MTU_PROTO_API_IP4  MtuProto = 1
+	MTU_PROTO_API_IP6  MtuProto = 2
+	MTU_PROTO_API_MPLS MtuProto = 3
 )
 
 var MtuProto_name = map[uint32]string{
-	1: "MTU_PROTO_API_L3",
-	2: "MTU_PROTO_API_IP4",
-	3: "MTU_PROTO_API_IP6",
-	4: "MTU_PROTO_API_MPLS",
-	5: "MTU_PROTO_API_N",
+	0: "MTU_PROTO_API_L3",
+	1: "MTU_PROTO_API_IP4",
+	2: "MTU_PROTO_API_IP6",
+	3: "MTU_PROTO_API_MPLS",
 }
 
 var MtuProto_value = map[string]uint32{
-	"MTU_PROTO_API_L3":   1,
-	"MTU_PROTO_API_IP4":  2,
-	"MTU_PROTO_API_IP6":  3,
-	"MTU_PROTO_API_MPLS": 4,
-	"MTU_PROTO_API_N":    5,
+	"MTU_PROTO_API_L3":   0,
+	"MTU_PROTO_API_IP4":  1,
+	"MTU_PROTO_API_IP6":  2,
+	"MTU_PROTO_API_MPLS": 3,
 }
 
 func (x MtuProto) String() string {
@@ -801,6 +798,50 @@ func (*SwInterfaceAddDelMacAddressReply) GetMessageName() string {
 func (*SwInterfaceAddDelMacAddressReply) GetCrcString() string            { return "e8d4e804" }
 func (*SwInterfaceAddDelMacAddressReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
+// SwInterfaceAddressReplaceBegin represents VPP binary API message 'sw_interface_address_replace_begin'.
+type SwInterfaceAddressReplaceBegin struct{}
+
+func (m *SwInterfaceAddressReplaceBegin) Reset() { *m = SwInterfaceAddressReplaceBegin{} }
+func (*SwInterfaceAddressReplaceBegin) GetMessageName() string {
+	return "sw_interface_address_replace_begin"
+}
+func (*SwInterfaceAddressReplaceBegin) GetCrcString() string            { return "51077d14" }
+func (*SwInterfaceAddressReplaceBegin) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// SwInterfaceAddressReplaceBeginReply represents VPP binary API message 'sw_interface_address_replace_begin_reply'.
+type SwInterfaceAddressReplaceBeginReply struct {
+	Retval int32
+}
+
+func (m *SwInterfaceAddressReplaceBeginReply) Reset() { *m = SwInterfaceAddressReplaceBeginReply{} }
+func (*SwInterfaceAddressReplaceBeginReply) GetMessageName() string {
+	return "sw_interface_address_replace_begin_reply"
+}
+func (*SwInterfaceAddressReplaceBeginReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceAddressReplaceBeginReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
+// SwInterfaceAddressReplaceEnd represents VPP binary API message 'sw_interface_address_replace_end'.
+type SwInterfaceAddressReplaceEnd struct{}
+
+func (m *SwInterfaceAddressReplaceEnd) Reset() { *m = SwInterfaceAddressReplaceEnd{} }
+func (*SwInterfaceAddressReplaceEnd) GetMessageName() string {
+	return "sw_interface_address_replace_end"
+}
+func (*SwInterfaceAddressReplaceEnd) GetCrcString() string            { return "51077d14" }
+func (*SwInterfaceAddressReplaceEnd) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// SwInterfaceAddressReplaceEndReply represents VPP binary API message 'sw_interface_address_replace_end_reply'.
+type SwInterfaceAddressReplaceEndReply struct {
+	Retval int32
+}
+
+func (m *SwInterfaceAddressReplaceEndReply) Reset() { *m = SwInterfaceAddressReplaceEndReply{} }
+func (*SwInterfaceAddressReplaceEndReply) GetMessageName() string {
+	return "sw_interface_address_replace_end_reply"
+}
+func (*SwInterfaceAddressReplaceEndReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceAddressReplaceEndReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
 // SwInterfaceClearStats represents VPP binary API message 'sw_interface_clear_stats'.
 type SwInterfaceClearStats struct {
 	SwIfIndex InterfaceIndex
@@ -1206,6 +1247,10 @@ func init() {
 	api.RegisterMessage((*SwInterfaceAddDelAddressReply)(nil), "interface.SwInterfaceAddDelAddressReply")
 	api.RegisterMessage((*SwInterfaceAddDelMacAddress)(nil), "interface.SwInterfaceAddDelMacAddress")
 	api.RegisterMessage((*SwInterfaceAddDelMacAddressReply)(nil), "interface.SwInterfaceAddDelMacAddressReply")
+	api.RegisterMessage((*SwInterfaceAddressReplaceBegin)(nil), "interface.SwInterfaceAddressReplaceBegin")
+	api.RegisterMessage((*SwInterfaceAddressReplaceBeginReply)(nil), "interface.SwInterfaceAddressReplaceBeginReply")
+	api.RegisterMessage((*SwInterfaceAddressReplaceEnd)(nil), "interface.SwInterfaceAddressReplaceEnd")
+	api.RegisterMessage((*SwInterfaceAddressReplaceEndReply)(nil), "interface.SwInterfaceAddressReplaceEndReply")
 	api.RegisterMessage((*SwInterfaceClearStats)(nil), "interface.SwInterfaceClearStats")
 	api.RegisterMessage((*SwInterfaceClearStatsReply)(nil), "interface.SwInterfaceClearStatsReply")
 	api.RegisterMessage((*SwInterfaceDetails)(nil), "interface.SwInterfaceDetails")
@@ -1264,6 +1309,10 @@ func AllMessages() []api.Message {
 		(*SwInterfaceAddDelAddressReply)(nil),
 		(*SwInterfaceAddDelMacAddress)(nil),
 		(*SwInterfaceAddDelMacAddressReply)(nil),
+		(*SwInterfaceAddressReplaceBegin)(nil),
+		(*SwInterfaceAddressReplaceBeginReply)(nil),
+		(*SwInterfaceAddressReplaceEnd)(nil),
+		(*SwInterfaceAddressReplaceEndReply)(nil),
 		(*SwInterfaceClearStats)(nil),
 		(*SwInterfaceClearStatsReply)(nil),
 		(*SwInterfaceDetails)(nil),
@@ -1313,6 +1362,8 @@ type RPCService interface {
 	InterfaceNameRenumber(ctx context.Context, in *InterfaceNameRenumber) (*InterfaceNameRenumberReply, error)
 	SwInterfaceAddDelAddress(ctx context.Context, in *SwInterfaceAddDelAddress) (*SwInterfaceAddDelAddressReply, error)
 	SwInterfaceAddDelMacAddress(ctx context.Context, in *SwInterfaceAddDelMacAddress) (*SwInterfaceAddDelMacAddressReply, error)
+	SwInterfaceAddressReplaceBegin(ctx context.Context, in *SwInterfaceAddressReplaceBegin) (*SwInterfaceAddressReplaceBeginReply, error)
+	SwInterfaceAddressReplaceEnd(ctx context.Context, in *SwInterfaceAddressReplaceEnd) (*SwInterfaceAddressReplaceEndReply, error)
 	SwInterfaceClearStats(ctx context.Context, in *SwInterfaceClearStats) (*SwInterfaceClearStatsReply, error)
 	SwInterfaceGetMacAddress(ctx context.Context, in *SwInterfaceGetMacAddress) (*SwInterfaceGetMacAddressReply, error)
 	SwInterfaceGetTable(ctx context.Context, in *SwInterfaceGetTable) (*SwInterfaceGetTableReply, error)
@@ -1480,6 +1531,24 @@ func (c *serviceClient) SwInterfaceAddDelAddress(ctx context.Context, in *SwInte
 
 func (c *serviceClient) SwInterfaceAddDelMacAddress(ctx context.Context, in *SwInterfaceAddDelMacAddress) (*SwInterfaceAddDelMacAddressReply, error) {
 	out := new(SwInterfaceAddDelMacAddressReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) SwInterfaceAddressReplaceBegin(ctx context.Context, in *SwInterfaceAddressReplaceBegin) (*SwInterfaceAddressReplaceBeginReply, error) {
+	out := new(SwInterfaceAddressReplaceBeginReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) SwInterfaceAddressReplaceEnd(ctx context.Context, in *SwInterfaceAddressReplaceEnd) (*SwInterfaceAddressReplaceEndReply, error) {
+	out := new(SwInterfaceAddressReplaceEndReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err

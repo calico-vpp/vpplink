@@ -28,7 +28,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "3.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x8e70261b
+	VersionCrc = 0xd8f8f7ce
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -448,6 +448,8 @@ type IpsecSadEntry struct {
 	TunnelDst          Address
 	TxTableID          uint32
 	Salt               uint32
+	UDPSrcPort         uint16
+	UDPDstPort         uint16
 }
 
 func (*IpsecSadEntry) GetTypeName() string { return "ipsec_sad_entry" }
