@@ -21,6 +21,22 @@ import (
 	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip"
 )
 
+type MRoute struct {
+	Dst       *net.IPNet
+	Gw        net.IP
+	Table     int
+	DstTable  int
+	SwIfIndex []uint32
+}
+
+func (r *MRoute) GetVppGwAddress() vppip.Address {
+	return ToVppIpAddress(r.Gw)
+}
+
+func (r *MRoute) GetVppDstAddress() vppip.Address {
+	return ToVppIpAddress(r.Dst.IP)
+}
+
 type Route struct {
 	Dst       *net.IPNet
 	Gw        net.IP
