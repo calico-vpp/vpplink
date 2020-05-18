@@ -36,8 +36,6 @@ const (
 type NamespaceNotFound error
 
 func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
-	v.lock.Lock()
-	defer v.lock.Unlock()
 	response := &tapv2.TapCreateV2Reply{}
 	request := &tapv2.TapCreateV2{
 		// TODO check namespace len < 64?
@@ -62,7 +60,10 @@ func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
 		request.HostMacAddr = tap.GetVppHostMacAddress()
 		request.HostMacAddrSet = true
 	}
+	v.lock.Lock()
 	err = v.ch.SendRequest(request).ReceiveReply(response)
+	v.lock.Unlock()
+
 	if err != nil {
 		return INVALID_SW_IF_INDEX, errors.Wrap(err, "Tap creation request failed")
 	} else if response.Retval == -12 {
@@ -70,6 +71,22 @@ func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
 	} else if response.Retval != 0 {
 		return INVALID_SW_IF_INDEX, fmt.Errorf("Tap creation failed (retval %d). Request: %+v", response.Retval, request)
 	}
+
+	if tap.RxQueues > 1 {
+		// This asumes the number of queues is equal to the number of workers
+		// otherwise this won't be optimal (queues < workers) or print errors (queues > workers)
+		for i := uint32(0); i < uint32(tap.RxQueues); i++ {
+			worker := uint32(tap.RxQueues) - 1
+			if i > 0 {
+				worker = i - 1
+			}
+			err2 := v.SetInterfaceRxPlacement(uint32(response.SwIfIndex), i, worker, false)
+			if err2 != nil {
+				v.log.Warnf("failed to set tap placement: %v", err2)
+			}
+		}
+	}
+
 	return uint32(response.SwIfIndex), err
 }
 
@@ -403,4 +420,22 @@ func (v *VppLink) EnableGSOFeature(swIfIndex uint32) error {
 
 func (v *VppLink) DisableGSOFeature(swIfIndex uint32) error {
 	return v.enableDisableGso(swIfIndex, false)
+}
+
+func (v *VppLink) SetInterfaceRxPlacement(swIfIndex, queue, worker uint32, main bool) error {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+
+	request := &interfaces.SwInterfaceSetRxPlacement{
+		SwIfIndex: interfaces.InterfaceIndex(swIfIndex),
+		QueueID:   queue,
+		WorkerID:  worker,
+		IsMain:    main,
+	}
+	response := &interfaces.SwInterfaceSetRxPlacementReply{}
+	err := v.ch.SendRequest(request).ReceiveReply(response)
+	if err != nil || response.Retval != 0 {
+		return fmt.Errorf("cannot set interface rx placement: %v %d", err, response.Retval)
+	}
+	return nil
 }
