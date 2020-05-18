@@ -34,8 +34,8 @@ echo "Update version number with $VPP_VERSION ? [yes/no] "
 read RESP
 
 if [[ x$RESP = xyes ]]; then
-	find .. -path ./binapi -prune -o -name '*.go' \
-		-exec sed -i "s@github.com/calico-vpp/vpplink/binapi/[0-9a-z_~-]*/@github.com/calico-vpp/vpplink/binapi/$VPP_VERSION/@g" {} \;
+	find . -path ./binapi -prune -o -name '*.go' \
+		-exec sed -i 's@github.com/calico-vpp/vpplink/binapi/[.~0-9a-z_-]*/'"@github.com/calico-vpp/vpplink/binapi/$VPP_VERSION/@g" {} \;
 fi
 
 echo "#!/bin/bash
