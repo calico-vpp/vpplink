@@ -159,3 +159,30 @@ func (v *VppLink) addDelIPRoute(route *types.Route, isAdd bool) error {
 	v.log.Debugf("added/deleted (%d) route %+v", isAdd, route)
 	return nil
 }
+
+func (v *VppLink) SetIPFlowHash(vrfID uint32, isIPv6 bool, src bool, dst bool, sport bool, dport bool, proto bool, reverse bool, symmetric bool) error {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+
+	request := &vppip.SetIPFlowHash{
+		VrfID:     vrfID,
+		IsIPv6:    isIPv6,
+		Src:       src,
+		Dst:       dst,
+		Sport:     sport,
+		Dport:     dport,
+		Proto:     proto,
+		Reverse:   reverse,
+		Symmetric: symmetric,
+	}
+
+	response := &vppip.SetIPFlowHashReply{}
+	err := v.ch.SendRequest(request).ReceiveReply(response)
+	if err != nil {
+		return errors.Wrapf(err, "failed to update flow hash algo for vrf %d", vrfID)
+	} else if response.Retval != 0 {
+		return fmt.Errorf("failed to update flow hash algo for vrf %d (retval %d)", vrfID, response.Retval)
+	}
+	v.log.Debugf("updated flow hash algo for vrf %d", vrfID)
+	return nil
+}
