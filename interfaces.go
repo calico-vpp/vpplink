@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/gso"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/interfaces"
-	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip_neighbor"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/tapv2"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/gso"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/interfaces"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/ip"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/ip_neighbor"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/tapv2"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
@@ -47,6 +47,8 @@ func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
 		MacAddress:  tap.GetVppMacAddress(),
 		TapFlags:    tapv2.TapFlags(tap.Flags),
 		NumRxQueues: uint8(tap.RxQueues),
+		TxRingSz:    1024,
+		RxRingSz:    1024,
 	}
 	if tap.HostNamespace != "" {
 		request.HostNamespaceSet = true

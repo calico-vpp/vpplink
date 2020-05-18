@@ -18,7 +18,7 @@ package types
 import (
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/tapv2"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/tapv2"
 )
 
 type TapFlags uint32
@@ -29,6 +29,7 @@ const (
 	TapFlagPersist     TapFlags = 4
 	TapFlagAttach      TapFlags = 8
 	TapFlagTun         TapFlags = 16
+	TapGROCoalesce     TapFlags = 32
 )
 
 type TapV2 struct {

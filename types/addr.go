@@ -18,7 +18,7 @@ package types
 import (
 	"net"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/ip"
 )
 
 type IPProto uint32

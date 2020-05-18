@@ -18,35 +18,23 @@ package types
 import (
 	"net"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/ip"
 )
 
-type MRoute struct {
-	Dst       *net.IPNet
+type RoutePath struct {
 	Gw        net.IP
+	SwIfIndex uint32
 	Table     int
-	DstTable  int
-	SwIfIndex []uint32
-}
-
-func (r *MRoute) GetVppGwAddress() vppip.Address {
-	return ToVppIpAddress(r.Gw)
-}
-
-func (r *MRoute) GetVppDstAddress() vppip.Address {
-	return ToVppIpAddress(r.Dst.IP)
 }
 
 type Route struct {
-	Dst       *net.IPNet
-	Gw        net.IP
-	Table     int
-	DstTable  int
-	SwIfIndex uint32
+	Dst   *net.IPNet
+	Paths []RoutePath
+	Table int
 }
 
-func (r *Route) GetVppGwAddress() vppip.Address {
-	return ToVppIpAddress(r.Gw)
+func (p *RoutePath) GetVppGwAddress() vppip.Address {
+	return ToVppIpAddress(p.Gw)
 }
 
 func (r *Route) GetVppDstAddress() vppip.Address {

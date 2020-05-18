@@ -18,7 +18,7 @@ package types
 import (
 	"fmt"
 	"net"
-	vppnat "github.com/calico-vpp/vpplink/binapi/20.05-rc0~540-gad1cca49e/nat"
+	vppnat "github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/nat"
 )
 
 type NatFlags uint8
