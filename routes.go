@@ -18,8 +18,8 @@ package vpplink
 import (
 	"fmt"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/ip"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/ip_neighbor"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ip"
+	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ip_neighbor"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )

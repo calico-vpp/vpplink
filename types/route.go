@@ -18,7 +18,7 @@ package types
 import (
 	"net"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~778-g6f2c5a55f/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ip"
 )
 
 type RoutePath struct {

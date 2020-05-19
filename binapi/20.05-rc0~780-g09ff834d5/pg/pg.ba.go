@@ -26,9 +26,9 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "pg"
 	// APIVersion is the API version of this module.
-	APIVersion = "2.0.0"
+	APIVersion = "3.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0xb7fe86ae
+	VersionCrc = 0xe134c1a7
 )
 
 // IfStatusFlags represents VPP binary API enum 'if_status_flags'.
@@ -264,14 +264,15 @@ func (*PgCaptureReply) GetMessageType() api.MessageType { return api.ReplyMessag
 
 // PgCreateInterface represents VPP binary API message 'pg_create_interface'.
 type PgCreateInterface struct {
-	InterfaceID InterfaceIndex
-	GsoEnabled  bool
-	GsoSize     uint32
+	InterfaceID     InterfaceIndex
+	GsoEnabled      bool
+	GsoSize         uint32
+	CoalesceEnabled bool
 }
 
 func (m *PgCreateInterface) Reset()                        { *m = PgCreateInterface{} }
 func (*PgCreateInterface) GetMessageName() string          { return "pg_create_interface" }
-func (*PgCreateInterface) GetCrcString() string            { return "b7c893d7" }
+func (*PgCreateInterface) GetCrcString() string            { return "e93b5dc4" }
 func (*PgCreateInterface) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // PgCreateInterfaceReply represents VPP binary API message 'pg_create_interface_reply'.
