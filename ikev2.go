@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ikev2"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ikev2"
 	"github.com/pkg/errors"
 )
 

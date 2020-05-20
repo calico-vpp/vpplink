@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/gso"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/interfaces"
-	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ip"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ip_neighbor"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/tapv2"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/gso"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/interfaces"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ip"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ip_neighbor"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/tapv2"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
@@ -34,6 +34,23 @@ const (
 )
 
 type NamespaceNotFound error
+
+func (v *VppLink) SetInterfaceRxMode(swIfIndex uint32, queueID uint32, mode types.RxMode) error {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+	response := &interfaces.SwInterfaceSetRxModeReply{}
+	request := &interfaces.SwInterfaceSetRxMode{
+		SwIfIndex:    interfaces.InterfaceIndex(swIfIndex),
+		QueueIDValid: queueID != types.AllQueues,
+		QueueID:      queueID,
+		Mode:         interfaces.RxMode(mode),
+	}
+	err := v.ch.SendRequest(request).ReceiveReply(response)
+	if err != nil {
+		return errors.Wrapf(err, "SetInterfaceRxMode failed: req %+v reply %+v", request, response)
+	}
+	return nil
+}
 
 func (v *VppLink) CreateTapV2(tap *types.TapV2) (swIfIndex uint32, err error) {
 	response := &tapv2.TapCreateV2Reply{}

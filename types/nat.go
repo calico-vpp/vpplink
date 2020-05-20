@@ -18,7 +18,8 @@ package types
 import (
 	"fmt"
 	"net"
-	vppnat "github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/nat"
+
+	vppnat "github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/nat"
 )
 
 type NatFlags uint8
@@ -40,11 +41,11 @@ func ToVppNatConfigFlags(flags NatFlags) vppnat.NatConfigFlags {
 }
 
 type Nat44Entry struct {
-	ServiceIP       net.IP
-	ServicePort     int32
-	Protocol        IPProto
-	BackendIPs      []net.IP
-	BackendPort     int32
+	ServiceIP   net.IP
+	ServicePort int32
+	Protocol    IPProto
+	BackendIPs  []net.IP
+	BackendPort int32
 }
 
 func (n *Nat44Entry) String() string {

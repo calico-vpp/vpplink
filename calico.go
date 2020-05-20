@@ -17,168 +17,54 @@ package vpplink
 
 import (
 	"fmt"
-	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/calico"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/calico"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
 
-func (v *VppLink) calicoAddDelIfNat4(swIfIndex uint32, isAdd bool) (err error) {
+const InvalidID = ^uint32(0)
+
+func (v *VppLink) CalicoTranslateAdd(tr *types.CalicoTranslateEntry) (id uint32, err error) {
+	v.lock.Lock()
+	defer v.lock.Unlock()
+	if len(tr.BackendIPs) == 0 {
+		return InvalidID, nil
+	}
+
+	paths := make([]calico.CalicoEndpoint, 0, len(tr.BackendIPs))
+	for _, bip := range tr.BackendIPs {
+		paths = append(paths, types.ToCalicoEndpoint(bip, tr.DestPort))
+	}
+
+	response := &calico.CalicoTranslationUpdateReply{}
+	request := &calico.CalicoTranslationUpdate{
+		Translation: calico.CalicoTranslation{
+			Vip:     types.ToCalicoEndpoint(tr.Vip, tr.SrcPort),
+			IPProto: types.ToCalicoProto(tr.Proto),
+			Paths:   paths,
+		},
+	}
+	err = v.ch.SendRequest(request).ReceiveReply(response)
+	if err != nil {
+		return InvalidID, errors.Wrap(err, "Add/Upd CalicoTranslate failed")
+	} else if response.Retval != 0 {
+		return InvalidID, fmt.Errorf("Add/Upd CalicoTranslate failed with retval: %d", response.Retval)
+	}
+	return response.ID, nil
+}
+
+func (v *VppLink) CalicoTranslateDel(id uint32) (err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
-	response := &calico.CalicoAddDelIntfNat4Reply{}
-	request := &calico.CalicoAddDelIntfNat4{
-		SwIfIndex: types.CalicoSwif(swIfIndex),
-		IsAdd:     isAdd,
-	}
-	v.log.Debug("Add/del interface nat6")
+	response := &calico.CalicoTranslationDelReply{}
+	request := &calico.CalicoTranslationDel{ID: id}
 	err = v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
-		return errors.Wrap(err, "Add/del interface nat6 failed")
+		return errors.Wrap(err, "Deleting CalicoTranslate failed")
 	} else if response.Retval != 0 {
-		return fmt.Errorf("Add/del interface nat6 failed with retval: %d", response.Retval)
+		return fmt.Errorf("Deleting CalicoTranslate failed with retval: %d", response.Retval)
 	}
 	return nil
-}
-
-func (v *VppLink) CalicoAddInterfaceNat4(swIfIndex uint32) (err error) {
-	return v.calicoAddDelIfNat4(swIfIndex, true /* isAdd */)
-}
-
-func (v *VppLink) CalicoDelInterfaceNat4(swIfIndex uint32) (err error) {
-	return v.calicoAddDelIfNat4(swIfIndex, false /* isAdd */)
-}
-
-// --------------
-
-func (v *VppLink) calicoAddDelIfNat6(swIfIndex uint32, isAdd bool) (err error) {
-	v.lock.Lock()
-	defer v.lock.Unlock()
-
-	response := &calico.CalicoAddDelIntfNat6Reply{}
-	request := &calico.CalicoAddDelIntfNat6{
-		SwIfIndex: types.CalicoSwif(swIfIndex),
-		IsAdd:     isAdd,
-	}
-	v.log.Debug("Add/del interface nat6")
-	err = v.ch.SendRequest(request).ReceiveReply(response)
-	if err != nil {
-		return errors.Wrap(err, "Add/del interface nat6 failed")
-	} else if response.Retval != 0 {
-		return fmt.Errorf("Add/del interface nat6 failed with retval: %d", response.Retval)
-	}
-	return nil
-}
-
-func (v *VppLink) CalicoAddInterfaceNat6(swIfIndex uint32) (err error) {
-	return v.calicoAddDelIfNat6(swIfIndex, true /* isAdd */)
-}
-
-func (v *VppLink) CalicoDelInterfaceNat6(swIfIndex uint32) (err error) {
-	return v.calicoAddDelIfNat6(swIfIndex, false /* isAdd */)
-}
-
-// --------------
-
-func (v *VppLink) calicoAddDelAs(asAddress net.IP, vipAddress *net.IPNet, port int32, proto types.IPProto, isAdd bool) (err error) {
-	v.lock.Lock()
-	defer v.lock.Unlock()
-
-	response := &calico.CalicoAddDelAsReply{}
-	request := &calico.CalicoAddDelAs{
-		Pfx:       types.ToCalicoVppIpAddressWithPrefix(vipAddress),
-		Protocol:  types.ToCalicoProto(proto),
-		Port:      uint16(port),
-		AsAddress: types.ToCalicoVppIpAddress(asAddress),
-		IsDel:     !isAdd,
-		IsFlush:   false,
-	}
-	v.log.Debug("Add/del As")
-	err = v.ch.SendRequest(request).ReceiveReply(response)
-	if err != nil {
-		return errors.Wrap(err, "Add/del As failed")
-	} else if response.Retval != 0 {
-		return fmt.Errorf("Add/del As failed with retval: %d", response.Retval)
-	}
-	return nil
-}
-
-func (v *VppLink) CalicoAddAs(asAddress net.IP, vipAddress *net.IPNet, port int32, proto types.IPProto) (err error) {
-	return v.calicoAddDelAs(asAddress, vipAddress, port, proto, true /* isAdd */)
-}
-
-func (v *VppLink) CalicoDelAs(asAddress net.IP, vipAddress *net.IPNet, port int32, proto types.IPProto) (err error) {
-	return v.calicoAddDelAs(asAddress, vipAddress, port, proto, false /* isAdd */)
-}
-
-// --------------
-
-func (v *VppLink) calicoAddDelVip(vipAddress *net.IPNet, port int32, targetPort int32, encapIsv6 bool, proto types.IPProto, isAdd bool) (err error) {
-	v.lock.Lock()
-	defer v.lock.Unlock()
-
-	encap := calico.CALICO_API_ENCAP_TYPE_NAT4
-	if encapIsv6 {
-		encap = calico.CALICO_API_ENCAP_TYPE_NAT6
-	}
-
-	response := &calico.CalicoAddDelVipReply{}
-	request := &calico.CalicoAddDelVip{
-		Pfx:                 types.ToCalicoVppIpAddressWithPrefix(vipAddress),
-		Protocol:            types.ToCalicoProto(proto),
-		Port:                uint16(port),
-		Encap:               encap,
-		TargetPort:          uint16(targetPort),
-		NewFlowsTableLength: 1024,
-		IsDel:               !isAdd,
-	}
-	v.log.Debug("Adding Vip")
-	err = v.ch.SendRequest(request).ReceiveReply(response)
-	if err != nil {
-		return errors.Wrap(err, "Add/del vip failed")
-	} else if response.Retval != 0 {
-		return fmt.Errorf("Add/del vip failed with retval: %d", response.Retval)
-	}
-	return nil
-}
-
-func (v *VppLink) CalicoAddVip(vipAddress *net.IPNet, port int32, targetPort int32, encapIsv6 bool, proto types.IPProto) (err error) {
-	return v.calicoAddDelVip(vipAddress, port, targetPort, encapIsv6, proto, true /* isAdd */)
-}
-
-func (v *VppLink) CalicoDelVip(vipAddress *net.IPNet, port int32, targetPort int32, encapIsv6 bool, proto types.IPProto) (err error) {
-	return v.calicoAddDelVip(vipAddress, port, targetPort, encapIsv6, proto, false /* isAdd */)
-}
-
-// --------------
-
-func (v *VppLink) calicoAddDelSnatEntry(addr net.IP, prefix *net.IPNet, tableID uint32, isAdd bool) (err error) {
-	v.lock.Lock()
-	defer v.lock.Unlock()
-
-	response := &calico.CalicoAddDelSnatEntryReply{}
-	request := &calico.CalicoAddDelSnatEntry{
-		Pfx:     types.ToCalicoVppIpAddressWithPrefix(prefix),
-		Addr:    types.ToCalicoVppIpAddress(addr),
-		TableID: tableID,
-		IsAdd:   isAdd,
-	}
-	v.log.Debug("Add/Del SnatEntry")
-	err = v.ch.SendRequest(request).ReceiveReply(response)
-	if err != nil {
-		return errors.Wrap(err, "Add/del SnatEntry failed")
-	} else if response.Retval != 0 {
-		return fmt.Errorf("Add/del SnatEntry failed with retval: %d", response.Retval)
-	}
-	return nil
-}
-
-func (v *VppLink) CalicoAddSnatEntry(addr net.IP, prefix *net.IPNet, tableID uint32) (err error) {
-	return v.calicoAddDelSnatEntry(addr, prefix, tableID, true /* isAdd */)
-}
-
-func (v *VppLink) CalicoDelSnatEntry(addr net.IP, prefix *net.IPNet, tableID uint32) (err error) {
-	return v.calicoAddDelSnatEntry(addr, prefix, tableID, false /* isAdd */)
 }

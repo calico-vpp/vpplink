@@ -19,13 +19,13 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ipip"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ipip"
 	"github.com/pkg/errors"
 )
 
-func ipipAddressFromNetIP(addr net.IP, isV4 bool) ipip.Address {
+func ipipAddressFromNetIP(addr net.IP) ipip.Address {
 	var ip ipip.AddressUnion = ipip.AddressUnion{}
-	if isV4 {
+	if IsIP4(addr) {
 		var ip4 ipip.IP4Address
 		copy(ip4[:], addr.To4()[0:4])
 		ip.SetIP4(ip4)
@@ -44,7 +44,7 @@ func ipipAddressFromNetIP(addr net.IP, isV4 bool) ipip.Address {
 	}
 }
 
-func (v *VppLink) AddIpipTunnel(src net.IP, dst net.IP, isV4 bool, tableID uint32) (SwIfIndex uint32, err error) {
+func (v *VppLink) AddIpipTunnel(src net.IP, dst net.IP, tableID uint32) (SwIfIndex uint32, err error) {
 	v.lock.Lock()
 	defer v.lock.Unlock()
 
@@ -52,8 +52,8 @@ func (v *VppLink) AddIpipTunnel(src net.IP, dst net.IP, isV4 bool, tableID uint3
 	request := &ipip.IpipAddTunnel{
 		Tunnel: ipip.IpipTunnel{
 			Instance: ^uint32(0),
-			Src:      ipipAddressFromNetIP(src.To4(), isV4),
-			Dst:      ipipAddressFromNetIP(dst.To4(), isV4),
+			Src:      ipipAddressFromNetIP(src),
+			Dst:      ipipAddressFromNetIP(dst),
 			TableID:  0,
 		},
 	}

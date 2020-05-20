@@ -18,8 +18,8 @@ package vpplink
 import (
 	"fmt"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ip"
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/ip_neighbor"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ip"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ip_neighbor"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
@@ -50,7 +50,7 @@ func (v *VppLink) GetRoutes(tableID uint32, isIPv6 bool) (routes []types.Route, 
 			return routes, nil
 		}
 		vppRoute := response.Route
-		routePaths := make([]types.RoutePath, vppRoute.NPaths)
+		routePaths := make([]types.RoutePath, 0, vppRoute.NPaths)
 		for _, vppPath := range vppRoute.Paths {
 			routePaths = append(routePaths, types.RoutePath{
 				Gw:        types.FromVppIpAddressUnion(vppPath.Nh.Address, vppRoute.Prefix.Address.Af == vppip.ADDRESS_IP6),
@@ -118,7 +118,7 @@ func (v *VppLink) addDelIPRoute(route *types.Route, isAdd bool) error {
 		proto = vppip.FIB_API_PATH_NH_PROTO_IP6
 	}
 
-	paths := make([]vppip.FibPath, len(route.Paths))
+	paths := make([]vppip.FibPath, 0, len(route.Paths))
 	for _, routePath := range route.Paths {
 		path := vppip.FibPath{
 			SwIfIndex:  uint32(routePath.SwIfIndex),

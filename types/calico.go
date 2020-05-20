@@ -16,52 +16,62 @@
 package types
 
 import (
+	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/calico"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/calico"
 )
 
-func ToCalicoProto(proto IPProto) uint8 {
+type CalicoTranslateEntry struct {
+	SrcPort    uint16
+	Vip        net.IP
+	DestPort   uint16
+	ID         uint32
+	BackendIPs []net.IP
+	Proto      IPProto
+}
+
+func (n *CalicoTranslateEntry) String() string {
+	return fmt.Sprintf("%s %s:%d -> %+v:%d",
+		formatProto(n.Proto),
+		n.Vip.String(),
+		n.SrcPort,
+		n.BackendIPs,
+		n.DestPort,
+	)
+}
+
+func ToCalicoProto(proto IPProto) calico.IPProto {
 	switch proto {
 	case UDP:
-		return uint8(calico.IP_API_PROTO_TCP)
+		return calico.IP_API_PROTO_TCP
 	case TCP:
-		return uint8(calico.IP_API_PROTO_TCP)
+		return calico.IP_API_PROTO_TCP
 	case SCTP:
-		return uint8(calico.IP_API_PROTO_SCTP)
+		return calico.IP_API_PROTO_SCTP
 	case ICMP:
-		return uint8(calico.IP_API_PROTO_ICMP)
+		return calico.IP_API_PROTO_ICMP
 	case ICMP6:
-		return uint8(calico.IP_API_PROTO_ICMP6)
+		return calico.IP_API_PROTO_ICMP6
 	default:
-		return ^uint8(0)
+		return calico.IP_API_PROTO_RESERVED
 	}
 }
 
-func CalicoSwif(swIfIndex uint32) calico.InterfaceIndex {
-	return calico.InterfaceIndex(swIfIndex)
-}
-
-func ToCalicoVppIpAddress(addr net.IP) calico.Address {
-	a := calico.Address{}
+func ToCalicoEndpoint(addr net.IP, port uint16) calico.CalicoEndpoint {
+	a := calico.CalicoEndpoint{
+		Port: port,
+	}
 	if addr.To4() == nil {
-		a.Af = calico.ADDRESS_IP6
+		a.Addr.Af = calico.ADDRESS_IP6
 		ip := [16]uint8{}
 		copy(ip[:], addr)
-		a.Un = calico.AddressUnionIP6(ip)
+		a.Addr.Un = calico.AddressUnionIP6(ip)
 	} else {
-		a.Af = calico.ADDRESS_IP4
+		a.Addr.Af = calico.ADDRESS_IP4
 		ip := [4]uint8{}
 		copy(ip[:], addr.To4())
-		a.Un = calico.AddressUnionIP4(ip)
+		a.Addr.Un = calico.AddressUnionIP4(ip)
 	}
 	return a
-}
-
-func ToCalicoVppIpAddressWithPrefix(addr *net.IPNet) calico.AddressWithPrefix {
-	prefixLen, _ := addr.Mask.Size()
-	return calico.AddressWithPrefix{
-		Address: ToCalicoVppIpAddress(addr.IP),
-		Len:     uint8(prefixLen),
-	}
 }

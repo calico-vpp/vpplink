@@ -15,6 +15,18 @@
 
 package types
 
+type RxMode uint32
+
+const (
+	UnknownRxMode RxMode = 0
+	Polling       RxMode = 1
+	Interrupt     RxMode = 2
+	Adaptative    RxMode = 3
+	DefaultRxMode RxMode = 4
+
+	AllQueues = ^uint32(0)
+)
+
 type VppInterfaceDetails struct {
 	SwIfIndex uint32
 	IsUp      bool
