@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.05-rc0~780-g09ff834d5/nat"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/nat"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
