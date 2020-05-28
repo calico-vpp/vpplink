@@ -18,7 +18,7 @@ package types
 import (
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/tapv2"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/tapv2"
 )
 
 type TapFlags uint32

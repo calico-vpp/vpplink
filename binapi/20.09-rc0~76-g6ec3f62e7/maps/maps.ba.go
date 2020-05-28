@@ -9,8 +9,8 @@ It consists of:
 	  6 aliases
 	  6 types
 	  1 union
-	 30 messages
-	 15 services
+	 32 messages
+	 16 services
 */
 package maps
 
@@ -28,9 +28,9 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "map"
 	// APIVersion is the API version of this module.
-	APIVersion = "4.1.1"
+	APIVersion = "4.2.1"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x82b79829
+	VersionCrc = 0xe73c4c97
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -644,6 +644,27 @@ func (*MapDomainDump) GetMessageName() string          { return "map_domain_dump
 func (*MapDomainDump) GetCrcString() string            { return "51077d14" }
 func (*MapDomainDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
+// MapDomainsGet represents VPP binary API message 'map_domains_get'.
+type MapDomainsGet struct {
+	Cursor uint32
+}
+
+func (m *MapDomainsGet) Reset()                        { *m = MapDomainsGet{} }
+func (*MapDomainsGet) GetMessageName() string          { return "map_domains_get" }
+func (*MapDomainsGet) GetCrcString() string            { return "f75ba505" }
+func (*MapDomainsGet) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// MapDomainsGetReply represents VPP binary API message 'map_domains_get_reply'.
+type MapDomainsGetReply struct {
+	Retval int32
+	Cursor uint32
+}
+
+func (m *MapDomainsGetReply) Reset()                        { *m = MapDomainsGetReply{} }
+func (*MapDomainsGetReply) GetMessageName() string          { return "map_domains_get_reply" }
+func (*MapDomainsGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*MapDomainsGetReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
 // MapIfEnableDisable represents VPP binary API message 'map_if_enable_disable'.
 type MapIfEnableDisable struct {
 	SwIfIndex     InterfaceIndex
@@ -904,6 +925,8 @@ func init() {
 	api.RegisterMessage((*MapDelDomainReply)(nil), "map.MapDelDomainReply")
 	api.RegisterMessage((*MapDomainDetails)(nil), "map.MapDomainDetails")
 	api.RegisterMessage((*MapDomainDump)(nil), "map.MapDomainDump")
+	api.RegisterMessage((*MapDomainsGet)(nil), "map.MapDomainsGet")
+	api.RegisterMessage((*MapDomainsGetReply)(nil), "map.MapDomainsGetReply")
 	api.RegisterMessage((*MapIfEnableDisable)(nil), "map.MapIfEnableDisable")
 	api.RegisterMessage((*MapIfEnableDisableReply)(nil), "map.MapIfEnableDisableReply")
 	api.RegisterMessage((*MapParamAddDelPreResolve)(nil), "map.MapParamAddDelPreResolve")
@@ -939,6 +962,8 @@ func AllMessages() []api.Message {
 		(*MapDelDomainReply)(nil),
 		(*MapDomainDetails)(nil),
 		(*MapDomainDump)(nil),
+		(*MapDomainsGet)(nil),
+		(*MapDomainsGetReply)(nil),
 		(*MapIfEnableDisable)(nil),
 		(*MapIfEnableDisableReply)(nil),
 		(*MapParamAddDelPreResolve)(nil),
@@ -967,6 +992,7 @@ func AllMessages() []api.Message {
 // RPCService represents RPC service API for map module.
 type RPCService interface {
 	DumpMapDomain(ctx context.Context, in *MapDomainDump) (RPCService_DumpMapDomainClient, error)
+	MapDomainsGet(ctx context.Context, in *MapDomainsGet) (RPCService_MapDomainsGetClient, error)
 	DumpMapRule(ctx context.Context, in *MapRuleDump) (RPCService_DumpMapRuleClient, error)
 	MapAddDelRule(ctx context.Context, in *MapAddDelRule) (*MapAddDelRuleReply, error)
 	MapAddDomain(ctx context.Context, in *MapAddDomain) (*MapAddDomainReply, error)
@@ -1007,6 +1033,32 @@ type serviceClient_DumpMapDomainClient struct {
 
 func (c *serviceClient_DumpMapDomainClient) Recv() (*MapDomainDetails, error) {
 	m := new(MapDomainDetails)
+	stop, err := c.MultiRequestCtx.ReceiveReply(m)
+	if err != nil {
+		return nil, err
+	}
+	if stop {
+		return nil, io.EOF
+	}
+	return m, nil
+}
+
+func (c *serviceClient) MapDomainsGet(ctx context.Context, in *MapDomainsGet) (RPCService_MapDomainsGetClient, error) {
+	stream := c.ch.SendMultiRequest(in)
+	x := &serviceClient_MapDomainsGetClient{stream}
+	return x, nil
+}
+
+type RPCService_MapDomainsGetClient interface {
+	Recv() (*MapDomainsGetReply, error)
+}
+
+type serviceClient_MapDomainsGetClient struct {
+	api.MultiRequestCtx
+}
+
+func (c *serviceClient_MapDomainsGetClient) Recv() (*MapDomainsGetReply, error) {
+	m := new(MapDomainsGetReply)
 	stop, err := c.MultiRequestCtx.ReceiveReply(m)
 	if err != nil {
 		return nil, err
