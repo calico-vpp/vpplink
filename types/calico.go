@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/calico"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/calico"
 )
 
 type CalicoTranslateEntry struct {

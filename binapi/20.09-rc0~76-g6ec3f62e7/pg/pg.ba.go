@@ -7,8 +7,8 @@ Package pg is a generated VPP binary API for 'pg' module.
 It consists of:
 	  6 enums
 	  1 alias
-	  6 messages
-	  3 services
+	  8 messages
+	  4 services
 */
 package pg
 
@@ -26,9 +26,9 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "pg"
 	// APIVersion is the API version of this module.
-	APIVersion = "3.0.0"
+	APIVersion = "2.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0xe134c1a7
+	VersionCrc = 0xb9d9c2dc
 )
 
 // IfStatusFlags represents VPP binary API enum 'if_status_flags'.
@@ -264,15 +264,14 @@ func (*PgCaptureReply) GetMessageType() api.MessageType { return api.ReplyMessag
 
 // PgCreateInterface represents VPP binary API message 'pg_create_interface'.
 type PgCreateInterface struct {
-	InterfaceID     InterfaceIndex
-	GsoEnabled      bool
-	GsoSize         uint32
-	CoalesceEnabled bool
+	InterfaceID InterfaceIndex
+	GsoEnabled  bool
+	GsoSize     uint32
 }
 
 func (m *PgCreateInterface) Reset()                        { *m = PgCreateInterface{} }
 func (*PgCreateInterface) GetMessageName() string          { return "pg_create_interface" }
-func (*PgCreateInterface) GetCrcString() string            { return "e93b5dc4" }
+func (*PgCreateInterface) GetCrcString() string            { return "b7c893d7" }
 func (*PgCreateInterface) GetMessageType() api.MessageType { return api.RequestMessage }
 
 // PgCreateInterfaceReply represents VPP binary API message 'pg_create_interface_reply'.
@@ -308,6 +307,33 @@ func (*PgEnableDisableReply) GetMessageName() string          { return "pg_enabl
 func (*PgEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
 func (*PgEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessage }
 
+// PgInterfaceEnableDisableCoalesce represents VPP binary API message 'pg_interface_enable_disable_coalesce'.
+type PgInterfaceEnableDisableCoalesce struct {
+	SwIfIndex       InterfaceIndex
+	CoalesceEnabled bool
+}
+
+func (m *PgInterfaceEnableDisableCoalesce) Reset() { *m = PgInterfaceEnableDisableCoalesce{} }
+func (*PgInterfaceEnableDisableCoalesce) GetMessageName() string {
+	return "pg_interface_enable_disable_coalesce"
+}
+func (*PgInterfaceEnableDisableCoalesce) GetCrcString() string            { return "a2ef99e7" }
+func (*PgInterfaceEnableDisableCoalesce) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// PgInterfaceEnableDisableCoalesceReply represents VPP binary API message 'pg_interface_enable_disable_coalesce_reply'.
+type PgInterfaceEnableDisableCoalesceReply struct {
+	Retval int32
+}
+
+func (m *PgInterfaceEnableDisableCoalesceReply) Reset() { *m = PgInterfaceEnableDisableCoalesceReply{} }
+func (*PgInterfaceEnableDisableCoalesceReply) GetMessageName() string {
+	return "pg_interface_enable_disable_coalesce_reply"
+}
+func (*PgInterfaceEnableDisableCoalesceReply) GetCrcString() string { return "e8d4e804" }
+func (*PgInterfaceEnableDisableCoalesceReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
 func init() {
 	api.RegisterMessage((*PgCapture)(nil), "pg.PgCapture")
 	api.RegisterMessage((*PgCaptureReply)(nil), "pg.PgCaptureReply")
@@ -315,6 +341,8 @@ func init() {
 	api.RegisterMessage((*PgCreateInterfaceReply)(nil), "pg.PgCreateInterfaceReply")
 	api.RegisterMessage((*PgEnableDisable)(nil), "pg.PgEnableDisable")
 	api.RegisterMessage((*PgEnableDisableReply)(nil), "pg.PgEnableDisableReply")
+	api.RegisterMessage((*PgInterfaceEnableDisableCoalesce)(nil), "pg.PgInterfaceEnableDisableCoalesce")
+	api.RegisterMessage((*PgInterfaceEnableDisableCoalesceReply)(nil), "pg.PgInterfaceEnableDisableCoalesceReply")
 }
 
 // Messages returns list of all messages in this module.
@@ -326,6 +354,8 @@ func AllMessages() []api.Message {
 		(*PgCreateInterfaceReply)(nil),
 		(*PgEnableDisable)(nil),
 		(*PgEnableDisableReply)(nil),
+		(*PgInterfaceEnableDisableCoalesce)(nil),
+		(*PgInterfaceEnableDisableCoalesceReply)(nil),
 	}
 }
 
@@ -334,6 +364,7 @@ type RPCService interface {
 	PgCapture(ctx context.Context, in *PgCapture) (*PgCaptureReply, error)
 	PgCreateInterface(ctx context.Context, in *PgCreateInterface) (*PgCreateInterfaceReply, error)
 	PgEnableDisable(ctx context.Context, in *PgEnableDisable) (*PgEnableDisableReply, error)
+	PgInterfaceEnableDisableCoalesce(ctx context.Context, in *PgInterfaceEnableDisableCoalesce) (*PgInterfaceEnableDisableCoalesceReply, error)
 }
 
 type serviceClient struct {
@@ -364,6 +395,15 @@ func (c *serviceClient) PgCreateInterface(ctx context.Context, in *PgCreateInter
 
 func (c *serviceClient) PgEnableDisable(ctx context.Context, in *PgEnableDisable) (*PgEnableDisableReply, error) {
 	out := new(PgEnableDisableReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) PgInterfaceEnableDisableCoalesce(ctx context.Context, in *PgInterfaceEnableDisableCoalesce) (*PgInterfaceEnableDisableCoalesceReply, error) {
+	out := new(PgInterfaceEnableDisableCoalesceReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err

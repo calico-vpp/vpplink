@@ -17,12 +17,11 @@ pushd $VPP_DIR > /dev/null
 VPP_REMOTE_NAME=$(echo `git remote`)
 if [[ x$(git remote | wc -l) != x1 ]]; then
 	echo "Input VPP's remote [ $VPP_REMOTE_NAME ] : "
+	echo "ommitting won't update ./vpp_clone_current.sh"
 	read VPP_REMOTE_NAME
 fi
-VPP_COMMIT=$(git rev-parse --short HEAD)
-VPP_REMOTE_URL=$(git config --get remote.$VPP_REMOTE_NAME.url)
+
 VPP_VERSION=$(./build-root/scripts/version)
-echo "Using remote : $VPP_REMOTE_URL"
 echo "Using commit : $VPP_COMMIT"
 make json-api-files
 popd > /dev/null
@@ -37,6 +36,13 @@ if [[ x$RESP = xyes ]]; then
 	find . -path ./binapi -prune -o -name '*.go' \
 		-exec sed -i 's@github.com/calico-vpp/vpplink/binapi/[.~0-9a-z_-]*/'"@github.com/calico-vpp/vpplink/binapi/$VPP_VERSION/@g" {} \;
 fi
+
+if [[ x$VPP_REMOTE_NAME = x ]]; then
+	exit 0
+fi
+
+VPP_COMMIT=$(git rev-parse --short HEAD)
+VPP_REMOTE_URL=$(git config --get remote.$VPP_REMOTE_NAME.url)
 
 echo "#!/bin/bash
 if [ ! -d \$1 ]; then

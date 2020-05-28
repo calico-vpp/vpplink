@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/gso"
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/interfaces"
-	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ip"
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/ip_neighbor"
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~54-g1324b6d1a/tapv2"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/gso"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/interfaces"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/ip"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/ip_neighbor"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/tapv2"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )
