@@ -44,7 +44,7 @@ func (n *CalicoTranslateEntry) String() string {
 func ToCalicoProto(proto IPProto) calico.IPProto {
 	switch proto {
 	case UDP:
-		return calico.IP_API_PROTO_TCP
+		return calico.IP_API_PROTO_UDP
 	case TCP:
 		return calico.IP_API_PROTO_TCP
 	case SCTP:
