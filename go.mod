@@ -9,3 +9,5 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	golang.org/x/sys v0.0.0-20190422165155-953cdadca894
 )
+
+replace github.com/lunixbochs/struc v0.0.0-20190916212049-a5c72983bc42 => github.com/sknat/struc v0.0.0-20200602162841-7885e0109839
