@@ -41,6 +41,37 @@ func (n *CalicoTranslateEntry) String() string {
 	)
 }
 
+func (n *CalicoTranslateEntry) Equal(o *CalicoTranslateEntry) bool {
+	if n == nil || o == nil {
+		return false
+	}
+	if n.SrcPort != o.SrcPort {
+		return false
+	}
+	if n.DestPort != o.DestPort {
+		return false
+	}
+	if n.Proto != o.Proto {
+		return false
+	}
+	if !n.Vip.Equal(o.Vip) {
+		return false
+	}
+	if len(n.BackendIPs) != len(o.BackendIPs) {
+		return false
+	}
+	nMap := make(map[string]bool)
+	for _, i := range n.BackendIPs {
+		nMap[i.String()] = true
+	}
+	for _, i := range o.BackendIPs {
+		if _, ok := nMap[i.String()]; !ok {
+			return false
+		}
+	}
+	return true
+}
+
 func ToCalicoProto(proto IPProto) calico.IPProto {
 	switch proto {
 	case UDP:
