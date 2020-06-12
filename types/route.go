@@ -17,6 +17,8 @@ package types
 
 import (
 	"net"
+	"fmt"
+	"strings"
 
 	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/ip"
 )
@@ -33,10 +35,59 @@ type Route struct {
 	Table int
 }
 
+func (p *RoutePath) tableString() string {
+	if p.Table == 0 {
+		return ""
+	} else {
+		return fmt.Sprintf("[%d]", p.Table)
+	}
+}
+
+func (p *RoutePath) swIfIndexString() string {
+	if p.SwIfIndex == 0 {
+		return ""
+	} else {
+		return fmt.Sprintf("[idx%d]", p.SwIfIndex)
+	}
+}
+
 func (p *RoutePath) GetVppGwAddress() vppip.Address {
 	return ToVppIpAddress(p.Gw)
+}
+
+func (p *RoutePath) String() string {
+	return fmt.Sprintf("%s%s%s", p.tableString(), p.Gw.String(), p.swIfIndexString())
 }
 
 func (r *Route) GetVppDstAddress() vppip.Address {
 	return ToVppIpAddress(r.Dst.IP)
 }
+
+func (r *Route) pathsString() string {
+	pathsStr := make([]string, 0, len(r.Paths))
+	for _, path := range r.Paths {
+		pathsStr = append(pathsStr, path.String())
+	}
+	return strings.Join(pathsStr, ", ")
+}
+
+func (r *Route) tableString() string {
+	if r.Table == 0 {
+		return ""
+	} else {
+		return fmt.Sprintf("[%d] ", r.Table)
+	}
+}
+
+func (r *Route) dstString() string {
+	if r.Dst == nil {
+		return "*"
+	} else {
+		return r.Dst.String()
+	}
+}
+
+func (r *Route) String() string {
+	return fmt.Sprintf("%s%s -> %s", r.tableString(), r.dstString(), r.pathsString())
+}
+

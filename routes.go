@@ -76,6 +76,14 @@ func (v *VppLink) DelNeighbor(neighbor *types.Neighbor) error {
 	return v.addDelNeighbor(neighbor, false)
 }
 
+func isAddStr(isAdd bool) string {
+	if isAdd {
+		return "add"
+	} else {
+		return "delete"
+	}
+}
+
 func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd bool) error {
 	v.lock.Lock()
 	defer v.lock.Unlock()
@@ -92,11 +100,11 @@ func (v *VppLink) addDelNeighbor(neighbor *types.Neighbor, isAdd bool) error {
 	response := &ip_neighbor.IPNeighborAddDelReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
-		return errors.Wrapf(err, "failed to add/delete (%d) neighbor from VPP", isAdd)
+		return errors.Wrapf(err, "failed to %s neighbor from VPP", isAddStr(isAdd))
 	} else if response.Retval != 0 {
-		return fmt.Errorf("failed to add/delete (%d) neighbor from VPP (retval %d)", isAdd, response.Retval)
+		return fmt.Errorf("failed to %s neighbor from VPP (retval %d)", isAddStr(isAdd), response.Retval)
 	}
-	v.log.Debugf("added/deleted (%d) neighbor %+v", isAdd, neighbor)
+	v.log.Debugf("%sed neighbor %+v", isAddStr(isAdd), neighbor)
 	return nil
 }
 
