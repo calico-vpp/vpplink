@@ -18,7 +18,7 @@ package vpplink
 import (
 	"fmt"
 
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/calico"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~151-g4d6ecdd52/calico"
 	"github.com/calico-vpp/vpplink/types"
 	"github.com/pkg/errors"
 )

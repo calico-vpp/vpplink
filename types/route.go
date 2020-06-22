@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~76-g6ec3f62e7/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~151-g4d6ecdd52/ip"
 )
 
 type RoutePath struct {
