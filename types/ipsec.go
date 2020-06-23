@@ -18,8 +18,8 @@ package types
 import (
 	"net"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~151-g4d6ecdd52/ip"
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~151-g4d6ecdd52/ipsec"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~83-g7d71e7f8a/ip"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~83-g7d71e7f8a/ipsec"
 )
 
 type IPsecTunnelProtection struct {
