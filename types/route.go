@@ -16,11 +16,11 @@
 package types
 
 import (
-	"net"
 	"fmt"
+	"net"
 	"strings"
 
-	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~151-g4d6ecdd52/ip"
+	vppip "github.com/calico-vpp/vpplink/binapi/20.09-rc0~83-g7d71e7f8a/ip"
 )
 
 type RoutePath struct {
@@ -90,4 +90,3 @@ func (r *Route) dstString() string {
 func (r *Route) String() string {
 	return fmt.Sprintf("%s%s -> %s", r.tableString(), r.dstString(), r.pathsString())
 }
-

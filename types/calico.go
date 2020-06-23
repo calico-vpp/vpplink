@@ -18,26 +18,52 @@ package types
 import (
 	"fmt"
 	"net"
+	"strings"
 
-	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~151-g4d6ecdd52/calico"
+	"github.com/calico-vpp/vpplink/binapi/20.09-rc0~83-g7d71e7f8a/calico"
 )
 
+type CalicoEndpoint struct {
+	IP   net.IP
+	Port uint16
+}
+
+func (e *CalicoEndpoint) String() string {
+	return fmt.Sprintf("%s;%d",
+		e.IP.String(),
+		e.Port,
+	)
+}
+
+type CalicoEndpointTuple struct {
+	SrcEndpoint CalicoEndpoint
+	DstEndpoint CalicoEndpoint
+}
+
+func (t *CalicoEndpointTuple) String() string {
+	return fmt.Sprintf("%s -> %s",
+		t.SrcEndpoint.String(),
+		t.DstEndpoint.String(),
+	)
+}
+
 type CalicoTranslateEntry struct {
-	SrcPort    uint16
-	Vip        net.IP
-	DestPort   uint16
-	ID         uint32
-	BackendIPs []net.IP
-	Proto      IPProto
+	Endpoint CalicoEndpoint
+	Backends []CalicoEndpointTuple
+	Proto    IPProto
+	IsRealIP bool
+	ID       uint32
 }
 
 func (n *CalicoTranslateEntry) String() string {
-	return fmt.Sprintf("%s %s:%d -> %+v:%d",
+	strLst := make([]string, 0, len(n.Backends))
+	for _, e := range n.Backends {
+		strLst = append(strLst, e.String())
+	}
+	return fmt.Sprintf("%s %s => [%s]",
 		formatProto(n.Proto),
-		n.Vip.String(),
-		n.SrcPort,
-		n.BackendIPs,
-		n.DestPort,
+		n.Endpoint.String(),
+		strings.Join(strLst, ", "),
 	)
 }
 
@@ -45,26 +71,23 @@ func (n *CalicoTranslateEntry) Equal(o *CalicoTranslateEntry) bool {
 	if n == nil || o == nil {
 		return false
 	}
-	if n.SrcPort != o.SrcPort {
-		return false
-	}
-	if n.DestPort != o.DestPort {
-		return false
-	}
 	if n.Proto != o.Proto {
 		return false
 	}
-	if !n.Vip.Equal(o.Vip) {
+	if n.Endpoint.Port != o.Endpoint.Port {
 		return false
 	}
-	if len(n.BackendIPs) != len(o.BackendIPs) {
+	if !n.Endpoint.IP.Equal(o.Endpoint.IP) {
+		return false
+	}
+	if len(n.Backends) != len(o.Backends) {
 		return false
 	}
 	nMap := make(map[string]bool)
-	for _, i := range n.BackendIPs {
+	for _, i := range n.Backends {
 		nMap[i.String()] = true
 	}
-	for _, i := range o.BackendIPs {
+	for _, i := range o.Backends {
 		if _, ok := nMap[i.String()]; !ok {
 			return false
 		}
@@ -89,19 +112,19 @@ func ToCalicoProto(proto IPProto) calico.IPProto {
 	}
 }
 
-func ToCalicoEndpoint(addr net.IP, port uint16) calico.CalicoEndpoint {
+func ToCalicoEndpoint(ep CalicoEndpoint) calico.CalicoEndpoint {
 	a := calico.CalicoEndpoint{
-		Port: port,
+		Port: ep.Port,
 	}
-	if addr.To4() == nil {
+	if ep.IP.To4() == nil {
 		a.Addr.Af = calico.ADDRESS_IP6
 		ip := [16]uint8{}
-		copy(ip[:], addr)
+		copy(ip[:], ep.IP)
 		a.Addr.Un = calico.AddressUnionIP6(ip)
 	} else {
 		a.Addr.Af = calico.ADDRESS_IP4
 		ip := [4]uint8{}
-		copy(ip[:], addr.To4())
+		copy(ip[:], ep.IP.To4())
 		a.Addr.Un = calico.AddressUnionIP4(ip)
 	}
 	return a
