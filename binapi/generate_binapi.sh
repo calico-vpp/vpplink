@@ -45,14 +45,18 @@ VPP_COMMIT=$(git rev-parse --short HEAD)
 VPP_REMOTE_URL=$(git config --get remote.$VPP_REMOTE_NAME.url)
 
 echo "#!/bin/bash
+
+VPP_COMMIT=$VPP_COMMIT
+
 if [ ! -d \$1 ]; then
 	git clone $VPP_REMOTE_URL \$1
 	cd \$1
-	git reset --hard $VPP_COMMIT
+	git reset --hard \${VPP_COMMIT}
 else
 	cd \$1
-	git fetch $VPP_REMOTE_URL && git reset --hard $VPP_COMMIT
+	git fetch $VPP_REMOTE_URL && git reset --hard \${VPP_COMMIT}
 fi
+
 # git fetch $VPP_REMOTE_URL refs/changes/00/00000/0 && git cherry-pick FETCH_HEAD # Example patch
 " > $SCRIPTDIR/vpp_clone_current.sh
 chmod +x $SCRIPTDIR/vpp_clone_current.sh
