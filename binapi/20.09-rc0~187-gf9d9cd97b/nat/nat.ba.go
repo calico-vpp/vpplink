@@ -8,8 +8,8 @@ It consists of:
 	  6 aliases
 	  7 types
 	  1 union
-	125 messages
-	 62 services
+	117 messages
+	 58 services
 */
 package nat
 
@@ -29,7 +29,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "5.2.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0xabdcbb0d
+	VersionCrc = 0xab633025
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -1434,94 +1434,6 @@ func (*Nat64StDump) GetMessageName() string          { return "nat64_st_dump" }
 func (*Nat64StDump) GetCrcString() string            { return "cfcb6b75" }
 func (*Nat64StDump) GetMessageType() api.MessageType { return api.RequestMessage }
 
-// Nat66AddDelInterface represents VPP binary API message 'nat66_add_del_interface'.
-type Nat66AddDelInterface struct {
-	IsAdd     bool
-	Flags     NatConfigFlags
-	SwIfIndex InterfaceIndex
-}
-
-func (m *Nat66AddDelInterface) Reset()                        { *m = Nat66AddDelInterface{} }
-func (*Nat66AddDelInterface) GetMessageName() string          { return "nat66_add_del_interface" }
-func (*Nat66AddDelInterface) GetCrcString() string            { return "f3699b83" }
-func (*Nat66AddDelInterface) GetMessageType() api.MessageType { return api.RequestMessage }
-
-// Nat66AddDelInterfaceReply represents VPP binary API message 'nat66_add_del_interface_reply'.
-type Nat66AddDelInterfaceReply struct {
-	Retval int32
-}
-
-func (m *Nat66AddDelInterfaceReply) Reset()                        { *m = Nat66AddDelInterfaceReply{} }
-func (*Nat66AddDelInterfaceReply) GetMessageName() string          { return "nat66_add_del_interface_reply" }
-func (*Nat66AddDelInterfaceReply) GetCrcString() string            { return "e8d4e804" }
-func (*Nat66AddDelInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessage }
-
-// Nat66AddDelStaticMapping represents VPP binary API message 'nat66_add_del_static_mapping'.
-type Nat66AddDelStaticMapping struct {
-	IsAdd             bool
-	LocalIPAddress    IP6Address
-	ExternalIPAddress IP6Address
-	VrfID             uint32
-}
-
-func (m *Nat66AddDelStaticMapping) Reset()                        { *m = Nat66AddDelStaticMapping{} }
-func (*Nat66AddDelStaticMapping) GetMessageName() string          { return "nat66_add_del_static_mapping" }
-func (*Nat66AddDelStaticMapping) GetCrcString() string            { return "fb64e50b" }
-func (*Nat66AddDelStaticMapping) GetMessageType() api.MessageType { return api.RequestMessage }
-
-// Nat66AddDelStaticMappingReply represents VPP binary API message 'nat66_add_del_static_mapping_reply'.
-type Nat66AddDelStaticMappingReply struct {
-	Retval int32
-}
-
-func (m *Nat66AddDelStaticMappingReply) Reset() { *m = Nat66AddDelStaticMappingReply{} }
-func (*Nat66AddDelStaticMappingReply) GetMessageName() string {
-	return "nat66_add_del_static_mapping_reply"
-}
-func (*Nat66AddDelStaticMappingReply) GetCrcString() string            { return "e8d4e804" }
-func (*Nat66AddDelStaticMappingReply) GetMessageType() api.MessageType { return api.ReplyMessage }
-
-// Nat66InterfaceDetails represents VPP binary API message 'nat66_interface_details'.
-type Nat66InterfaceDetails struct {
-	Flags     NatConfigFlags
-	SwIfIndex InterfaceIndex
-}
-
-func (m *Nat66InterfaceDetails) Reset()                        { *m = Nat66InterfaceDetails{} }
-func (*Nat66InterfaceDetails) GetMessageName() string          { return "nat66_interface_details" }
-func (*Nat66InterfaceDetails) GetCrcString() string            { return "5d286289" }
-func (*Nat66InterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
-
-// Nat66InterfaceDump represents VPP binary API message 'nat66_interface_dump'.
-type Nat66InterfaceDump struct{}
-
-func (m *Nat66InterfaceDump) Reset()                        { *m = Nat66InterfaceDump{} }
-func (*Nat66InterfaceDump) GetMessageName() string          { return "nat66_interface_dump" }
-func (*Nat66InterfaceDump) GetCrcString() string            { return "51077d14" }
-func (*Nat66InterfaceDump) GetMessageType() api.MessageType { return api.RequestMessage }
-
-// Nat66StaticMappingDetails represents VPP binary API message 'nat66_static_mapping_details'.
-type Nat66StaticMappingDetails struct {
-	LocalIPAddress    IP6Address
-	ExternalIPAddress IP6Address
-	VrfID             uint32
-	TotalBytes        uint64
-	TotalPkts         uint64
-}
-
-func (m *Nat66StaticMappingDetails) Reset()                        { *m = Nat66StaticMappingDetails{} }
-func (*Nat66StaticMappingDetails) GetMessageName() string          { return "nat66_static_mapping_details" }
-func (*Nat66StaticMappingDetails) GetCrcString() string            { return "5c568448" }
-func (*Nat66StaticMappingDetails) GetMessageType() api.MessageType { return api.ReplyMessage }
-
-// Nat66StaticMappingDump represents VPP binary API message 'nat66_static_mapping_dump'.
-type Nat66StaticMappingDump struct{}
-
-func (m *Nat66StaticMappingDump) Reset()                        { *m = Nat66StaticMappingDump{} }
-func (*Nat66StaticMappingDump) GetMessageName() string          { return "nat66_static_mapping_dump" }
-func (*Nat66StaticMappingDump) GetCrcString() string            { return "51077d14" }
-func (*Nat66StaticMappingDump) GetMessageType() api.MessageType { return api.RequestMessage }
-
 // NatControlPing represents VPP binary API message 'nat_control_ping'.
 type NatControlPing struct{}
 
@@ -2165,14 +2077,6 @@ func init() {
 	api.RegisterMessage((*Nat64PrefixDump)(nil), "nat.Nat64PrefixDump")
 	api.RegisterMessage((*Nat64StDetails)(nil), "nat.Nat64StDetails")
 	api.RegisterMessage((*Nat64StDump)(nil), "nat.Nat64StDump")
-	api.RegisterMessage((*Nat66AddDelInterface)(nil), "nat.Nat66AddDelInterface")
-	api.RegisterMessage((*Nat66AddDelInterfaceReply)(nil), "nat.Nat66AddDelInterfaceReply")
-	api.RegisterMessage((*Nat66AddDelStaticMapping)(nil), "nat.Nat66AddDelStaticMapping")
-	api.RegisterMessage((*Nat66AddDelStaticMappingReply)(nil), "nat.Nat66AddDelStaticMappingReply")
-	api.RegisterMessage((*Nat66InterfaceDetails)(nil), "nat.Nat66InterfaceDetails")
-	api.RegisterMessage((*Nat66InterfaceDump)(nil), "nat.Nat66InterfaceDump")
-	api.RegisterMessage((*Nat66StaticMappingDetails)(nil), "nat.Nat66StaticMappingDetails")
-	api.RegisterMessage((*Nat66StaticMappingDump)(nil), "nat.Nat66StaticMappingDump")
 	api.RegisterMessage((*NatControlPing)(nil), "nat.NatControlPing")
 	api.RegisterMessage((*NatControlPingReply)(nil), "nat.NatControlPingReply")
 	api.RegisterMessage((*NatDetAddDelMap)(nil), "nat.NatDetAddDelMap")
@@ -2295,14 +2199,6 @@ func AllMessages() []api.Message {
 		(*Nat64PrefixDump)(nil),
 		(*Nat64StDetails)(nil),
 		(*Nat64StDump)(nil),
-		(*Nat66AddDelInterface)(nil),
-		(*Nat66AddDelInterfaceReply)(nil),
-		(*Nat66AddDelStaticMapping)(nil),
-		(*Nat66AddDelStaticMappingReply)(nil),
-		(*Nat66InterfaceDetails)(nil),
-		(*Nat66InterfaceDump)(nil),
-		(*Nat66StaticMappingDetails)(nil),
-		(*Nat66StaticMappingDump)(nil),
 		(*NatControlPing)(nil),
 		(*NatControlPingReply)(nil),
 		(*NatDetAddDelMap)(nil),
@@ -2373,8 +2269,6 @@ type RPCService interface {
 	DumpNat64PoolAddr(ctx context.Context, in *Nat64PoolAddrDump) (RPCService_DumpNat64PoolAddrClient, error)
 	DumpNat64Prefix(ctx context.Context, in *Nat64PrefixDump) (RPCService_DumpNat64PrefixClient, error)
 	DumpNat64St(ctx context.Context, in *Nat64StDump) (RPCService_DumpNat64StClient, error)
-	DumpNat66Interface(ctx context.Context, in *Nat66InterfaceDump) (RPCService_DumpNat66InterfaceClient, error)
-	DumpNat66StaticMapping(ctx context.Context, in *Nat66StaticMappingDump) (RPCService_DumpNat66StaticMappingClient, error)
 	DumpNatDetMap(ctx context.Context, in *NatDetMapDump) (RPCService_DumpNatDetMapClient, error)
 	DumpNatDetSession(ctx context.Context, in *NatDetSessionDump) (RPCService_DumpNatDetSessionClient, error)
 	DumpNatWorker(ctx context.Context, in *NatWorkerDump) (RPCService_DumpNatWorkerClient, error)
@@ -2397,8 +2291,6 @@ type RPCService interface {
 	Nat64AddDelPoolAddrRange(ctx context.Context, in *Nat64AddDelPoolAddrRange) (*Nat64AddDelPoolAddrRangeReply, error)
 	Nat64AddDelPrefix(ctx context.Context, in *Nat64AddDelPrefix) (*Nat64AddDelPrefixReply, error)
 	Nat64AddDelStaticBib(ctx context.Context, in *Nat64AddDelStaticBib) (*Nat64AddDelStaticBibReply, error)
-	Nat66AddDelInterface(ctx context.Context, in *Nat66AddDelInterface) (*Nat66AddDelInterfaceReply, error)
-	Nat66AddDelStaticMapping(ctx context.Context, in *Nat66AddDelStaticMapping) (*Nat66AddDelStaticMappingReply, error)
 	NatControlPing(ctx context.Context, in *NatControlPing) (*NatControlPingReply, error)
 	NatDetAddDelMap(ctx context.Context, in *NatDetAddDelMap) (*NatDetAddDelMapReply, error)
 	NatDetCloseSessionIn(ctx context.Context, in *NatDetCloseSessionIn) (*NatDetCloseSessionInReply, error)
@@ -2795,58 +2687,6 @@ func (c *serviceClient_DumpNat64StClient) Recv() (*Nat64StDetails, error) {
 	return m, nil
 }
 
-func (c *serviceClient) DumpNat66Interface(ctx context.Context, in *Nat66InterfaceDump) (RPCService_DumpNat66InterfaceClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpNat66InterfaceClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpNat66InterfaceClient interface {
-	Recv() (*Nat66InterfaceDetails, error)
-}
-
-type serviceClient_DumpNat66InterfaceClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpNat66InterfaceClient) Recv() (*Nat66InterfaceDetails, error) {
-	m := new(Nat66InterfaceDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpNat66StaticMapping(ctx context.Context, in *Nat66StaticMappingDump) (RPCService_DumpNat66StaticMappingClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpNat66StaticMappingClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpNat66StaticMappingClient interface {
-	Recv() (*Nat66StaticMappingDetails, error)
-}
-
-type serviceClient_DumpNat66StaticMappingClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpNat66StaticMappingClient) Recv() (*Nat66StaticMappingDetails, error) {
-	m := new(Nat66StaticMappingDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
 func (c *serviceClient) DumpNatDetMap(ctx context.Context, in *NatDetMapDump) (RPCService_DumpNatDetMapClient, error) {
 	stream := c.ch.SendMultiRequest(in)
 	x := &serviceClient_DumpNatDetMapClient{stream}
@@ -3089,24 +2929,6 @@ func (c *serviceClient) Nat64AddDelPrefix(ctx context.Context, in *Nat64AddDelPr
 
 func (c *serviceClient) Nat64AddDelStaticBib(ctx context.Context, in *Nat64AddDelStaticBib) (*Nat64AddDelStaticBibReply, error) {
 	out := new(Nat64AddDelStaticBibReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *serviceClient) Nat66AddDelInterface(ctx context.Context, in *Nat66AddDelInterface) (*Nat66AddDelInterfaceReply, error) {
-	out := new(Nat66AddDelInterfaceReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *serviceClient) Nat66AddDelStaticMapping(ctx context.Context, in *Nat66AddDelStaticMapping) (*Nat66AddDelStaticMappingReply, error) {
-	out := new(Nat66AddDelStaticMappingReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err
