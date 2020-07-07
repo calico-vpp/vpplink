@@ -285,7 +285,7 @@ func (v *VppLink) interfaceAdminUpDown(swIfIndex uint32, up bool) error {
 	response := &interfaces.SwInterfaceSetFlagsReply{}
 	err := v.ch.SendRequest(request).ReceiveReply(response)
 	if err != nil {
-		return errors.Wrapf(err, "setting interface down failed")
+		return errors.Wrapf(err, "setting interface up/down failed")
 	}
 	return nil
 }
