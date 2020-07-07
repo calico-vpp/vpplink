@@ -70,6 +70,9 @@ func (v *VppLink) Reconnect() (err error) {
 }
 
 func (v *VppLink) Close() {
+	if v == nil {
+		return
+	}
 	if v.ch != nil {
 		v.ch.Close()
 	}
