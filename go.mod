@@ -1,13 +1,20 @@
 module github.com/calico-vpp/vpplink
 
-go 1.14
+go 1.18
 
 require (
-	git.fd.io/govpp.git v0.3.4
-	github.com/lunixbochs/struc v0.0.0-20190916212049-a5c72983bc42
-	github.com/pkg/errors v0.9.1
-	github.com/sirupsen/logrus v1.4.2
-	golang.org/x/sys v0.0.0-20190422165155-953cdadca894
+	github.com/hashicorp/go-version v1.6.0
+	github.com/sirupsen/logrus v1.6.0
+	github.com/stretchr/testify v1.2.2
+	go.fd.io/govpp v0.6.1-0.20220928123720-fe96cac6bad7
+	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6
 )
 
-replace github.com/lunixbochs/struc => ../struc
+require (
+	github.com/bennyscetbun/jsongo v1.1.0 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
+	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+)
