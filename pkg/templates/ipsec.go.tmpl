@@ -34,10 +34,10 @@ func (v *Vpp) GetIPsecTunnelProtection(tunnelInterface uint32) (protections []ty
 	}
 	stream := v.GetChannel().SendMultiRequest(request)
 	for {
-                response := &ipsec.IpsecTunnelProtectDetails{}
+        response := &ipsec.IpsecTunnelProtectDetails{}
 		stop, err := stream.ReceiveReply(response)
 		if err != nil {
-			return nil, errors.Wrapf(err, "error listing tunnel interface %u protections", tunnelInterface)
+			return nil, errors.Wrapf(err, "error listing tunnel interface %v protections", tunnelInterface)
 		}
 		if stop {
 			return protections, nil
@@ -121,7 +121,7 @@ func (v *Vpp) AddIpsecInterface() (uint32, error) {
 			UserInstance: ^uint32(0),
 		},
 	}
-        err := v.SendRequestAwaitReply(request, response)
+    err := v.SendRequestAwaitReply(request, response)
 	if err != nil {
 		return InvalidSwIfIndex, err
 	}

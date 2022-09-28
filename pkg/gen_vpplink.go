@@ -43,8 +43,6 @@ var (
 )
 
 func init() {
-	// binapigen.RegisterPlugin("vpplink", GenerateVppLink)
-
 	// Trim off the "templates" prefix from the paths of our templates
 	templates, err := fs.Sub(templates, "templates")
 	if err != nil {
@@ -52,7 +50,7 @@ func init() {
 	}
 
 	// Parse all the templates
-	parsedTemplates, err = wrappergen.ParseFS(templates, "*.tmpl")
+	parsedTemplates, err = wrappergen.ParseFS(templates, "*.tmpl.go")
 	if err != nil {
 		logrus.Fatalf("failed to ParseFS templates: %s", err)
 	}
