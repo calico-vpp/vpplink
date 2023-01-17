@@ -40,7 +40,7 @@ func TestReqirementSatisfiedInTemplate(t *testing.T) {
 	require.NoError(t, err)
 	tmpl, err := wrappergen.ParseFS(templates, "*.tmpl")
 	require.NoError(t, err)
-	err = tmpl.ExecuteAll(outputDir, data)
+	err = tmpl.ExecuteAll(outputDir, data, nil)
 	require.NoError(t, err)
 	require.NoError(t, os.RemoveAll(outputDir))
 }

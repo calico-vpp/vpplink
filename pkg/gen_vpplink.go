@@ -17,17 +17,11 @@ package main
 import (
 	"embed"
 	_ "embed"
-
-	"fmt"
 	"io/fs"
-	"os"
-	"os/exec"
 	"path/filepath"
-	"strings"
 
 	"github.com/sirupsen/logrus"
 	"go.fd.io/govpp/binapigen"
-	"go.fd.io/govpp/version"
 
 	"github.com/calico-vpp/vpplink/pkg/wrappergen"
 )
@@ -57,7 +51,9 @@ func init() {
 
 }
 
-func GenerateFile(gen *binapigen.Generator) {
+func GenerateFile(gen *binapigen.Generator, file *binapigen.File) *binapigen.GenFile {
+	logrus.Infof("[WRAPPERGEN] GenerateFile: %v", file.Desc.Path)
+
 	// We output vpplink one directory higher than the regular bindings
 	basePkgName := filepath.Join(gen.GetOpts().ImportPrefix, "..")
 	outputDir := filepath.Join(gen.GetOpts().OutputDir, "..")
@@ -69,15 +65,17 @@ func GenerateFile(gen *binapigen.Generator) {
 	)
 
 	// Execute all the templates
-	err := parsedTemplates.ExecuteAll(outputDir, data)
+	err := parsedTemplates.ExecuteAll(outputDir, data, gen)
 	if err != nil {
 		logrus.Fatalf("failed to execute template: %s", err)
 	}
 
-	createGenerateLog(gen.GetOpts().ApiDir, filepath.Join(outputDir, generateLogFname))
+	//createGenerateLog(gen.GetOpts().ApiDir, filepath.Join(outputDir, generateLogFname))
+
+	return nil
 }
 
-func createGenerateLog(apiDir string, fname string) {
+/*func createGenerateLog(apiDir string, fname string) {
 	vppSrcDir, err := binapigen.FindGitRepoRootDir(apiDir)
 	if err != nil {
 		return
@@ -88,7 +86,7 @@ func createGenerateLog(apiDir string, fname string) {
 		logrus.Fatalf("Unable to get vpp version : %s", err)
 	}
 
-	cmd := exec.Command("bash", "-c", "git log $(git log origin/master..HEAD --oneline | tail -1 | awk '{print $1}')^ --oneline -1")
+	cmd := exec.Command("bash", "-c", "git log --oneline -1 $(git log origin/master..HEAD --oneline | tail -1 | awk '{print $1}')")
 	cmd.Dir = binapigen.ExpandPaths(vppSrcDir)
 	cmd.Stderr = os.Stderr
 	out, err := cmd.Output()
@@ -126,4 +124,4 @@ func createGenerateLog(apiDir string, fname string) {
 		logrus.Fatalf("Unable to close file %s %s", fname, err)
 	}
 
-}
+}*/
