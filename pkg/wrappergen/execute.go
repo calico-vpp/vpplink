@@ -2,12 +2,13 @@ package wrappergen
 
 import (
 	"bytes"
-	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"go.fd.io/govpp/binapigen"
 )
 
 type Template struct {
@@ -46,7 +47,7 @@ func (t *Template) addAllToTemplateWalkFn(path string, d fs.DirEntry, err error)
 	return nil
 }
 
-func (t *Template) createExecuteWalkFn(outputDir string, data interface{}) func(path string, d fs.DirEntry, err error) error {
+func (t *Template) createExecuteWalkFn(outputDir string, data interface{}, gen *binapigen.Generator) func(path string, d fs.DirEntry, err error) error {
 	return func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -77,14 +78,17 @@ func (t *Template) createExecuteWalkFn(outputDir string, data interface{}) func(
 			return err
 		}
 
-		output, err := os.Create(strings.TrimSuffix(outputPath, ".tmpl"))
-		defer output.Close()
+		genFile := gen.NewGenFile(strings.TrimSuffix(outputPath, ".tmpl"), nil)
+		_, err = outputBuffer.WriteTo(genFile)
 
-		_, err = io.Copy(output, outputBuffer)
+		/*		output, err := os.Create(strings.TrimSuffix(outputPath, ".tmpl"))
+				defer output.Close()*/
+
+		//_, err = io.Copy(output, outputBuffer)
 		return err
 	}
 }
 
-func (t *Template) ExecuteAll(outputDir string, data interface{}) error {
-	return fs.WalkDir(t.input, ".", t.createExecuteWalkFn(outputDir, data))
+func (t *Template) ExecuteAll(outputDir string, data interface{}, gen *binapigen.Generator) error {
+	return fs.WalkDir(t.input, ".", t.createExecuteWalkFn(outputDir, data, gen))
 }

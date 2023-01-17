@@ -1,8 +1,8 @@
-package consumer
+package examples
 
 import (
-	_ "go.fd.io/govpp/binapi"
+	_ "go.fd.io/govpp/cmd/binapi-generator"
 )
 
 //go:generate go build -buildmode=plugin -o ./.bin/vpplink_plugin.so github.com/calico-vpp/vpplink/pkg
-//go:generate go run go.fd.io/govpp/cmd/binapi-generator --plugin ./.bin/vpplink_plugin.so --vpp $VPP_DIR -o ./impl
+//go:generate go run go.fd.io/govpp/cmd/binapi-generator --gen ./.bin/vpplink_plugin.so,rpc --input ../../vpp -o ./impl

@@ -4,9 +4,10 @@ go 1.18
 
 require (
 	github.com/hashicorp/go-version v1.6.0
+	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.6.0
-	github.com/stretchr/testify v1.2.2
-	go.fd.io/govpp v0.6.1-0.20220928123720-fe96cac6bad7
+	github.com/stretchr/testify v1.3.0
+	go.fd.io/govpp v0.8.0-alpha.0.20221215090837-bcc61f132e05
 	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6
 )
 
@@ -17,4 +18,6 @@ require (
 	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	golang.org/x/text v0.3.7 // indirect
 )
