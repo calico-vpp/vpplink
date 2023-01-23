@@ -7,7 +7,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.6.0
 	github.com/stretchr/testify v1.3.0
-	go.fd.io/govpp v0.8.0-alpha.0.20221215090837-bcc61f132e05
+	go.fd.io/govpp v0.8.0-alpha.0.20230119104801-57da5b22a44c
 	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6
 )
 
