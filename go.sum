@@ -24,8 +24,8 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-go.fd.io/govpp v0.8.0-alpha.0.20221215090837-bcc61f132e05 h1:rqG1pmq/xYMUkHurCVxMcpA5nSrOsHjztjLb0lmc4Ls=
-go.fd.io/govpp v0.8.0-alpha.0.20221215090837-bcc61f132e05/go.mod h1:CP9b1rXbEow1suEDn0k1nwHQdrV0YpuIo7LUPw3+/H4=
+go.fd.io/govpp v0.8.0-alpha.0.20230119104801-57da5b22a44c h1:ibXO4E5hxJghMtofQNE/i1Y7XQfy/0A0p+rzkrwLpCw=
+go.fd.io/govpp v0.8.0-alpha.0.20230119104801-57da5b22a44c/go.mod h1:CP9b1rXbEow1suEDn0k1nwHQdrV0YpuIo7LUPw3+/H4=
 golang.org/x/net v0.0.0-20220225172249-27dd8689420f h1:oA4XRj0qtSt8Yo1Zms0CUlsT3KG69V2UGQWPBxujDmc=
 golang.org/x/sys v0.0.0-20190422165155-953cdadca894/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20191005200804-aed5e4c7ecf9/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
