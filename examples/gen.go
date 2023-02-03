@@ -1,8 +1,11 @@
+//go:build generate
+
 package examples
 
 import (
-	_ "github.com/calico-vpp/vpplink/pkg"
 	_ "go.fd.io/govpp/cmd/binapi-generator"
+
+	_ "github.com/calico-vpp/vpplink/pkg"
 )
 
 //go:generate go build -buildmode=plugin -o ./.bin/vpplink_plugin.so github.com/calico-vpp/vpplink/pkg
