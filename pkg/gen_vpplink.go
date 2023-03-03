@@ -17,11 +17,17 @@ package main
 import (
 	"embed"
 	_ "embed"
+	"fmt"
 	"io/fs"
+	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"go.fd.io/govpp/binapigen"
+	"go.fd.io/govpp/binapigen/vppapi"
+	"go.fd.io/govpp/version"
 
 	"github.com/calico-vpp/vpplink/pkg/wrappergen"
 )
@@ -51,18 +57,16 @@ func init() {
 
 }
 
-func GenerateFile(gen *binapigen.Generator, file *binapigen.File) *binapigen.GenFile {
-	logrus.Infof("[WRAPPERGEN] GenerateFile: %v", file.Desc.Path)
+func GenerateAll(gen *binapigen.Generator) []*binapigen.GenFile {
+	genOpts := gen.GetOpts()
+
+	logrus.Infof("[WRAPPERGEN] GenerateAll (opts: %+v)", genOpts)
 
 	// We output vpplink one directory higher than the regular bindings
-	basePkgName := filepath.Join(gen.GetOpts().ImportPrefix, "..")
-	outputDir := filepath.Join(gen.GetOpts().OutputDir, "..")
+	basePkgName := filepath.Join(genOpts.ImportPrefix, "..")
+	outputDir := filepath.Join(genOpts.OutputDir, "..")
 
-	data := wrappergen.NewDataFromFiles(
-		gen.GetOpts().ImportPrefix,
-		filepath.Base(basePkgName),
-		gen.Files,
-	)
+	data := wrappergen.NewDataFromFiles(genOpts.ImportPrefix, filepath.Base(basePkgName), gen.Files)
 
 	// Execute all the templates
 	err := parsedTemplates.ExecuteAll(outputDir, data, gen)
@@ -70,24 +74,26 @@ func GenerateFile(gen *binapigen.Generator, file *binapigen.File) *binapigen.Gen
 		logrus.Fatalf("failed to execute template: %s", err)
 	}
 
-	//createGenerateLog(gen.GetOpts().ApiDir, filepath.Join(outputDir, generateLogFname))
+	if vppDir := os.Getenv("VPP_DIR"); vppDir != "" {
+		createGenerateLog(vppDir, filepath.Join(outputDir, generateLogFname))
+	}
 
 	return nil
 }
 
-/*func createGenerateLog(apiDir string, fname string) {
-	vppSrcDir, err := binapigen.FindGitRepoRootDir(apiDir)
+func createGenerateLog(apiDir string, fname string) {
+	vppSrcDir, err := findGitRepoRootDir(apiDir)
 	if err != nil {
 		return
 	}
 
-	vppVersion, err := binapigen.GetVPPVersionRepo(vppSrcDir)
+	vppVersion, err := vppapi.GetVPPVersionRepo(vppSrcDir)
 	if err != nil {
 		logrus.Fatalf("Unable to get vpp version : %s", err)
 	}
 
 	cmd := exec.Command("bash", "-c", "git log --oneline -1 $(git log origin/master..HEAD --oneline | tail -1 | awk '{print $1}')")
-	cmd.Dir = binapigen.ExpandPaths(vppSrcDir)
+	cmd.Dir = vppSrcDir
 	cmd.Stderr = os.Stderr
 	out, err := cmd.Output()
 	if err != nil {
@@ -96,7 +102,7 @@ func GenerateFile(gen *binapigen.Generator, file *binapigen.File) *binapigen.Gen
 	lastCommit := strings.TrimSpace(string(out))
 
 	cmd = exec.Command("git", "log", "origin/master..HEAD", "--pretty=%s")
-	cmd.Dir = binapigen.ExpandPaths(vppSrcDir)
+	cmd.Dir = vppSrcDir
 	cmd.Stderr = os.Stderr
 	out, err = cmd.Output()
 	if err != nil {
@@ -124,4 +130,14 @@ func GenerateFile(gen *binapigen.Generator, file *binapigen.File) *binapigen.Gen
 		logrus.Fatalf("Unable to close file %s %s", fname, err)
 	}
 
-}*/
+}
+
+func findGitRepoRootDir(dir string) (string, error) {
+	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	cmd.Dir = dir
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("git command failed: %v\noutput: %s", err, out)
+	}
+	return strings.TrimSpace(string(out)), nil
+}

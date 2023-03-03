@@ -7,8 +7,8 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.3.0
-	go.fd.io/govpp v0.8.0-alpha.0.20230207075433-b71f13cf4640
-	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a
+	go.fd.io/govpp v0.8.0-alpha.0.20230302140400-5ee4cc8ec01d
+	golang.org/x/sys v0.5.0
 )
 
 require (
@@ -18,5 +18,7 @@ require (
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/text v0.7.0 // indirect
 )
+
+//replace go.fd.io/govpp => ../../../go/src/git.fd.io/govpp.git
