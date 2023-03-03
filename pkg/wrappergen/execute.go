@@ -81,10 +81,6 @@ func (t *Template) createExecuteWalkFn(outputDir string, data interface{}, gen *
 		genFile := gen.NewGenFile(strings.TrimSuffix(outputPath, ".tmpl"), nil)
 		_, err = outputBuffer.WriteTo(genFile)
 
-		/*		output, err := os.Create(strings.TrimSuffix(outputPath, ".tmpl"))
-				defer output.Close()*/
-
-		//_, err = io.Copy(output, outputBuffer)
 		return err
 	}
 }
