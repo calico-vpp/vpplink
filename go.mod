@@ -4,15 +4,14 @@ go 1.18
 
 require (
 	github.com/hashicorp/go-version v1.6.0
-	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.3.0
-	go.fd.io/govpp v0.8.0-alpha.0.20230302140400-5ee4cc8ec01d
+	go.fd.io/govpp v0.8.0-alpha.0.20230505134316-f36ddce7ebff
 	golang.org/x/sys v0.5.0
 )
 
 require (
-	github.com/bennyscetbun/jsongo v1.1.0 // indirect
+	github.com/bennyscetbun/jsongo v1.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe // indirect

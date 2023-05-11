@@ -25,9 +25,9 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	"go.fd.io/govpp"
 	"go.fd.io/govpp/binapigen"
 	"go.fd.io/govpp/binapigen/vppapi"
-	"go.fd.io/govpp/version"
 
 	"github.com/calico-vpp/vpplink/pkg/wrappergen"
 )
@@ -111,7 +111,7 @@ func createGenerateLog(apiDir string, fname string) {
 	ownCommits := strings.TrimSpace(string(out))
 
 	value := fmt.Sprintf("VPP Version                 : %s\n", vppVersion)
-	value += fmt.Sprintf("Binapi-generator version    : %s\n", version.Info())
+	value += fmt.Sprintf("Binapi-generator version    : %s\n", govpp.Version())
 	value += fmt.Sprintf("VPP Base commit             : %s\n", lastCommit)
 	value += fmt.Sprintf("------------------ Cherry picked commits --------------------\n")
 	value += fmt.Sprintf("%s\n", ownCommits)
