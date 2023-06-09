@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/go-version v1.6.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.3.0
-	go.fd.io/govpp v0.8.0-alpha.0.20230505134316-f36ddce7ebff
+	go.fd.io/govpp v0.8.0-alpha.0.20230605100346-5d7f5251f08c
 	golang.org/x/sys v0.5.0
 )
 
